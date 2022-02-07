@@ -20,29 +20,31 @@
 //   );
 // }
 
-import React from 'react'
+import React from 'react';
 import './App.scss';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Outlet, Link } from "react-router-dom";
-import { routes } from "./routes"
+import { Outlet, Link } from 'react-router-dom';
+import { routes } from './routes';
 
-export const App = () => {
+export function App() {
   return (
-<div>
-    <Typography variant="h5" gutterBottom component="div">
-    Main App Page
-    </Typography>
-    <Button variant="contained">SOME BUTTON</Button>
-          <nav
+    <div>
+      <Typography variant="h5" gutterBottom component="div">
+        Main App Page
+      </Typography>
+      <Button variant="contained">SOME BUTTON</Button>
+      <nav
         style={{
-          borderBottom: "solid 1px",
-          paddingBottom: "1rem"
+          borderBottom: 'solid 1px',
+          paddingBottom: '1rem',
         }}
       >
-        <Link to={'/' + routes.CREATE_EXPERIMENT}>CreateExperiment</Link>
+        <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
       </nav>
-      <Outlet/>
+      <Outlet />
     </div>
-  )
+  );
 }
+
+export default App;
