@@ -41,6 +41,7 @@ export function App() {
         }}
       >
         <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
+        <Link to="/active">active</Link>
       </nav>
       <Outlet />
     </div>
