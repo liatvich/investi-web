@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
 
@@ -15,13 +15,21 @@ const firebaseConfig = {
 
 // eslint-disable-next-line import/prefer-default-export
 export function useDatabase() {
-  let dataBase;
-  useEffect(() => {
-    const app = initializeApp(firebaseConfig);
-    dataBase = getFirestore(app);
-  }, []);
+  const [dataBase, setDatabase] = useState(null);
+  //   useEffect(() => {
+  //     const app = initializeApp(firebaseConfig);
+  //     dataBase = getFirestore(app);
+  //   }, []);
 
-  const getDatabase = () => dataBase;
+  const getDatabase = () => {
+    let db = dataBase;
+    if (!db) {
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      setDatabase(db);
+    }
+    return db;
+  };
 
   return { getDatabase };
 }

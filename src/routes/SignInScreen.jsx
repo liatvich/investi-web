@@ -1,21 +1,9 @@
 // Import FirebaseAuth and firebase.
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/compat/app';
+import { UserContext } from '../context';
 import 'firebase/compat/auth';
-
-// Configure Firebase.
-const firebaseConfig = {
-  apiKey: 'AIzaSyDPuVNfCGlfrgMbNX-jD-i1ndh3tFXFguA',
-  authDomain: 'investitest-5253f.firebaseapp.com',
-  // The value of `databaseURL` depends on the location of the database
-  // databaseURL: "https://DATABASE_NAME.firebaseio.com", - real time :/
-  projectId: 'investitest-5253f',
-  storageBucket: 'investitest-5253f.appspot.com',
-  // messagingSenderId: "SENDER_ID",
-  appId: '1:644024387343:ios:8d646c4aed67cc13b1a07a',
-};
-firebase.initializeApp(firebaseConfig);
 
 // Configure FirebaseUI.
 const uiConfig = {
@@ -36,19 +24,10 @@ const uiConfig = {
   },
 };
 
-export function SignInScreen() {
-  const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
+export function SignInScreen() { // SHOULD BE COMPONENT!
+  const { getLoggedUser } = useContext(UserContext);
 
-  // Listen to the Firebase Auth state and set the local state.
-  useEffect(() => {
-    const unregisterAuthObserver = firebase.auth().onAuthStateChanged((user) => {
-      setIsSignedIn(!!user);
-    });
-    return () => unregisterAuthObserver();
-    // Make sure we un-register Firebase observers when the component unmounts.
-  }, []);
-
-  if (!isSignedIn) {
+  if (!getLoggedUser()) {
     return (
       <div>
         <h1>My App</h1>

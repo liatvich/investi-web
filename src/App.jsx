@@ -25,26 +25,30 @@ import './App.scss';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { Outlet, Link } from 'react-router-dom';
-import { routes } from './routes';
+import { routes, SignInScreen } from './routes';
+import { UserContextProvider } from './context';
 
 export function App() {
   return (
-    <div>
-      <Typography variant="h5" gutterBottom component="div">
-        Main App Page
-      </Typography>
-      <Button variant="contained">SOME BUTTON</Button>
-      <nav
-        style={{
-          borderBottom: 'solid 1px',
-          paddingBottom: '1rem',
-        }}
-      >
-        <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
-        <Link to="/active">active</Link>
-      </nav>
-      <Outlet />
-    </div>
+    <UserContextProvider>
+      <div>
+        <Typography variant="h5" gutterBottom component="div">
+          Main App Page
+        </Typography>
+        <Button variant="contained">SOME BUTTON</Button>
+        <SignInScreen />
+        <nav
+          style={{
+            borderBottom: 'solid 1px',
+            paddingBottom: '1rem',
+          }}
+        >
+          <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
+          <Link to="/active">active</Link>
+        </nav>
+        <Outlet />
+      </div>
+    </UserContextProvider>
   );
 }
 

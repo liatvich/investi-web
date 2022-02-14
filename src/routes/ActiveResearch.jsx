@@ -1,17 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Typography from '@mui/material/Typography';
-import { collection, getDocs } from 'firebase/firestore/lite';
+import {
+  collection, query, where, getDocs,
+} from 'firebase/firestore/lite';
+import parse from 'html-react-parser';
 import { useDatabase } from '../Hooks';
+import { UserContext } from '../context';
 
 export function ActiveResearch() {
   const [researches, setResearches] = useState([]);
   const { getDatabase } = useDatabase();
+  const { getLoggedUser } = useContext(UserContext);
 
   useEffect(() => {
     async function fetchResearch() {
       const dataBase = getDatabase();
-      const researchCol = collection(dataBase, 'research');
-      const researchSnapshot = await getDocs(researchCol);
+      const q = query(collection(dataBase, 'experiments'), where('user_id', '==', getLoggedUser().uid));
+      //   const researchSnapshot = await getDocs(researchCol);
+      //   const researchList = researchSnapshot.docs.map((doc) => doc.data());
+      //   setResearches(researchList);
+
+      const researchSnapshot = await getDocs(q);
       const researchList = researchSnapshot.docs.map((doc) => doc.data());
       setResearches(researchList);
     }
@@ -27,10 +36,14 @@ export function ActiveResearch() {
       {researches.length > 0
         ? (
           researches.map((research) => (
-            <div key={research.name}>
+            <div key={research.title}>
               <Typography variant="h5" gutterBottom component="div">
-                {research.name}
+                {research.title}
               </Typography>
+              <Typography variant="h5" gutterBottom component="div">
+                Experiment Preview:
+              </Typography>
+              {parse(research.data)}
             </div>
           ))
         ) : (

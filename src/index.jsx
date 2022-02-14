@@ -6,10 +6,10 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
-// import { App } from './App';
-// CreateExperiment, routes, ActiveResearch,
+import { App } from './App';
 import {
-  SignInScreen,
+  CreateExperiment, routes, ActiveResearch,
+//   SignInScreen,
 } from './routes';
 // import reportWebVitals from './reportWebVitals';
 
@@ -17,20 +17,20 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<SignInScreen />} />
-        {/* <Route path="/" element={<App />}>
-        //    <Route
+        {/* <Route path="/" element={<SignInScreen />} /> */}
+        <Route path="/" element={<App />}>
+          {/* //    <Route
         //     index
         //     element={
         //     <main style={{ padding: "1rem" }}>
         //         <p>Select an invoice</p>
         //         </main>
         //         }
-        //     />  THIS IS THE DEFAULT OUTLET
+        //     />  THIS IS THE DEFAULT OUTLET */}
           <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
           <Route path="active" element={<ActiveResearch />} />
-        </Route> */}
-        {/* <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} /> */}
+        </Route>
+        <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
         <Route
           path="*"
           element={(

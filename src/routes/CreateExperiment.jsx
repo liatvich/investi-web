@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import {
   useEditor,
   EditorContent,
@@ -10,9 +10,33 @@ import StarterKit from '@tiptap/starter-kit';
 import './CreateExperiment.scss';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
+import {
+  collection, addDoc,
+} from 'firebase/firestore/lite'; // serverTimestamp, updateDoc
+import { useDatabase } from '../Hooks';
+import { UserContext } from '../context';
 
 export function CreateExperiment() {
+//   const [currentExperiment, setCurrentExperiment] = useState({});
+  const [experimentTitle, setExperimentTitle] = useState('');
+  const { getLoggedUser } = useContext(UserContext);
+  const { getDatabase } = useDatabase();
+
+  //   useEffect(() => {
+  //     async function createNewExperiment() {
+  //       // Add a new document with a generated id.
+  //       const experimentRef = await addDoc(collection(getDatabase(), 'experiments'), {
+  //         user_id: getLoggedUser() && getLoggedUser().uid,
+  //       });
+  //       setCurrentExperiment(experimentRef);
+  //     }
+
+  //     createNewExperiment();
+  //     // setLoggedUser(firebase.auth().currentUser);
+  //   }, []);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -30,8 +54,9 @@ export function CreateExperiment() {
   return (
     <div>
       <Typography variant="h5" gutterBottom component="div">
-        Introduction From:
+        Experiment title:
       </Typography>
+      <TextField id="standard-basic" label="Standard" variant="standard" placeholder="Please enter title" onChange={(event) => { setExperimentTitle(event.target.value); }} />
       <div className="editor-container">
         {editor && (
         <BubbleMenu className="bubble-menu" tippyOptions={{ duration: 100 }} editor={editor}>
@@ -81,9 +106,34 @@ export function CreateExperiment() {
 
         <EditorContent editor={editor} />
       </div>
-      <Button variant="contained">Add Page</Button>
-      <Button variant="contained">Submit</Button>
-      <Button variant="contained">Preview</Button>
+      {/* <Button variant="contained">Add Page</Button> */}
+      <Button
+        variant="contained"
+        onClick={async () => {
+          // const dataBase = getDatabase();
+          // const researchCol = collection(dataBase, 'research');
+          // const researchList = researchSnapshot.docs.map((doc) => doc.data());
+
+          // Add a new document with a generated id.
+          const dataBase = getDatabase();
+          //   collection(dataBase, 'experiments')
+          const experimentsRef = collection(dataBase, 'experiments');
+          await addDoc(experimentsRef, {
+            user_id: getLoggedUser() && getLoggedUser().uid,
+            title: experimentTitle,
+            data: editor.getHTML(),
+          });
+
+        //   await updateDoc(currentExperiment, {
+        //     title: experimentTitle,
+        //     data: editor.getHTML(),
+        //     // timestamp: serverTimestamp(),
+        //   });
+        }}
+      >
+        Submit
+      </Button>
+      {/* <Button variant="contained">Preview</Button> */}
       <nav
         style={{
           borderBottom: 'solid 1px',
