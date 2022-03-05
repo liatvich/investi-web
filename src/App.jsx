@@ -1,54 +1,53 @@
-// import logo from './logo.svg';
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
 import React from 'react';
 import './App.scss';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Outlet, Link } from 'react-router-dom';
-import { routes, SignInScreen } from './routes';
-import { UserContextProvider } from './context';
+import { Link, Outlet } from 'react-router-dom';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { SignInScreen, routes } from './routes';
+import { ProvideAuth, useProvideAuth } from './Hooks';
 
 export function App() {
+  const font = "'Noto Sans', sans-serif";
+  const theme = createTheme({
+    typography: {
+      fontFamily: font,
+    },
+  });
+  //   const { loggedUser } = useContext(UserContext);
+  const { user } = useProvideAuth();
+
   return (
-    <UserContextProvider>
-      <div>
-        <Typography variant="h5" gutterBottom component="div">
-          Main App Page
-        </Typography>
-        <Button variant="contained">SOME BUTTON</Button>
-        <SignInScreen />
-        <nav
-          style={{
-            borderBottom: 'solid 1px',
-            paddingBottom: '1rem',
-          }}
-        >
-          <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
-          <Link to="/active">active</Link>
-        </nav>
-        <Outlet />
-      </div>
-    </UserContextProvider>
+    <ProvideAuth>
+      <ThemeProvider theme={theme}>
+        <div>
+          {user ? (
+            <>
+              <Typography variant="h5" gutterBottom component="div">
+                Main App Page
+              </Typography>
+              <Button variant="contained">  </Button>
+              <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
+              <Link to="/active">active</Link>
+              <Outlet />
+            </>
+          ) : (
+            <SignInScreen />
+          )}
+          ;
+          {/* <nav
+            style={{
+              borderBottom: 'solid 1px',
+              paddingBottom: '1rem',
+            }}
+          >
+            <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
+            <Link to="/active">active</Link>
+          </nav>
+          <Outlet /> */}
+        </div>
+      </ThemeProvider>
+    </ProvideAuth>
   );
 }
 

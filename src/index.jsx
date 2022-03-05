@@ -9,17 +9,33 @@ import {
 import { App } from './App';
 import {
   CreateExperiment, routes, ActiveResearch,
-//   SignInScreen,
+  SignInScreen,
 } from './routes';
+// import { PrivateRoute } from './routes/services';
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<SignInScreen />} /> */}
         <Route path="/" element={<App />}>
-          {/* //    <Route
+          <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
+          <Route path="active" element={<ActiveResearch />} />
+        </Route>
+        <Route path={routes.SIGN_IN} element={<SignInScreen />} />
+        <Route
+          path="*"
+          element={(
+            <main style={{ padding: '1rem' }}>
+              <p>Theres nothing here!</p>
+            </main>
+      )}
+        />
+      </Routes>
+
+      {/* <Route path="/" element={<SignInScreen />} /> */}
+      {/* <Route path="/" element={<App />}> */}
+      {/* //    <Route
         //     index
         //     element={
         //     <main style={{ padding: "1rem" }}>
@@ -27,7 +43,8 @@ ReactDOM.render(
         //         </main>
         //         }
         //     />  THIS IS THE DEFAULT OUTLET */}
-          <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
+      {/* <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
+          <Route path={routes.SIGN_IN} element={<SignInScreen />} />
           <Route path="active" element={<ActiveResearch />} />
         </Route>
         <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
@@ -38,8 +55,7 @@ ReactDOM.render(
               <p>Theres nothing here!</p>
             </main>
       )}
-        />
-      </Routes>
+        /> */}
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root'),

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   useEditor,
   EditorContent,
@@ -15,14 +15,14 @@ import { Link } from 'react-router-dom';
 import {
   collection, addDoc,
 } from 'firebase/firestore/lite'; // serverTimestamp, updateDoc
-import { useDatabase } from '../Hooks';
-import { UserContext } from '../context';
+import { useDatabase, useProvideAuth } from '../Hooks';
+// import { UserContext } from '../context';
 
 export function CreateExperiment() {
 //   const [currentExperiment, setCurrentExperiment] = useState({});
   const [experimentTitle, setExperimentTitle] = useState('');
-  const { getLoggedUser } = useContext(UserContext);
   const { getDatabase } = useDatabase();
+  const { user } = useProvideAuth();
 
   //   useEffect(() => {
   //     async function createNewExperiment() {
@@ -119,7 +119,7 @@ export function CreateExperiment() {
           //   collection(dataBase, 'experiments')
           const experimentsRef = collection(dataBase, 'experiments');
           await addDoc(experimentsRef, {
-            user_id: getLoggedUser() && getLoggedUser().uid,
+            user_id: user?.uid,
             title: experimentTitle,
             data: editor.getHTML(),
           });
