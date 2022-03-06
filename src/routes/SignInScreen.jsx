@@ -1,12 +1,12 @@
-// Import FirebaseAuth and firebase.
+/* eslint-disable global-require */
 import React, { useEffect } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/compat/app';
-// import { UserContext } from '../context';
+import Typography from '@mui/material/Typography';
 import 'firebase/compat/auth';
-// import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useProvideAuth } from '../Hooks'; // useAuth
+import s from './SignInScreen.module.scss';
 
 export function SignInScreen() {
 //   const { getLoggedUser } = useContext(UserContext);
@@ -47,34 +47,17 @@ export function SignInScreen() {
   }, [firebase?.auth()?.currentUser]);
 
   return (
-  // firebase.auth().currentUser ? (
-    <div>
-      <h1>My App</h1>
-      <p>Please sign-in:</p>
+    <div className={s.signin}>
+      <div className={s.top}>
+        <Typography variant="h5" gutterBottom component="div" className={s.username}>
+          Log in to start the investigation adventure
+        </Typography>
+        <img className={s.image} src={require('../Resources/searchImage.png')} alt="Logo" />
+      </div>
+
       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
     </div>
-  // ) : (
-  //   <Navigate to="/" />
-  // )
   );
-//   }
-//   return (
-//     <div>
-//       <h1>My App</h1>
-//       <p>
-//         Welcome
-//         {' '}
-//         {firebase.auth().currentUser.displayName}
-//         ! You are now signed-in!
-//       </p>
-//       <button
-//         type="submit"
-//         onClick={() => firebase.auth().signOut()}
-//       >
-//         Sign-out
-//       </button>
-//     </div>
-//   );
 }
 
 export default SignInScreen;

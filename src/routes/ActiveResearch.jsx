@@ -30,7 +30,7 @@ export function ActiveResearch() {
   return (
     <div>
       <Typography variant="h5" gutterBottom component="div">
-        Main App Page
+        Project List -
       </Typography>
       {researches.length > 0
         ? (
@@ -47,7 +47,7 @@ export function ActiveResearch() {
           ))
         ) : (
           <Typography variant="h5" gutterBottom component="div">
-            research not loaded
+            Empty State
           </Typography>
         )}
     </div>

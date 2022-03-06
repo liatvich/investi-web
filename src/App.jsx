@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.scss';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { Link, Outlet } from 'react-router-dom';
+// import Typography from '@mui/material/Typography';
+// import Button from '@mui/material/Button';
+import { Outlet } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { SignInScreen, routes } from './routes';
+import { SignInScreen } from './routes';
 import { ProvideAuth, useProvideAuth } from './Hooks';
+import { AppLayout } from './components/App/AppLayout';
 
 export function App() {
   const font = "'Noto Sans', sans-serif";
@@ -23,18 +24,22 @@ export function App() {
         <div>
           {user ? (
             <>
-              <Typography variant="h5" gutterBottom component="div">
+              {/* <Typography variant="h5" gutterBottom component="div">
                 Main App Page
               </Typography>
               <Button variant="contained">  </Button>
               <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
-              <Link to="/active">active</Link>
-              <Outlet />
+              <Link to="/active">active</Link> */}
+              <AppLayout>
+                {/* <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
+                <Link to="/active">active</Link> */}
+                <Outlet />
+              </AppLayout>
+
             </>
           ) : (
             <SignInScreen />
           )}
-          ;
           {/* <nav
             style={{
               borderBottom: 'solid 1px',
