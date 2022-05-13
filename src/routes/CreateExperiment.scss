@@ -52,6 +52,35 @@
     }
   }
 
-  .editor-container {
-    border: 1px solid black;
+  .ProseMirror-focused {
+    outline: none;
   }
+
+  .editor-container {
+    border: 2px solid black;
+    border-radius: 10px 15px 15px 10px;
+
+    .editor-content {
+        margin: 0px 10px;
+    }
+  }
+
+ul[data-type="taskList"] {
+    list-style: none;
+    padding: 0;
+
+    li {
+        display: flex;
+        align-items: center;
+
+        > label {
+            
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        }
+    }
+
+    input[type="checkbox"] {
+        cursor: pointer;
+    }
+}

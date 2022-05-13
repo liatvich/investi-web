@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import {
   useEditor,
   EditorContent,
-  BubbleMenu,
-  FloatingMenu,
+//   BubbleMenu,
+//   FloatingMenu,
 } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 // import './styles.scss'
@@ -16,7 +16,9 @@ import {
   collection, addDoc,
 } from 'firebase/firestore/lite'; // serverTimestamp, updateDoc
 import { useDatabase, useProvideAuth } from '../Hooks';
+import MenuBar from '../components/Editor/MenuBar';
 // import { UserContext } from '../context';
+import ValidationCheckboxExtension from '../components/Editor/ReactComponents/ValidationCheckboxExtension';
 
 export function CreateExperiment() {
 //   const [currentExperiment, setCurrentExperiment] = useState({});
@@ -40,14 +42,23 @@ export function CreateExperiment() {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      //   TaskList,
+      //   TaskItem.configure({
+      //     nested: true,
+      //   }),
+      ValidationCheckboxExtension,
+    //   ListItem.extend({
+    //     content: 'text*',
+    //   }),
     ],
     content: `
       <p>
         Try to select <em>this text</em> to see what we call the bubble menu.
       </p>
       <p>
-        Neat, isn’t it? Add an empty paragraph to see the floating menu.
+        Neat, isn't it? Add an empty paragraph to see the floating menu.
       </p>
+      <validationCheckbox/>
     `,
   });
 
@@ -58,7 +69,7 @@ export function CreateExperiment() {
       </Typography>
       <TextField id="standard-basic" label="Standard" variant="standard" placeholder="Please enter title" onChange={(event) => { setExperimentTitle(event.target.value); }} />
       <div className="editor-container">
-        {editor && (
+        {/* {editor && (
         <BubbleMenu className="bubble-menu" tippyOptions={{ duration: 100 }} editor={editor}>
           <Button
             onClick={() => editor.chain().focus().toggleBold().run()}
@@ -79,32 +90,10 @@ export function CreateExperiment() {
             Strike
           </Button>
         </BubbleMenu>
-        )}
+        )} */}
 
-        {editor && (
-        <FloatingMenu className="floating-menu" tippyOptions={{ duration: 100 }} editor={editor}>
-          <Button
-            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-            className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-          >
-            H1
-          </Button>
-          <Button
-            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-            className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-          >
-            H2
-          </Button>
-          <Button
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={editor.isActive('bulletList') ? 'is-active' : ''}
-          >
-            Bullet List
-          </Button>
-        </FloatingMenu>
-        )}
-
-        <EditorContent editor={editor} />
+        {editor && (<MenuBar editor={editor} />)}
+        <EditorContent className="editor-content" editor={editor} />
       </div>
       {/* <Button variant="contained">Add Page</Button> */}
       <Button
@@ -121,7 +110,7 @@ export function CreateExperiment() {
           await addDoc(experimentsRef, {
             user_id: user?.uid,
             title: experimentTitle,
-            data: editor.getHTML(),
+            data: { 0: editor.getJSON() },
           });
 
         //   await updateDoc(currentExperiment, {
@@ -132,6 +121,32 @@ export function CreateExperiment() {
         }}
       >
         Submit
+      </Button>
+      <Button
+        variant="contained"
+        onClick={async () => {
+        //   // const dataBase = getDatabase();
+        //   // const researchCol = collection(dataBase, 'research');
+        //   // const researchList = researchSnapshot.docs.map((doc) => doc.data());
+
+          //   // Add a new document with a generated id.
+          //   const dataBase = getDatabase();
+          //   //   collection(dataBase, 'experiments')
+          //   const experimentsRef = collection(dataBase, 'experiments');
+          //   await addDoc(experimentsRef, {
+          //     user_id: user?.uid,
+          //     title: experimentTitle,
+          //     data: editor.getJSON(),
+          //   });
+
+        // //   await updateDoc(currentExperiment, {
+        // //     title: experimentTitle,
+        // //     data: editor.getHTML(),
+        // //     // timestamp: serverTimestamp(),
+        // //   });
+        }}
+      >
+        Add Page
       </Button>
       {/* <Button variant="contained">Preview</Button> */}
       <nav

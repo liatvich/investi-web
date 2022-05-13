@@ -1,0 +1,19 @@
+.main{
+    display: flex;
+    flex-direction: column;
+}
+
+ul.item {
+    list-style-type: circle;
+    // list-style-position: inside;
+}
+
+ol.item {
+    list-style: decimal;
+}
+
+.validation {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
