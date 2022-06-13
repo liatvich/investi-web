@@ -87,6 +87,31 @@ function MenuBar({ editor }) {
       action: () => editor.chain().focus().toggleValidationCheckbox().run(),
       isActive: () => editor.isActive('validationCheckbox'),
     },
+    {
+      title: 'textbox',
+      action: () => editor.chain().focus().toggleTextbox().run(),
+      isActive: () => editor.isActive('textbox'),
+    },
+    {
+      title: 'add image',
+      action: () => {
+        const url = window.prompt('Image URL');
+
+        if (url) {
+          editor.chain().focus().setImage({ src: url }).run();
+        }
+      },
+    },
+    {
+      title: 'add video',
+      action: () => {
+        const url = window.prompt('Video URL');
+
+        if (url) {
+          editor.chain().focus().setExternalVideo({ src: url }).run();
+        }
+      },
+    },
     // {
     //   type: 'divider',
     // },

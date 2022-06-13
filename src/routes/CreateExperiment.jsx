@@ -11,6 +11,8 @@ import './CreateExperiment.scss';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Dropcursor from '@tiptap/extension-dropcursor';
+import Image from '@tiptap/extension-image';
 import { Link } from 'react-router-dom';
 import {
   collection, addDoc,
@@ -19,6 +21,8 @@ import { useDatabase, useProvideAuth } from '../Hooks';
 import MenuBar from '../components/Editor/MenuBar';
 // import { UserContext } from '../context';
 import ValidationCheckboxExtension from '../components/Editor/ReactComponents/ValidationCheckboxExtension';
+import TextboxExtension from '../components/Editor/ReactComponents/TextboxExtension';
+import ExternalVideoExtension from '../components/Editor/ReactComponents/ExternalVideoExtension';
 
 export function CreateExperiment() {
 //   const [currentExperiment, setCurrentExperiment] = useState({});
@@ -47,6 +51,10 @@ export function CreateExperiment() {
       //     nested: true,
       //   }),
       ValidationCheckboxExtension,
+      TextboxExtension,
+      Image,
+      Dropcursor,
+      ExternalVideoExtension,
     //   ListItem.extend({
     //     content: 'text*',
     //   }),

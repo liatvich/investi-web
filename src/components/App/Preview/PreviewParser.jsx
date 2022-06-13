@@ -7,7 +7,7 @@
 /* eslint-disable global-require */
 import React, { createRef, useState, useEffect } from 'react';
 import {
-  Typography, List, ListItem, FormControl, FormHelperText, Checkbox,
+  Typography, List, ListItem, FormControl, FormHelperText, Checkbox, TextField,
 } from '@mui/material';
 import s from './PreviewParser.module.scss';
 
@@ -17,8 +17,11 @@ const EDITOR_ELEMENTS_TYPES = {
   BULLET_LIST: 'bulletList',
   ORDERED_LIST: 'orderedList',
   VALIDATION_CHECKBOX: 'validationCheckbox',
+  TEXTBOX: 'textbox',
   TEXT: 'text',
   HARD_BREAK: 'hardBreak',
+  IMAGE: 'image',
+  EXTERNAL_VIDEO: 'externalVideo',
 };
 
 export function PreviewParser({
@@ -83,7 +86,7 @@ export function PreviewParser({
         component="fieldset"
         variant="standard"
       >
-        <div className="validation">
+        <div className={s.validation}>
           <Checkbox
             key={Math.floor(Math.random() * 1000 + 1)}
             onChange={(event) => {
@@ -101,39 +104,30 @@ export function PreviewParser({
     return checkboxForm;
   };
 
-  //   const RenderValidationCheckbox = ({
-  //     validationCheckbox,
-  //     // eslint-disable-next-line no-shadow
-  //     checkBoxClick,
-  //     id,
-  //   }) => { //  React.forwardRef(
-  //     const [value, setValue] = useState(false);
-  //     const checkboxForm = (
-  //       <FormControl
-  //         key={Math.floor(Math.random() * 1000 + 1)}
-  //         required
-  //         component="fieldset"
-  //         variant="standard"
-  //         error={!value}
-  //       >
-  //         <div className="validation">
-  //           <Checkbox
-  //             key={Math.floor(Math.random() * 1000 + 1)}
-  //             onChange={(event) => {
-  //               setValue(event.target.checked);
-  //               checkBoxClick(event.target.checked);
-  //             }}
-  //             checked={value}
-  //             id={id}
-  //           />
-  //           {renderText(validationCheckbox)}
-  //         </div>
-  //         <FormHelperText key={Math.floor(Math.random() * 1000 + 1)}>
-  //   Must Be Checked</FormHelperText>
-  //       </FormControl>
-  //     );
-  //     return checkboxForm;
-  //   };
+  const renderTextbox = (node) => (
+    <div className={s.mainTextbox}>
+      {renderText(node)}
+      <TextField id="filled-basic" variant="standard" className={s.textbox} />
+    </div>
+  );
+
+  const renderImage = (node) => (
+    <div>
+      <img className={s.image} src={node?.attrs?.src} alt="img" />
+    </div>
+  );
+
+  const renderExternalVideo = (node) => (
+    <iframe
+      width="950"
+      height="534"
+      src={node?.attrs?.src}
+      frameBorder="0"
+      title="video"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  );
 
   return (
     <div className={s.main} key={Math.floor(Math.random() * 1000 + 1)}>
@@ -151,18 +145,12 @@ export function PreviewParser({
               checkBoxClick,
               checkboxCounter.toString(),
             );
-            // const ref = React.createRef();
-            // setValidationRefs((prevRefs) => [...prevRefs, ref]);
-            // return (
-            //   <RenderValidationCheckbox
-            //     validationCheckbox={node}
-            //     checkBoxClick={checkBoxClick}
-            //     key={Math.floor(Math.random() * 1000 + 1)}
-            //     id={index}
-            //   />
-            // );
-            // );
-            // );
+          } if (node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX) {
+            return renderTextbox(node);
+          } if (node.type === EDITOR_ELEMENTS_TYPES.IMAGE) {
+            return renderImage(node);
+          } if (node.type === EDITOR_ELEMENTS_TYPES.EXTERNAL_VIDEO) {
+            return renderExternalVideo(node);
           }
           return <div key={Math.floor(Math.random() * 1000 + 1)}>NONE</div>;
         })
