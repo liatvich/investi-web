@@ -13,7 +13,7 @@ import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import s from './SideBar.module.scss';
 import { SideBarMenuItem } from './SideBarMenuItem';
-import { routes } from '../../routes';
+import { routes } from '../../routes/manager';
 
 export function SideBar() {
   const navigate = useNavigate();

@@ -17,16 +17,18 @@ import { Link } from 'react-router-dom';
 import {
   collection, addDoc,
 } from 'firebase/firestore/lite'; // serverTimestamp, updateDoc
-import { useDatabase, useProvideAuth } from '../Hooks';
-import MenuBar from '../components/Editor/MenuBar';
+import { useDatabase, useProvideAuth } from '../../Hooks';
+import MenuBar from '../../components/Editor/MenuBar';
 // import { UserContext } from '../context';
-import ValidationCheckboxExtension from '../components/Editor/ReactComponents/ValidationCheckboxExtension';
-import TextboxExtension from '../components/Editor/ReactComponents/TextboxExtension';
-import ExternalVideoExtension from '../components/Editor/ReactComponents/ExternalVideoExtension';
+import ValidationCheckboxExtension from '../../components/Editor/ReactComponents/ValidationCheckboxExtension';
+import TextboxExtension from '../../components/Editor/ReactComponents/TextboxExtension';
+import ExternalVideoExtension from '../../components/Editor/ReactComponents/ExternalVideoExtension';
 
 export function CreateExperiment() {
 //   const [currentExperiment, setCurrentExperiment] = useState({});
   const [experimentTitle, setExperimentTitle] = useState('');
+  const [currentDocId, setCurrentDocId] = useState(null);
+
   const { getDatabase } = useDatabase();
   const { user } = useProvideAuth();
 
@@ -115,12 +117,13 @@ export function CreateExperiment() {
           const dataBase = getDatabase();
           //   collection(dataBase, 'experiments')
           const experimentsRef = collection(dataBase, 'experiments');
-          await addDoc(experimentsRef, {
+          const docRef = await addDoc(experimentsRef, {
             user_id: user?.uid,
             title: experimentTitle,
             data: { 0: editor.getJSON() },
           });
 
+          setCurrentDocId(docRef.id);
         //   await updateDoc(currentExperiment, {
         //     title: experimentTitle,
         //     data: editor.getHTML(),
@@ -130,6 +133,15 @@ export function CreateExperiment() {
       >
         Submit
       </Button>
+      {
+        currentDocId && (
+        <Typography variant="contained" gutterBottom component="div">
+          currentDocId:
+          {' '}
+          {currentDocId}
+        </Typography>
+        )
+      }
       <Button
         variant="contained"
         onClick={async () => {
@@ -156,7 +168,6 @@ export function CreateExperiment() {
       >
         Add Page
       </Button>
-      {/* <Button variant="contained">Preview</Button> */}
       <nav
         style={{
           borderBottom: 'solid 1px',

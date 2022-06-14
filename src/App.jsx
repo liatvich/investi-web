@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.scss';
-// import Typography from '@mui/material/Typography';
-// import Button from '@mui/material/Button';
-import { Outlet } from 'react-router-dom';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { SignInScreen } from './routes';
+// import { SignInScreen } from './routes/manager';
 import { ProvideAuth, useProvideAuth } from './Hooks';
 import { AppLayout } from './components/App/AppLayout';
 
@@ -17,6 +17,7 @@ export function App() {
   });
   //   const { loggedUser } = useContext(UserContext);
   const { user } = useProvideAuth();
+  const navigate = useNavigate();
 
   return (
     <ProvideAuth>
@@ -35,11 +36,18 @@ export function App() {
                 <Link to="/active">active</Link> */}
                 <Outlet />
               </AppLayout>
-
             </>
-          ) : (
-            <SignInScreen />
-          )}
+          )
+            : (
+              <div>
+                <Typography variant="h5" gutterBottom component="div">
+                  Choose User type:
+                </Typography>
+                <Button variant="contained" onClick={() => { navigate('/signin'); }}>Manager</Button>
+                <Button variant="contained" onClick={() => { navigate('/research'); }}>Consumer</Button>
+              </div>
+          // <SignInScreen />
+            )}
           {/* <nav
             style={{
               borderBottom: 'solid 1px',

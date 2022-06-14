@@ -7,12 +7,13 @@ import {
   Route,
 } from 'react-router-dom';
 import { App } from './App';
+import { ConsumerPreview } from './routes/consumer/ConsumerPreview/ConsumerPreview';
+import { ConsumerResearchPreview } from './routes/consumer/ConsumerResearchPreview';
+
 import {
   CreateExperiment, routes, ActiveResearch,
   SignInScreen,
-} from './routes';
-// import { PrivateRoute } from './routes/services';
-// import reportWebVitals from './reportWebVitals';
+} from './routes/manager';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -23,6 +24,8 @@ ReactDOM.render(
           <Route path="active" element={<ActiveResearch />} />
         </Route>
         <Route path={routes.SIGN_IN} element={<SignInScreen />} />
+        <Route path="research" element={<ConsumerPreview />} />
+        <Route path="research/:activeResearch" element={<ConsumerResearchPreview />} />
         <Route
           path="*"
           element={(

@@ -6,8 +6,9 @@ import {
 // import parse from 'html-react-parser';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { useDatabase, useProvideAuth } from '../Hooks';
-import { ResearchPreview } from '../components/App/Preview/ResearchPreview';
+import { useDatabase, useProvideAuth } from '../../Hooks';
+import { ResearchPreview } from '../../components/App/Preview/ResearchPreview';
+
 
 export function ActiveResearch() {
   const [researches, setResearches] = useState([]);

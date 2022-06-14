@@ -11,7 +11,7 @@ import {
 import { useAuth } from '../../Hooks';
 
 // eslint-disable-next-line react/prop-types
-export function PrivateRoute({ children, ...rest }) {
+export function ({ children, ...rest }) {
   const auth = useAuth();
   return (
     <Route

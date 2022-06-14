@@ -5,7 +5,7 @@ import firebase from 'firebase/compat/app';
 import Typography from '@mui/material/Typography';
 import 'firebase/compat/auth';
 import { useNavigate } from 'react-router-dom';
-import { useProvideAuth } from '../Hooks'; // useAuth
+import { useProvideAuth } from '../../Hooks'; // useAuth
 import s from './SignInScreen.module.scss';
 
 export function SignInScreen() {
@@ -52,7 +52,7 @@ export function SignInScreen() {
         <Typography variant="h5" gutterBottom component="div" className={s.username}>
           Log in to start the investigation adventure
         </Typography>
-        <img className={s.image} src={require('../Resources/searchImage.png')} alt="Logo" />
+        <img className={s.image} src={require('../../Resources/searchImage.png')} alt="Logo" />
       </div>
 
       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />

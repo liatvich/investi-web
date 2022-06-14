@@ -27,7 +27,7 @@ export function ResearchPreview({ research }) {
       ).length;
       // eslint-disable-next-line no-plusplus
       const validationCheckboxes = {};
-      for (let index = 0; index < checkboxesCount; index++) {
+      for (let index = 0; index < checkboxesCount; index += 1) {
         validationCheckboxes[index.toString()] = false;
       }
       setCheckboxesState(validationCheckboxes);
