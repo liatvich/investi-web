@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-debugger */
 import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import {
@@ -8,7 +10,6 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useDatabase, useProvideAuth } from '../../Hooks';
 import { ResearchPreview } from '../../components/App/Preview/ResearchPreview';
-
 
 export function ActiveResearch() {
   const [researches, setResearches] = useState([]);
@@ -25,8 +26,16 @@ export function ActiveResearch() {
       //   setResearches(researchList);
 
       const researchSnapshot = await getDocs(q);
-      const researchList = researchSnapshot.docs.map((doc) => doc.data());
+      const researchList = researchSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       console.log(researchList);
+
+      researchList.forEach(async (research) => {
+        const signups = await getDocs(collection(dataBase, `experiments/${research.id}/signups`));
+        if (signups.docs.length > 0) {
+          research.signups = signups.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        }
+      });
+
       setResearches(researchList);
     }
 
@@ -46,7 +55,7 @@ export function ActiveResearch() {
         <Typography variant="h5" gutterBottom component="div">
           Experiment Preview:
         </Typography>
-        {research?.data?.['0'] && <ResearchPreview research={research?.data?.['0']} />}
+        {research?.data['1'] && <ResearchPreview research={research?.data} />}
       </div>
     ) : <div>Empty</div>
   );
@@ -60,6 +69,10 @@ export function ActiveResearch() {
         ? (
           <Stack spacing={2}>
             {researchView(researches[displayedResearch - 1])}
+            {researches[displayedResearch - 1].signups && (
+              researches[displayedResearch - 1].signups.map((signup, index) => (
+                <Typography>{`signup number: ${index} is ${signup.id}`}</Typography>
+              )))}
             <Pagination
               count={researches.length}
               defaultPage={0}

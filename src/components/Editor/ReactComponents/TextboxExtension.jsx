@@ -6,6 +6,13 @@ export default Node.create({
   name: 'textbox',
   group: 'block',
   content: 'text*',
+  addAttributes() {
+    return {
+      value: {
+        default: '',
+      },
+    };
+  },
   parseHTML() {
     return [
       {

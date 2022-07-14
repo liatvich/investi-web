@@ -7,6 +7,7 @@ import 'firebase/compat/auth';
 import { useNavigate } from 'react-router-dom';
 import { useProvideAuth } from '../../Hooks'; // useAuth
 import s from './SignInScreen.module.scss';
+import { Logo } from '../../assets/logo';
 
 export function SignInScreen() {
 //   const { getLoggedUser } = useContext(UserContext);
@@ -48,15 +49,23 @@ export function SignInScreen() {
 
   return (
     <div className={s.signin}>
-      <div className={s.top}>
-        <Typography variant="h5" gutterBottom component="div" className={s.username}>
-          Log in to start the investigation adventure
+      <div className={s.logo}>
+        <Logo className={s.icon} color="#104C43" />
+        <Typography variant="subtitle1" component="div" className={s.text}>
+          INVESTI PET
         </Typography>
-        <img className={s.image} src={require('../../Resources/searchImage.png')} alt="Logo" />
+      </div>
+      <div className={s.top}>
+        <Typography className={s.title} variant="h5" gutterBottom component="div">
+          Log in to start the investigation adventure!
+        </Typography>
       </div>
 
-      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+      <div className={s.googlesignin}>
+        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+      </div>
     </div>
+
   );
 }
 

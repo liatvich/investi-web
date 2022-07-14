@@ -13,7 +13,6 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Image from '@tiptap/extension-image';
-import { Link } from 'react-router-dom';
 import {
   collection, addDoc,
 } from 'firebase/firestore/lite'; // serverTimestamp, updateDoc
@@ -28,22 +27,11 @@ export function CreateExperiment() {
 //   const [currentExperiment, setCurrentExperiment] = useState({});
   const [experimentTitle, setExperimentTitle] = useState('');
   const [currentDocId, setCurrentDocId] = useState(null);
+  const [currentResearchJson, setCurrentResearchJson] = useState({});
+  const [pagesCounter, setPagesCounter] = useState(1);
 
   const { getDatabase } = useDatabase();
   const { user } = useProvideAuth();
-
-  //   useEffect(() => {
-  //     async function createNewExperiment() {
-  //       // Add a new document with a generated id.
-  //       const experimentRef = await addDoc(collection(getDatabase(), 'experiments'), {
-  //         user_id: getLoggedUser() && getLoggedUser().uid,
-  //       });
-  //       setCurrentExperiment(experimentRef);
-  //     }
-
-  //     createNewExperiment();
-  //     // setLoggedUser(firebase.auth().currentUser);
-  //   }, []);
 
   const editor = useEditor({
     extensions: [
@@ -79,56 +67,23 @@ export function CreateExperiment() {
       </Typography>
       <TextField id="standard-basic" label="Standard" variant="standard" placeholder="Please enter title" onChange={(event) => { setExperimentTitle(event.target.value); }} />
       <div className="editor-container">
-        {/* {editor && (
-        <BubbleMenu className="bubble-menu" tippyOptions={{ duration: 100 }} editor={editor}>
-          <Button
-            onClick={() => editor.chain().focus().toggleBold().run()}
-            className={editor.isActive('bold') ? 'is-active' : ''}
-          >
-            Bold
-          </Button>
-          <Button
-            onClick={() => editor.chain().focus().toggleItalic().run()}
-            className={editor.isActive('italic') ? 'is-active' : ''}
-          >
-            Italic
-          </Button>
-          <Button
-            onClick={() => editor.chain().focus().toggleStrike().run()}
-            className={editor.isActive('strike') ? 'is-active' : ''}
-          >
-            Strike
-          </Button>
-        </BubbleMenu>
-        )} */}
 
         {editor && (<MenuBar editor={editor} />)}
         <EditorContent className="editor-content" editor={editor} />
       </div>
-      {/* <Button variant="contained">Add Page</Button> */}
       <Button
         variant="contained"
         onClick={async () => {
-          // const dataBase = getDatabase();
-          // const researchCol = collection(dataBase, 'research');
-          // const researchList = researchSnapshot.docs.map((doc) => doc.data());
-
-          // Add a new document with a generated id.
           const dataBase = getDatabase();
-          //   collection(dataBase, 'experiments')
           const experimentsRef = collection(dataBase, 'experiments');
+          currentResearchJson[`${pagesCounter}`] = editor.getJSON();
           const docRef = await addDoc(experimentsRef, {
             user_id: user?.uid,
             title: experimentTitle,
-            data: { 0: editor.getJSON() },
+            data: { ...currentResearchJson },
           });
 
           setCurrentDocId(docRef.id);
-        //   await updateDoc(currentExperiment, {
-        //     title: experimentTitle,
-        //     data: editor.getHTML(),
-        //     // timestamp: serverTimestamp(),
-        //   });
         }}
       >
         Submit
@@ -144,42 +99,24 @@ export function CreateExperiment() {
       }
       <Button
         variant="contained"
-        onClick={async () => {
-        //   // const dataBase = getDatabase();
-        //   // const researchCol = collection(dataBase, 'research');
-        //   // const researchList = researchSnapshot.docs.map((doc) => doc.data());
-
-          //   // Add a new document with a generated id.
-          //   const dataBase = getDatabase();
-          //   //   collection(dataBase, 'experiments')
-          //   const experimentsRef = collection(dataBase, 'experiments');
-          //   await addDoc(experimentsRef, {
-          //     user_id: user?.uid,
-          //     title: experimentTitle,
-          //     data: editor.getJSON(),
-          //   });
-
-        // //   await updateDoc(currentExperiment, {
-        // //     title: experimentTitle,
-        // //     data: editor.getHTML(),
-        // //     // timestamp: serverTimestamp(),
-        // //   });
+        onClick={() => {
+          setCurrentResearchJson((researchJson) => {
+            const prevResearchJson = researchJson;
+            prevResearchJson[`${pagesCounter}`] = editor.getJSON();
+            return researchJson;
+          });
+          setPagesCounter(pagesCounter + 1);
+          editor.commands.clearContent();
         }}
+
       >
         Add Page
       </Button>
-      <nav
-        style={{
-          borderBottom: 'solid 1px',
-          paddingBottom: '1rem',
-        }}
-      >
-        <Link to="/invoices">Invoices</Link>
+      <Typography component="div">
+        Page Number:
         {' '}
-        |
-        {' '}
-        <Link to="/expenses">Expenses</Link>
-      </nav>
+        {pagesCounter}
+      </Typography>
     </div>
   );
 }

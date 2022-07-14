@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  doc, getDoc,
+  doc, getDoc, setDoc,
 } from 'firebase/firestore/lite';
-// import TextField from '@mui/material/TextField';
-// import Button from '@mui/material/Button';
-// import Typography from '@mui/material/Typography';
+import { EDITOR_ELEMENTS_TYPES } from '../../services/consts';
 
 import { useDatabase } from '../../Hooks';
 import { ResearchPreview } from '../../components/App/Preview/ResearchPreview';
@@ -22,8 +20,8 @@ export function ConsumerResearchPreview() {
       const docRef = doc(dataBase, 'experiments', activeResearch);
       const docResearch = await getDoc(docRef);
 
-      if (docResearch.exists() && docResearch.data()?.data?.['0']) {
-        setResearch(docResearch.data()?.data?.['0']);
+      if (docResearch.exists() && docResearch.data()?.data) {
+        setResearch(docResearch.data()?.data);
       } else {
         navigate(-1);
       }
@@ -34,7 +32,30 @@ export function ConsumerResearchPreview() {
 
   return (
     <div>
-      {research ? <ResearchPreview research={research} /> : <div>NO RESEARCH FOUND</div>}
+      {research
+        ? (
+          <ResearchPreview
+            research={research}
+            isConsumer
+            // eslint-disable-next-line no-unused-vars
+            submitOnClick={async (email, filledResearch) => {
+              const userInputs = Object.keys(filledResearch)?.reduce((inputs, docIndex) => {
+                const teaxtboxes = filledResearch[docIndex]?.content
+                  ?.filter((node) => node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX);
+                // eslint-disable-next-line no-param-reassign
+                inputs[docIndex] = teaxtboxes;
+                return inputs;
+              }, {});
+
+              const dataBase = getDatabase();
+              await setDoc(doc(dataBase, `experiments/${activeResearch}/signups`, email), {
+                inputs: userInputs,
+                email,
+                date: new Date(),
+              });
+            }}
+          />
+        ) : <div>NO RESEARCH FOUND</div>}
     </div>
   );
 }
