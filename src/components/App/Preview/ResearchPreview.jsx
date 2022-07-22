@@ -3,20 +3,17 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react/prop-types */
 /* eslint-disable global-require */
-import React, { useState, useEffect, useCallback } from 'react';
-import { Button, Typography, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { Button, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import debounce from 'lodash.debounce';
 import { PreviewParser } from './PreviewParser';
 import s from './ResearchPreview.module.scss';
-import { EDITOR_ELEMENTS_TYPES } from '../../../services/consts';
+import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 
 // isConsumer - SUPER UGLY!
 export function ResearchPreview({ research, isConsumer, submitOnClick }) {
   const [currPage, setCurrPage] = useState(1);
-  const [email, setEmail] = useState('');
-  const [showEmailValidationError, setShowEmailValidationError] = useState(false);
   const [validationError, setValidationError] = useState(false);
 
   const isCheckboxValid = () => {
@@ -28,21 +25,6 @@ export function ResearchPreview({ research, isConsumer, submitOnClick }) {
     setValidationError(!isValid);
     return isValid;
   };
-
-  const emailValidation = (checkEmail) => String(checkEmail).toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
-
-  const handleEmailValidationChange = (value) => {
-    if (emailValidation(value)) {
-      setShowEmailValidationError(false);
-    } else {
-      setShowEmailValidationError(true);
-    }
-  };
-
-  const onChangeMailValidation = useCallback(debounce(handleEmailValidationChange, 250), []);
 
   const researchView = () => (
     research ? (
@@ -83,34 +65,15 @@ export function ResearchPreview({ research, isConsumer, submitOnClick }) {
   isConsumer
   && currPage === Object.keys(research).length
     && (
-      <>
-        <div>
-          <Typography variant="body1" gutterBottom component="div">
-            To register please enter your mail:
-          </Typography>
-          <TextField
-            id="standard-error"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              // handleEmailValidationChange(event.target.value);
-              onChangeMailValidation(event.target.value);
-            }}
-            placeholder="Please enter your email"
-            error={showEmailValidationError}
-          />
-        </div>
-        <Button
-          onClick={() => {
-            if (isCheckboxValid()) {
-              submitOnClick(email, research);
-            }
-          }}
-          disabled={email === '' || showEmailValidationError}
-        >
-          Submit Application
-        </Button>
-      </>
+    <Button
+      onClick={() => {
+        if (isCheckboxValid()) {
+          submitOnClick(research);
+        }
+      }}
+    >
+      Submit Application
+    </Button>
     )
 }
         {validationError

@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
@@ -10,43 +11,32 @@ import { styled } from '@mui/material/styles';
 import { useDatabase } from '../../../Hooks';
 import s from './ConsumerPreview.module.scss';
 import { Logo } from '../../../assets/logo';
+import { TextFieldMuiStyle } from '../../../common/styleConsts';
+import { EmailTextbox } from '../../../components/EmailTextbox';
 
-const CssTextField = styled(TextField)({
-  '.MuiTextField-root': {
-    borderColor: '#104C43',
-  },
-  '& label.Mui-focused': {
-    color: '#104C43',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: '#104C43',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#104C43',
-    },
-    '&:hover fieldset': {
-      borderColor: '#104C43',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#104C43',
-    },
-  },
-});
+const CssTextField = styled(TextField)(TextFieldMuiStyle);
 
 export function ConsumerPreview() {
   const [researchCode, setResearchCode] = useState('');
   const [isError, setIsError] = useState(false);
+  const [email, setEmail] = useState({ email: '', isValid: false });
   const navigate = useNavigate();
   const { getDatabase } = useDatabase();
 
   const start = async () => {
+    if (researchCode === '') {
+      setIsError(true);
+      return;
+    }
+    if (!email.isValid) {
+      return;
+    }
     const dataBase = getDatabase();
     const docRef = doc(dataBase, 'experiments', researchCode);
     const docResearch = await getDoc(docRef);
 
     if (docResearch.exists() && docResearch.data()?.data?.['1']) {
-      navigate(`${researchCode}`);
+      navigate(`${researchCode}/${email.email}`);
     } else {
       setIsError(true);
     }
@@ -68,9 +58,8 @@ export function ConsumerPreview() {
           <Typography variant="subtitle1" gutterBottom component="div" className={s.boxtitle}>
             Research Code:
           </Typography>
-
           <CssTextField
-            placeholder="Example"
+            placeholder="research code"
             id="custom-css-outlined-input"
             value={researchCode}
             className={s.textfield}
@@ -87,7 +76,14 @@ export function ConsumerPreview() {
                 Please enter correct research code
               </Typography>
             ) : <div className={s.emptyError} />}
+          <EmailTextbox onEmailChange={
+            (currEmail, isCurrEmailValid) => {
+              setEmail({ email: currEmail, isValid: isCurrEmailValid });
+            }
+}
+          />
           <Button
+            disableRipple
             variant="contained"
             onClick={start}
             className={s.submit}

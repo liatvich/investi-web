@@ -25,13 +25,11 @@ ReactDOM.render(
         </Route>
         <Route path={routes.SIGN_IN} element={<SignInScreen />} />
         <Route path="research" element={<ConsumerPreview />} />
-        <Route path="research/:activeResearch" element={<ConsumerResearchPreview />} />
+        <Route path="research/:activeResearch/:email" element={<ConsumerResearchPreview />} />
         <Route
           path="*"
           element={(
-            <main style={{ padding: '1rem' }}>
-              <p>Theres nothing here!</p>
-            </main>
+            <App />
       )}
         />
       </Routes>

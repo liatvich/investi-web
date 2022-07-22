@@ -3,19 +3,24 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
   doc, getDoc, setDoc,
 } from 'firebase/firestore/lite';
-import { EDITOR_ELEMENTS_TYPES } from '../../services/consts';
+import { EDITOR_ELEMENTS_TYPES } from '../../common/consts';
 
 import { useDatabase } from '../../Hooks';
 import { ResearchPreview } from '../../components/App/Preview/ResearchPreview';
+import { emailValidation } from '../../common/general';
 
 export function ConsumerResearchPreview() {
-  const { activeResearch } = useParams();
+  const { activeResearch, email } = useParams();
   const { getDatabase } = useDatabase();
   const navigate = useNavigate();
   const [research, setResearch] = useState(null);
 
   useEffect(() => {
     async function fetchResearch() {
+      if (!emailValidation(email)) {
+        navigate(-1);
+      }
+
       const dataBase = getDatabase();
       const docRef = doc(dataBase, 'experiments', activeResearch);
       const docResearch = await getDoc(docRef);
@@ -38,7 +43,7 @@ export function ConsumerResearchPreview() {
             research={research}
             isConsumer
             // eslint-disable-next-line no-unused-vars
-            submitOnClick={async (email, filledResearch) => {
+            submitOnClick={async (filledResearch) => {
               const userInputs = Object.keys(filledResearch)?.reduce((inputs, docIndex) => {
                 const teaxtboxes = filledResearch[docIndex]?.content
                   ?.filter((node) => node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX);

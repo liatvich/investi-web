@@ -13,7 +13,7 @@ import s from './PreviewParser.module.scss';
 import { PreviewText } from './PreviewText';
 import { PreviewValidationCheckbox } from './PreviewValidationCheckbox';
 import { PreviewTextbox } from './PreviewTextbox';
-import { EDITOR_ELEMENTS_TYPES } from '../../../services/consts';
+import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 
 const renderImage = (node) => (
   <div>

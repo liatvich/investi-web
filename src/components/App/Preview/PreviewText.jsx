@@ -5,7 +5,7 @@ import React from 'react';
 import {
   Typography,
 } from '@mui/material';
-import { EDITOR_ELEMENTS_TYPES } from '../../../services/consts';
+import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 
 export function PreviewText({ node }) {
   return (
