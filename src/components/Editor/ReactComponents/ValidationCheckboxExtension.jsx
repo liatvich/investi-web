@@ -11,6 +11,9 @@ export default Node.create({
       isChecked: {
         default: false,
       },
+      isValid: {
+        default: false,
+      },
     };
   },
   parseHTML() {

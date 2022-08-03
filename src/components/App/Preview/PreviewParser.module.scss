@@ -1,32 +1,41 @@
 .main{
     display: flex;
     flex-direction: column;
-}
 
-ul.item {
-    list-style-type: circle;
-    // list-style-position: inside;
-}
-
-ol.item {
-    list-style: decimal;
-}
-
-.validation {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.mainTextbox {
-    display: flex;
-    align-items: center;
-
-    .textbox {
-        margin: 9px;
+    ul.item {
+        list-style-type: circle;
+        // list-style-position: inside;
     }
-}
+    
+    ol.item {
+        list-style: decimal;
+    }
+    
+    .validation {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .mainTextbox {
+        display: flex;
+        align-items: center;
+    
+        .textbox {
+            margin: 9px;
+        }
+    }
+    
+    .image {
+        object-fit: scale-down;
+    }
 
-.image {
-    object-fit: scale-down;
+    .button {
+        width: 184px;
+        height: 184px;
+        background: rgba(16, 76, 67, 0.1);
+        .arrow {
+
+        }
+    }
 }

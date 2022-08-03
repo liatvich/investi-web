@@ -1,12 +1,19 @@
-.topbar{
+.topbar {
     display: flex;
-    height: 100px;
-    width: 100%;
-    border-bottom-color: #d2d7da;
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
+    height: 80px;
+    // width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.06);
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
+
+    .icon {
+        margin-left: 33px;
+    }
+
+    .avatar {
+        display: flex;
+    }
 }
 
 .username {

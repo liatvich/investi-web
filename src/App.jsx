@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Outlet
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import s from './App.module.scss';
@@ -12,7 +12,7 @@ import { Logo } from './assets/logo';
 import welcome from './assets/welcome.png';
 
 export function App() {
-  const font = "'Helvetica', sans-serif";
+  const font = "'Roboto', sans-serif";
   const theme = createTheme({
     typography: {
       fontFamily: font,
@@ -27,20 +27,9 @@ export function App() {
       <ThemeProvider theme={theme}>
         <div>
           {user ? (
-            <>
-              {/* <Typography variant="h5" gutterBottom component="div">
-                Main App Page
-              </Typography>
-              <Button variant="contained">  </Button>
-              <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
-              <Link to="/active">active</Link> */}
-              <AppLayout>
-                {/* <Link to={`/${routes.CREATE_EXPERIMENT}`}>CreateExperiment</Link>
-                <Link to="/active">active</Link> */}
-                <Outlet />
-              </AppLayout>
-            </>
-          )
+            <AppLayout />)
+          // /* <Outlet />
+            // </AppLayout>*/}
             : (
               <div className={s.root}>
                 <div className={s.header}>

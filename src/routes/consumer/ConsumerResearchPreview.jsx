@@ -14,6 +14,7 @@ export function ConsumerResearchPreview() {
   const { getDatabase } = useDatabase();
   const navigate = useNavigate();
   const [research, setResearch] = useState(null);
+  const [title, setTitle] = useState('');
 
   useEffect(() => {
     async function fetchResearch() {
@@ -27,6 +28,7 @@ export function ConsumerResearchPreview() {
 
       if (docResearch.exists() && docResearch.data()?.data) {
         setResearch(docResearch.data()?.data);
+        setTitle(docResearch.data()?.title);
       } else {
         navigate(-1);
       }
@@ -42,6 +44,7 @@ export function ConsumerResearchPreview() {
           <ResearchPreview
             research={research}
             isConsumer
+            title={title}
             // eslint-disable-next-line no-unused-vars
             submitOnClick={async (filledResearch) => {
               const userInputs = Object.keys(filledResearch)?.reduce((inputs, docIndex) => {

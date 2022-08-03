@@ -11,18 +11,18 @@ import { ConsumerPreview } from './routes/consumer/ConsumerPreview/ConsumerPrevi
 import { ConsumerResearchPreview } from './routes/consumer/ConsumerResearchPreview';
 
 import {
-  CreateExperiment, routes, ActiveResearch,
+  routes,
   SignInScreen,
-} from './routes/manager';
+} from './routes/manager'; //  CreateExperiment, , ActiveResearch,
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />}>
-          <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
+        <Route path="/" element={<App />} />
+        {/* <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
           <Route path="active" element={<ActiveResearch />} />
-        </Route>
+        </Route> */}
         <Route path={routes.SIGN_IN} element={<SignInScreen />} />
         <Route path="research" element={<ConsumerPreview />} />
         <Route path="research/:activeResearch/:email" element={<ConsumerResearchPreview />} />

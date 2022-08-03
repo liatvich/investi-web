@@ -52,11 +52,11 @@ export function ConsumerPreview() {
       </div>
       <div className={s.content}>
         <Typography variant="h5" gutterBottom component="div" className={s.title}>
-          Please enter research number:
+          Please enter research code
         </Typography>
         <div className={s.box}>
           <Typography variant="subtitle1" gutterBottom component="div" className={s.boxtitle}>
-            Research Code:
+            Research Code
           </Typography>
           <CssTextField
             placeholder="research code"
@@ -76,6 +76,9 @@ export function ConsumerPreview() {
                 Please enter correct research code
               </Typography>
             ) : <div className={s.emptyError} />}
+          <Typography variant="subtitle1" gutterBottom component="div" className={s.boxtitle}>
+            Email
+          </Typography>
           <EmailTextbox onEmailChange={
             (currEmail, isCurrEmailValid) => {
               setEmail({ email: currEmail, isValid: isCurrEmailValid });

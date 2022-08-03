@@ -1,17 +1,27 @@
 // Import FirebaseAuth and firebase.
-import React from 'react';
-import { SideBar } from './SideBar';
+import React, { useState } from 'react';
 import { TopBar } from './TopBar';
+import { ActiveResearch } from '../../routes/manager/ActiveResearch';
 import s from './AppLayout.module.scss';
+
+const Steps = {
+  CREATE: 'CREATE',
+  LIST: 'LIST',
+};
 
 // eslint-disable-next-line react/prop-types
 export function AppLayout({ children }) {
+  const [step, setStep] = useState(Steps.LIST);
+
   return (
     <div className={s.main}>
-      <SideBar />
-      <div className={s.right_side}>
-        <TopBar className={s.topBar} />
-        {children}
+      <TopBar className={s.topBar} />
+      <div className={s.content}>
+        {
+          step === Steps.LIST && (
+            <ActiveResearch />
+          )
+        }
       </div>
     </div>
   );

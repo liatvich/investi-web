@@ -7,9 +7,13 @@ import { PreviewText } from './PreviewText';
 
 export function PreviewValidationCheckbox({ node }) {
   const [value, setValue] = useState(node?.attrs?.isChecked);
+  const [isValid, setIsValid] = useState(node?.attrs?.isValid);
 
   useEffect(() => {
     setValue(node?.attrs?.isChecked);
+    if (!node?.attrs?.isValid) {
+      setIsValid(false);
+    }
   }, [node]);
 
   return (
@@ -21,6 +25,7 @@ export function PreviewValidationCheckbox({ node }) {
     >
       <div className={s.validation}>
         <Checkbox
+          disableRipple
           key={Math.floor(Math.random() * 1000 + 1)}
           onChange={(event) => {
             if (node?.attrs) {
@@ -28,14 +33,18 @@ export function PreviewValidationCheckbox({ node }) {
               node.attrs.isChecked = event.target.checked;
             }
             setValue(event.target.checked);
+            setIsValid(event?.target?.checked);
           }}
           checked={value}
+          sx={isValid ? {
+            color: 'black',
+          } : {
+            color: 'red',
+          }}
         />
         {node
         && <PreviewText key={Math.floor(Math.random() * 1000 + 1)} node={node} />}
       </div>
-      {/* <FormHelperText key={Math.floor(Math.random() * 1000 + 1)}>
-    Must Be Checked</FormHelperText> */}
     </FormControl>
   );
 }
