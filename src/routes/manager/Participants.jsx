@@ -25,9 +25,15 @@ export function Participants({
 }) {
   const { getDatabase } = useDatabase();
   const dataBase = getDatabase();
+  const [currParticipants, setCurrParticipants] = useState(participants);
 
-  const updateStatus = async () => {
-    const frankDocRef = doc(dataBase, 'users', 'frank');
+  const updateStatus = async (participant, status) => {
+    const participantRef = doc(dataBase, `experiments/${participant.researchId}/signups/${participant.email}`);
+    await updateDoc(participantRef, {
+      status,
+    });
+    participant.status = status;
+    setCurrParticipants([...currParticipants]);
   };
 
   const theme = createTheme({
@@ -72,7 +78,6 @@ export function Participants({
     setPage(0);
   };
 
-  // const [currParticipants, setCurrParticipants] = useState(participants);
   const CssTableContainer = styled(TableContainer)({
     '& .MuiTable-root': {
       borderSpacing: '0px 12px !important',
@@ -116,8 +121,11 @@ export function Participants({
           return '';
         }
         const currDate = new Date(value);
-        const date = `${currDate.getFullYear()}-${currDate.getMonth() + 1}-${currDate.getDate()}`;
-        const time = `${currDate.getHours()}:${currDate.getMinutes()}:${currDate.getSeconds()}`;
+        if (Number.isNaN(currDate.getMonth())) {
+          return '';
+        }
+        const date = `${currDate.getMonth() + 1}/${currDate.getDate()}/${currDate.getFullYear()}`;
+        const time = `${currDate.getMinutes()}:${currDate.getHours()}`;
         return `${date} ${time}`;
       },
     },
@@ -150,20 +158,41 @@ export function Participants({
       minWidth: 50,
       align: 'right',
       // eslint-disable-next-line react/no-unstable-nested-components
-      format: (value) => (
-        !value ? (
+      format: (participant) => (
+        !participant?.status ? (
           <ThemeProvider theme={theme}>
             <div className={s.status}>
-              <Button disableRipple variant="contained" color="neutral" className={s.button}>
+              <Button
+                disableRipple
+                variant="contained"
+                color="neutral"
+                className={s.button}
+                onClick={() => {
+                  updateStatus(
+                    participant,
+                    PARTICIPANT_STATUS.APPROVED,
+                  );
+                }}
+              >
                 ACCEPT
               </Button>
-              <Button disableRipple variant="outlined" color="neutralReverse">
+              <Button
+                disableRipple
+                variant="outlined"
+                color="neutralReverse"
+                onClick={() => {
+                  updateStatus(
+                    participant,
+                    PARTICIPANT_STATUS.DENIED,
+                  );
+                }}
+              >
                 DECLINE
               </Button>
             </div>
           </ThemeProvider>
         ) : (
-          value === PARTICIPANT_STATUS.APPROVED ? (
+          participant?.status === PARTICIPANT_STATUS.APPROVED ? (
             <Typography variant="subtitle2"> APPROVED </Typography>
           ) : (<Typography variant="subtitle2"> DENIED </Typography>)
         )
@@ -205,7 +234,7 @@ export function Participants({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {participants?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                {currParticipants?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((participant, index) => (
                     <TableRow
                       hover
@@ -217,8 +246,10 @@ export function Participants({
                         const value = participant[column.id];
                         return (
                           <TableCell key={column.id} align={column.align}>
-                            {column.id === 'Number' ? (index + page * index)
-                              : (column.format ? column.format(value) : (value || ''))}
+                            {column.id === 'Number' ? (index + page * index + 1)
+                              : (column.format
+                                ? column.id === 'status' ? column.format(participant)
+                                  : column.format(value) : (value || ''))}
                           </TableCell>
                         );
                       })}

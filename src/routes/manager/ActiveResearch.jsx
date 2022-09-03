@@ -66,7 +66,13 @@ export function ActiveResearch({ createResearch, participantsSelected }) {
           const signups = await getDocs(collection(dataBase, `experiments/${research.id}/signups`));
           if (signups?.docs.length > 0) {
             // eslint-disable-next-line no-unused-vars
-            const participantsData = signups?.docs?.map((doc) => ({ ...doc.data(), id: doc.id }));
+            const participantsData = signups
+              ?.docs
+              ?.map((doc) => ({
+                ...doc.data(),
+                id: doc.id,
+                researchId: research.id,
+              }));
             research.signups = signups?.docs?.length;
             research.actionsData = {
               signups: signups?.docs?.length,
@@ -75,6 +81,12 @@ export function ActiveResearch({ createResearch, participantsSelected }) {
             };
           }
         }),
+      );
+
+      researchList.sort(
+        (firstResearch, secondResearch) => (
+          new Date(secondResearch.date) - new Date(firstResearch.date)
+        ),
       );
 
       setResearches(researchList);
@@ -114,8 +126,8 @@ export function ActiveResearch({ createResearch, participantsSelected }) {
           return '';
         }
         const currDate = new Date(value);
-        const date = `${currDate.getFullYear()}-${currDate.getMonth() + 1}-${currDate.getDate()}`;
-        const time = `${currDate.getHours()}:${currDate.getMinutes()}:${currDate.getSeconds()}`;
+        const date = `${currDate.getMonth() + 1}/${currDate.getDate()}/${currDate.getFullYear()}`;
+        const time = `${currDate.getMinutes()}:${currDate.getHours()}`;
         return `${date} ${time}`;
       },
     },
@@ -217,7 +229,7 @@ export function ActiveResearch({ createResearch, participantsSelected }) {
                           const value = research[column.id];
                           return (
                             <TableCell key={column.id} align={column.align}>
-                              {column.id === 'Number' ? (index + page * index)
+                              {column.id === 'Number' ? (index + page * index + 1)
                                 : (column.format ? column.format(value) : (value || ''))}
                             </TableCell>
                           );
