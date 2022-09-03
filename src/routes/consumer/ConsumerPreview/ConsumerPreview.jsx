@@ -35,7 +35,7 @@ export function ConsumerPreview() {
     const docRef = doc(dataBase, 'experiments', researchCode);
     const docResearch = await getDoc(docRef);
 
-    if (docResearch.exists() && docResearch.data()?.data?.['1']) {
+    if (docResearch.exists() && docResearch.data()?.data?.[0]) {
       navigate(`${researchCode}/${email.email}`);
     } else {
       setIsError(true);
@@ -80,10 +80,10 @@ export function ConsumerPreview() {
             Email
           </Typography>
           <EmailTextbox onEmailChange={
-            (currEmail, isCurrEmailValid) => {
-              setEmail({ email: currEmail, isValid: isCurrEmailValid });
+              (currEmail, isCurrEmailValid) => {
+                setEmail({ email: currEmail, isValid: isCurrEmailValid });
+              }
             }
-}
           />
           <Button
             disableRipple
@@ -91,7 +91,7 @@ export function ConsumerPreview() {
             onClick={start}
             className={s.submit}
           >
-            Subscribe
+            SEE RESEARCH
           </Button>
         </div>
       </div>

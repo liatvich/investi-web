@@ -1,21 +1,26 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
-/* eslint-disable no-debugger */
 import React, { useEffect, useState } from 'react';
 import {
-  Typography, Button, Pagination, Stack,
+  Typography, Button,
   Table, TableBody, TableCell,
-  TableHead, TableRow, TableContainer, TablePagination,
+  TableHead, TableRow, TableContainer, TablePagination, Chip,
+  IconButton,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CreateIcon from '@mui/icons-material/Create';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   collection, query, where, getDocs,
 } from 'firebase/firestore/lite';
 import s from './ActiveResearch.module.scss';
 import { ResearchPreview } from '../../components/App/Preview/ResearchPreview';
 import { useDatabase, useProvideAuth } from '../../Hooks';
+import { RESEARCH_STATUS } from '../../common/consts';
 
 // eslint-disable-next-line react/prop-types
-export function ActiveResearch({ createResearch }) {
+export function ActiveResearch({ createResearch, participantsSelected }) {
   const [researches, setResearches] = useState([]);
   const [displayedResearch, setDisplayedResearch] = useState(1);
   const { getDatabase } = useDatabase();
@@ -34,14 +39,14 @@ export function ActiveResearch({ createResearch }) {
       '& .MuiTableRow-root': {
         background: '#F5F7F9',
 
-        '& .MuiTableCell-root:first-child': {
-          'border-bottom-left-radius': '8px',
-          'border-top-left-radius': '8px',
+        '& .MuiTableCell-root:first-of-type': {
+          borderBottomLeftRadius: '8px',
+          borderTopLeftRadius: '8px',
         },
 
         '& .MuiTableCell-root:last-child': {
-          'border-bottom-right-radius': '8px',
-          'border-top-right-radius': '8px',
+          borderBottomRightRadius: '8px',
+          borderTopRightRadius: '8px',
         },
       },
     },
@@ -57,14 +62,23 @@ export function ActiveResearch({ createResearch }) {
 
       const researchSnapshot = await getDocs(q);
       const researchList = researchSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-      console.log(researchList);
 
-      researchList.forEach(async (research) => {
-        const signups = await getDocs(collection(dataBase, `experiments/${research.id}/signups`));
-        if (signups.docs.length > 0) {
-          research.signups = signups.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-        }
-      });
+      await Promise.all(
+        researchList.map(async (research) => {
+          const signups = await getDocs(collection(dataBase, `experiments/${research.id}/signups`));
+          if (signups?.docs.length > 0) {
+            // eslint-disable-next-line no-unused-vars
+            const participantsData = signups?.docs?.map((doc) => ({ ...doc.data(), id: doc.id }));
+            research.signups = signups?.docs?.length;
+            debugger;
+            research.actionsData = {
+              signups: signups?.docs?.length,
+              participantsData,
+              researchTitle: research.title,
+            };
+          }
+        }),
+      );
 
       setResearches(researchList);
     }
@@ -72,99 +86,69 @@ export function ActiveResearch({ createResearch }) {
     fetchResearch();
   }, [user?.uid]);
 
-  //   useEffect(() => {
-
-  //   }, [displayedResearch]);
-
-  const researchView = (research) => (
-    research ? (
-      <div key={research.title}>
-        <Typography variant="h5" gutterBottom component="div">
-          {research.title}
-        </Typography>
-        <Typography variant="h5" gutterBottom component="div">
-          Experiment Preview:
-        </Typography>
-        {research?.data['1'] && <ResearchPreview research={research?.data} />}
-      </div>
-    ) : <div>Empty</div>
-  );
-
-  { /* <Typography variant="h5" gutterBottom component="div">
-        Project List -
-      </Typography>
-      {researches.length > 0
-        ? (
-          <Stack spacing={2}>
-            {researchView(researches[displayedResearch - 1])}
-            {researches[displayedResearch - 1].signups && (
-              researches[displayedResearch - 1].signups.map((signup, index) => (
-                <Typography>{`signup number: ${index} is ${signup.id}`}</Typography>
-              )))}
-            <Pagination
-              count={researches.length}
-              defaultPage={0}
-              page={displayedResearch}
-              onChange={(event, value) => {
-                setDisplayedResearch(value);
-              }}
-            />
-          </Stack>
-        ) : ( */ }
-
-  function createData(
-    name,
-    code,
-    population,
-    size,
-  ) {
-    const density = population / size;
-    return {
-      name, code, population, size, density,
-    };
-  }
-
-  const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    createData('France', 'FR', 67022000, 640679),
-    createData('United Kingdom', 'GB', 67545757, 242495),
-    createData('Russia', 'RU', 146793744, 17098246),
-    createData('Nigeria', 'NG', 200962417, 923768),
-    createData('Brazil', 'BR', 210147125, 8515767),
-  ];
-
   const columns = [
-    { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+    { id: 'Number', label: 'Number', minWidth: 17 },
+    { id: 'id', label: 'ID', minWidth: 30 },
+    { id: 'title', label: 'Research Name', minWidth: 50 },
     {
-      id: 'population',
-      label: 'Population',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
+      id: 'status',
+      label: 'Status',
+      minWidth: 70,
+      // eslint-disable-next-line react/no-unstable-nested-components
+      format: (value) => {
+        const status = value === RESEARCH_STATUS.PUBLISHED ? 'success' : 'warning';
+        return <Chip label={value} color={status} />;
+      },
     },
     {
-      id: 'size',
-      label: 'Size\u00a0(km\u00b2)',
-      minWidth: 170,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
+      id: 'signups',
+      label: 'Participants',
+      minWidth: 70,
+      // eslint-disable-next-line react/no-unstable-nested-components
+      format: (value) => `${value || 0} participants`,
     },
     {
-      id: 'density',
-      label: 'Density',
-      minWidth: 170,
+      id: 'date',
+      label: 'Date',
+      minWidth: 50,
+      // align: 'right',
+      format: (value) => {
+        if (!value) {
+          return '';
+        }
+        const currDate = new Date(value);
+        const date = `${currDate.getFullYear()}-${currDate.getMonth() + 1}-${currDate.getDate()}`;
+        const time = `${currDate.getHours()}:${currDate.getMinutes()}:${currDate.getSeconds()}`;
+        return `${date} ${time}`;
+      },
+    },
+    {
+      id: 'actionsData',
+      minWidth: 50,
       align: 'right',
-      format: (value) => value.toFixed(2),
+      // eslint-disable-next-line react/no-unstable-nested-components
+      format: (value) => (
+        <div>
+          <IconButton
+            disableRipple
+            disabled={!value || value?.signups === 0}
+            onClick={() => {
+              participantsSelected({
+                participants: value?.participantsData,
+                researchTitle: value?.researchTitle,
+              });
+            }}
+          >
+            <VisibilityIcon />
+          </IconButton>
+          <IconButton disableRipple>
+            <CreateIcon />
+          </IconButton>
+          <IconButton disableRipple>
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      ),
     },
   ];
 
@@ -223,31 +207,21 @@ export function ActiveResearch({ createResearch }) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows
+                  {researches
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
+                    .map((research, index) => (
                       <TableRow
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.code}
-                        // sx={{
-                        //   // '&:last-child td, &:last-child th': { border: 0 },
-                        //   // borderColor: 0,
-                        //   // tr: {
-                        //   //   border: 0, backgroundColor:
-                        //   // '#F5F7F9', borderRadius: '8px', margin: '21px',
-                        //   // },
-
-                        // }}
+                        key={research.id}
                       >
                         {columns.map((column) => {
-                          const value = row[column.id];
+                          const value = research[column.id];
                           return (
                             <TableCell key={column.id} align={column.align}>
-                              {column.format && typeof value === 'number'
-                                ? column.format(value)
-                                : value}
+                              {column.id === 'Number' ? (index + page * index)
+                                : (column.format ? column.format(value) : (value || ''))}
                             </TableCell>
                           );
                         })}
@@ -259,7 +233,7 @@ export function ActiveResearch({ createResearch }) {
             <TablePagination
               rowsPerPageOptions={[10, 25, 100]}
               component="div"
-              count={rows.length}
+              count={researches.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

@@ -25,6 +25,10 @@
                 font-size: 18px;
                 font-weight: 400;
             }
+
+            .back {
+                display: flex;
+                align-items: center;            }
         }
 
         .empty {
@@ -64,5 +68,27 @@
             margin: 0px 86px 66px 86px;
             height: 100%;
         }
+    }
+}
+
+.display {
+    display: flex;
+    align-items: center;
+
+    .text {
+        color: #104C43;
+    }
+}
+
+.status {
+    .button {
+        margin-right: 13px;
+    }
+}
+
+.response {
+    display: flex;
+    .answer {
+        margin-left: 3px;
     }
 }

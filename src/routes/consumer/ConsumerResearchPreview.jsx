@@ -59,7 +59,7 @@ export function ConsumerResearchPreview() {
               await setDoc(doc(dataBase, `experiments/${activeResearch}/signups`, email), {
                 inputs: userInputs,
                 email,
-                date: new Date(),
+                date: Date.now(),
               });
             }}
           />

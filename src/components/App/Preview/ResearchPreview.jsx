@@ -14,6 +14,7 @@ import { PreviewParser } from './PreviewParser';
 import s from './ResearchPreview.module.scss';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 import { Logo } from '../../Logo';
+import { ResearchPreviewMobile } from './ResearchPreviewMobile';
 
 const IconRoundButton = styled(IconButton)({
   width: '184px',
@@ -32,8 +33,8 @@ const ArrowIconStyle = {
 export function ResearchPreview({
   research, isConsumer, submitOnClick, title,
 }) {
-  const [currPage, setCurrPage] = useState(1);
-  const [validationError, setValidationError] = useState(false);
+  const [currPage, setCurrPage] = useState(0);
+  // const [validationError, setValidationError] = useState(false);
   const [isSubmittedExperiment, setIsSubmittedExperiment] = useState(false);
 
   const isCheckboxValid = () => {
@@ -42,12 +43,7 @@ export function ResearchPreview({
     === EDITOR_ELEMENTS_TYPES.VALIDATION_CHECKBOX && node?.attrs?.isChecked === false)
       .length === 0;
 
-    setValidationError(!isValid);
     return isValid;
-  };
-
-  const styles = {
-
   };
 
   const researchView = () => (
@@ -72,7 +68,7 @@ export function ResearchPreview({
         <Typography variant="subtitle1" component="div" className={s.text}>
           Pages
           {' '}
-          {currPage}
+          {currPage + 1}
           /
           {Object.keys(research).length}
         </Typography>
@@ -84,13 +80,12 @@ export function ResearchPreview({
     <div className={s.main}>
       <Logo />
       <div className={s.content}>
-        {currPage > 1 ? (
+        {currPage > 0 ? (
           <IconRoundButton
             disableRipple
             onClick={() => {
               setCurrPage(currPage - 1);
             }}
-            classes={styles}
           >
             <ArrowBackIosIcon sx={ArrowIconStyle} />
           </IconRoundButton>
@@ -100,7 +95,7 @@ export function ResearchPreview({
           {researchView()}
           {
             isConsumer
-            && currPage === Object.keys(research).length
+            && (currPage + 1) === Object.keys(research).length
               && (
                 <div className={s.submit}>
                   <Typography variant="subtitle1" component="div" className={s.text}>
@@ -129,7 +124,7 @@ export function ResearchPreview({
               )
           }
         </div>
-        {currPage < Object.keys(research).length
+        {currPage + 1 < Object.keys(research).length
           ? (
             <IconRoundButton
               disableRipple
@@ -138,7 +133,6 @@ export function ResearchPreview({
                   setCurrPage(currPage + 1);
                 }
               }}
-              classes={styles}
             >
               <ArrowForwardIosIcon sx={ArrowIconStyle} />
             </IconRoundButton>
@@ -147,28 +141,40 @@ export function ResearchPreview({
     </div>
   );
 
+  const isMobile = window.matchMedia('only screen and (max-width: 760px)').matches;
+
   return (
     <>
-      {isSubmittedExperiment ? (
-        <div className={s.submitted}>
-          <Logo />
-          <div className={s.content}>
-            <CheckCircleIcon sx={{
-              width: '165px',
-              height: '162px',
-              color: '#104C43',
-              marginBottom: '62px',
-            }}
-            />
-            <Typography variant="subtitle1" component="div" className={s.text}>
-              Success your application was sent!
-            </Typography>
-            <Typography variant="subtitle1" component="div" className={s.text}>
-              You will get soon a mail with the experiment process.
-            </Typography>
-          </div>
-        </div>
-      ) : (preview)}
+      {
+        // eslint-disable-next-line no-nested-ternary
+        isMobile ? (
+          <ResearchPreviewMobile
+            research={research}
+            submitOnClick={submitOnClick}
+            title={title}
+          />
+        )
+          : isSubmittedExperiment ? (
+            <div className={s.submitted}>
+              <Logo />
+              <div className={s.content}>
+                <CheckCircleIcon sx={{
+                  width: '165px',
+                  height: '162px',
+                  color: '#104C43',
+                  marginBottom: '62px',
+                }}
+                />
+                <Typography variant="subtitle1" component="div" className={s.text}>
+                  Success your application was sent!
+                </Typography>
+                <Typography variant="subtitle1" component="div" className={s.text}>
+                  You will get soon a mail with the experiment process.
+                </Typography>
+              </div>
+            </div>
+          ) : (preview)
+}
     </>
   );
 }

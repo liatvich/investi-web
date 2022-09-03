@@ -21,10 +21,12 @@ const renderImage = (node) => (
   </div>
 );
 
+const isMobile = window.matchMedia('only screen and (max-width: 760px)').matches;
+
 const renderExternalVideo = (node) => (
   <iframe
-    width="950"
-    height="534"
+    width={isMobile ? 350 : 950}
+    height={isMobile ? 200 : 534}
     src={node?.attrs?.src}
     frameBorder="0"
     title="video"

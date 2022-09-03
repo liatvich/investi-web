@@ -1,0 +1,46 @@
+  .menu {
+    grid-template-columns: auto auto auto auto auto 1fr;
+    display: grid;
+    border-bottom: 1px solid #D9D9D9;
+
+    .undoRedo {
+      border-right: 1px solid #C4C4C4;
+    }
+
+    .textMenu {
+      border-right: 1px solid #C4C4C4;
+
+      .button{
+        color: #000000;
+        font-weight: 400;
+        text-transform: none;
+      }
+    }
+
+    .listsSection {
+      margin: 0px 3px;
+      border-right: 1px solid #C4C4C4;
+
+      .selected {
+        background: rgba(25, 118, 210, 0.08);
+        border-radius: 8px;
+      }
+    }
+  
+    .media {
+      margin: 0px 3px;
+      border-right: 1px solid #C4C4C4;
+    }
+
+    .pageAction {
+      margin: 0px 3px;
+
+      .icon {
+        color: #000000;
+      }
+
+      .disabled {
+        color: #C4C4C4;
+      }
+    }
+  }
