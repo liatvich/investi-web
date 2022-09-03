@@ -10,11 +10,12 @@ const Steps = {
   CREATE: 'CREATE',
   LIST: 'LIST',
   PARTICIPANTS: 'PARTICIPANTS',
+  EDIT: 'EDIT',
 };
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 export function AppLayout({ children }) {
-  const [step, setStep] = useState(Steps.LIST);
+  const [step, setStep] = useState({ id: Steps.LIST, data: {} });
   const [participantsData, setParticipantsData] = useState({});
 
   return (
@@ -22,22 +23,36 @@ export function AppLayout({ children }) {
       <TopBar className={s.topBar} />
       <div className={s.content}>
         {
-          (step === Steps.LIST && (
+          (step.id === Steps.LIST && (
             <ActiveResearch
-              createResearch={() => setStep(Steps.CREATE)}
+              createResearch={() => setStep({ id: Steps.CREATE, data: {} })}
               participantsSelected={(currParticipantsData) => {
                 setParticipantsData(currParticipantsData);
-                setStep(Steps.PARTICIPANTS);
+                setStep({ id: Steps.PARTICIPANTS, data: {} });
               }}
+              onEditExperiment={
+                (currEditExperimentData) => {
+                  setStep({ id: Steps.EDIT, data: currEditExperimentData });
+                }
+              }
             />
           ))
-          || (step === Steps.CREATE
-            && (<CreateExperiment onComplete={() => { setStep(Steps.LIST); }} />))
-          || (step === Steps.PARTICIPANTS
+          || (step.id === Steps.CREATE
+            && (<CreateExperiment onComplete={() => { setStep({ id: Steps.LIST, data: {} }); }} />))
+          || (step.id === Steps.EDIT
+            && (
+            <CreateExperiment
+              onComplete={() => { setStep({ id: Steps.LIST, data: {} }); }}
+              updateResearchId={step?.data?.updateResearchId}
+              title={step?.data?.title}
+              researchJson={step?.data?.researchJson}
+            />
+            ))
+          || (step.id === Steps.PARTICIPANTS
             && (
             <Participants
-              createResearch={() => setStep(Steps.CREATE)}
-              back={() => setStep(Steps.LIST)}
+              createResearch={() => setStep({ id: Steps.CREATE, data: {} })}
+              back={() => setStep({ id: Steps.LIST, data: {} })}
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...participantsData}
             />

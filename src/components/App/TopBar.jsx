@@ -23,9 +23,7 @@ export function TopBar() {
 
   return (
     <div className={s.topbar}>
-      <div className={s.icon}>
-        <Logo withoutPaddingTop />
-      </div>
+      <Logo withoutPaddingTop />
       <div className={s.avatar}>
         <Avatar src={user?.photoURL || ''} />
         <IconButton onClick={handleClick} disableRipple>

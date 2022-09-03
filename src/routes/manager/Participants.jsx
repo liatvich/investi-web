@@ -261,7 +261,7 @@ export function Participants({
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={participants.length}
+            count={participants?.length || 0}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   useEditor,
   EditorContent,
@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Image from '@tiptap/extension-image';
 import {
-  collection, addDoc,
+  collection, addDoc, setDoc, doc,
 } from 'firebase/firestore/lite';
 import CreateIcon from '@mui/icons-material/Create';
 import { useDatabase, useProvideAuth } from '../../Hooks';
@@ -23,14 +23,17 @@ import { RoundButton } from '../../components/RoundButton';
 import { RESEARCH_STATUS } from '../../common/consts';
 import './CreateExperiment.scss';
 
-// eslint-disable-next-line react/prop-types
-export function CreateExperiment({ onComplete }) {
-  const [experimentTitle, setExperimentTitle] = useState('');
+export function CreateExperiment({
+  // eslint-disable-next-line react/prop-types, no-unused-vars
+  onComplete, title, updateResearchId, researchJson,
+}) {
+  const [experimentTitle, setExperimentTitle] = useState(title || '');
   // eslint-disable-next-line no-unused-vars
-  const [currentDocId, setCurrentDocId] = useState(null);
-  const [currentResearchJson, setCurrentResearchJson] = useState([]);
+  const [currentResearchJson, setCurrentResearchJson] = useState(Object.values(researchJson) || []);
   const [pagesCounter, setPagesCounter] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages, setTotalPages] = useState(
+    (researchJson && Object.values(researchJson).length) || 1,
+  );
 
   const { getDatabase } = useDatabase();
   const { user } = useProvideAuth();
@@ -57,6 +60,13 @@ export function CreateExperiment({ onComplete }) {
       </p>
     `,
   });
+
+  useEffect(() => {
+    if (updateResearchId && researchJson?.[0]) {
+      // eslint-disable-next-line react/prop-types
+      editor?.commands?.setContent(researchJson?.[0]?.content);
+    }
+  }, [editor]);
 
   const moveToPage = (page) => {
     currentResearchJson[pagesCounter] = editor.getJSON();
@@ -86,7 +96,7 @@ export function CreateExperiment({ onComplete }) {
         <div className={s.input}>
           <TextField
             autoComplete={false}
-            defaultValue="Experiment Name"
+            defaultValue={experimentTitle || 'Experiment Name'}
             id="standard-basic"
             variant="standard"
             placeholder="Please enter title"
@@ -155,15 +165,20 @@ export function CreateExperiment({ onComplete }) {
               const dataBase = getDatabase();
               const experimentsRef = collection(dataBase, 'experiments');
               currentResearchJson[pagesCounter] = editor.getJSON();
-              const docRef = await addDoc(experimentsRef, {
+              const experimentData = {
                 user_id: user?.uid,
                 title: experimentTitle,
                 date: Date.now(),
                 data: { ...currentResearchJson },
                 status: RESEARCH_STATUS.DRAFT,
-              });
+              };
+              if (updateResearchId) {
+                const participantRef = doc(dataBase, `experiments/${updateResearchId}`);
+                await setDoc(participantRef, experimentData);
+              } else {
+                await addDoc(experimentsRef, experimentData);
+              }
               onComplete();
-              setCurrentDocId(docRef.id);
             }}
           >
             Save draft
@@ -177,15 +192,21 @@ export function CreateExperiment({ onComplete }) {
               const dataBase = getDatabase();
               const experimentsRef = collection(dataBase, 'experiments');
               currentResearchJson[pagesCounter] = editor.getJSON();
-              const docRef = await addDoc(experimentsRef, {
+              const experimentData = {
                 user_id: user?.uid,
                 title: experimentTitle,
                 date: Date.now(),
                 data: { ...currentResearchJson },
                 status: RESEARCH_STATUS.PUBLISHED,
-              });
+              };
+              if (updateResearchId) {
+                const participantRef = doc(dataBase, `experiments/${updateResearchId}`);
+                await setDoc(participantRef, experimentData);
+              } else {
+                await addDoc(experimentsRef, experimentData);
+              }
+
               onComplete();
-              setCurrentDocId(docRef.id);
             }}
           >
             Submit research

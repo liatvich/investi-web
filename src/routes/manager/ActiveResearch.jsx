@@ -6,20 +6,25 @@ import {
   Table, TableBody, TableCell,
   TableHead, TableRow, TableContainer, TablePagination, Chip,
   IconButton,
+  // Dialog,
+  // DialogActions,
+  // DialogContent,
+  // DialogContentText,
+  // DialogTitle,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
-  collection, query, where, getDocs,
+  collection, query, where, getDocs, deleteDoc, doc,
 } from 'firebase/firestore/lite';
-import s from './ActiveResearch.module.scss';
-import { useDatabase, useProvideAuth } from '../../Hooks';
 import { RESEARCH_STATUS } from '../../common/consts';
+import { useDatabase, useProvideAuth } from '../../Hooks';
+import s from './ActiveResearch.module.scss';
 
 // eslint-disable-next-line react/prop-types
-export function ActiveResearch({ createResearch, participantsSelected }) {
+export function ActiveResearch({ createResearch, participantsSelected, onEditExperiment }) {
   const [researches, setResearches] = useState([]);
   const { getDatabase } = useDatabase();
   const { user } = useProvideAuth();
@@ -59,25 +64,35 @@ export function ActiveResearch({ createResearch, participantsSelected }) {
       //   setResearches(researchList);
 
       const researchSnapshot = await getDocs(q);
-      const researchList = researchSnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      const researchList = researchSnapshot.docs.map(
+        (currDoc) => ({ ...currDoc.data(), id: currDoc.id }
+        ),
+      );
 
       await Promise.all(
         researchList.map(async (research) => {
           const signups = await getDocs(collection(dataBase, `experiments/${research.id}/signups`));
+          research.actionsData = {
+            researchTitle: research.title,
+            id: research.id,
+            status: research.status,
+            title: research.title,
+            researchJson: research?.data || [],
+          };
           if (signups?.docs.length > 0) {
             // eslint-disable-next-line no-unused-vars
             const participantsData = signups
               ?.docs
-              ?.map((doc) => ({
-                ...doc.data(),
-                id: doc.id,
+              ?.map((signedUser) => ({
+                ...signedUser.data(),
+                id: signedUser.id,
                 researchId: research.id,
               }));
             research.signups = signups?.docs?.length;
             research.actionsData = {
+              ...research.actionsData,
               signups: signups?.docs?.length,
               participantsData,
-              researchTitle: research.title,
             };
           }
         }),
@@ -140,7 +155,7 @@ export function ActiveResearch({ createResearch, participantsSelected }) {
         <div>
           <IconButton
             disableRipple
-            disabled={!value || value?.signups === 0}
+            disabled={!value || !value?.signups || value?.signups === 0}
             onClick={() => {
               participantsSelected({
                 participants: value?.participantsData,
@@ -150,10 +165,31 @@ export function ActiveResearch({ createResearch, participantsSelected }) {
           >
             <VisibilityIcon />
           </IconButton>
-          <IconButton disableRipple>
+          <IconButton
+            disableRipple
+            onClick={() => {
+              onEditExperiment({
+                title: value?.title,
+                researchJson: value?.researchJson,
+                updateResearchId: value?.id,
+              });
+            }}
+            disabled={value?.status === RESEARCH_STATUS.PUBLISHED}
+          >
             <CreateIcon />
           </IconButton>
-          <IconButton disableRipple>
+          <IconButton
+            disableRipple
+            onClick={async () => {
+              const dataBase = getDatabase();
+              const researchRef = doc(dataBase, `experiments/${value?.id}`);
+              await deleteDoc(researchRef);
+
+              const researchesList = researches.filter((research) => research.id !== value?.id);
+              setResearches(researchesList);
+            }}
+            disabled={value?.status === RESEARCH_STATUS.PUBLISHED}
+          >
             <DeleteIcon />
           </IconButton>
         </div>
@@ -251,6 +287,11 @@ export function ActiveResearch({ createResearch, participantsSelected }) {
           </div>
         )}
       </div>
+      {/* <SimpleDialog
+        selectedValue={selectedValue}
+        open={open}
+        onClose={handleClose}
+      /> */}
     </div>
   );
 }
