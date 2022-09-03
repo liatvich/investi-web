@@ -8,7 +8,8 @@ import s from './App.module.scss';
 // import { SignInScreen } from './routes/manager';
 import { ProvideAuth, useProvideAuth } from './Hooks';
 import { AppLayout } from './components/App/AppLayout';
-import { Logo } from './assets/logo';
+import { Logo as LogoIcon } from './assets/logo';
+import { Logo } from './components/Logo';
 import welcome from './assets/welcome.png';
 
 export function App() {
@@ -33,12 +34,7 @@ export function App() {
             : (
               <div className={s.root}>
                 <div className={s.header}>
-                  <div className={s.logo}>
-                    <Logo className={s.icon} color="#B6E4E4" />
-                    <Typography variant="subtitle1" component="div" className={s.text}>
-                      INVESTI PET
-                    </Typography>
-                  </div>
+                  <Logo color="#B6E4E4" withoutPaddingTop />
                   <div className={s.right}>
                     <Button variant="text" className={s.button}>contact</Button>
                     <Button variant="text" className={s.button}>about</Button>
@@ -66,7 +62,7 @@ export function App() {
                       >
                         Research Manager
                       </Button>
-                      <Button variant="contained" onClick={() => { navigate('/research'); }} startIcon={<Logo color="#104C43" />} className={s.consumer}>
+                      <Button variant="contained" onClick={() => { navigate('/research'); }} startIcon={<LogoIcon color="#104C43" />} className={s.consumer}>
                         Research Participant
                       </Button>
                     </div>

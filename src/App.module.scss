@@ -69,24 +69,6 @@
     display: flex;
     justify-content: space-between;
 
-.logo {
-    display: flex;
-    align-items: center;
-    padding-left: 33px;
-    color: #B6E4E4;
-
-    .text {
-        padding-left: 10px;
-    }
-
-    .icon {
-        stroke: #B6E4E4 !important;
-        fill: #B6E4E4 !important;
-        width: 25px;
-        height: 30px;
-    }
-}
-
 .right {
     .button {
         margin-right: 47px;

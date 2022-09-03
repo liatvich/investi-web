@@ -3,21 +3,6 @@
     background: #FFFFFF;
     height: 100vh;
 
-    .logo {
-        display: flex;
-        align-items: center;
-        padding-top: 38px;
-        padding-left: 33px; 
-    
-        .text {
-            color: #104C43;
-            font-weight: 500;
-            font-size: 18px;
-            line-height: 28px;
-            margin-left: 10px;
-        }
-    }
-
     .content {
         display: flex;
         flex-direction: column;

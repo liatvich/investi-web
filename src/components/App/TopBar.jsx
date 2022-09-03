@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import s from './TopBar.module.scss';
 import { useProvideAuth } from '../../Hooks';
-import { Logo as LogoIcon } from '../../assets/logo';
+import { Logo } from '../Logo';
 
 export function TopBar() {
   const { user, signout } = useProvideAuth();
@@ -24,7 +24,7 @@ export function TopBar() {
   return (
     <div className={s.topbar}>
       <div className={s.icon}>
-        <LogoIcon color="#104C43" />
+        <Logo withoutPaddingTop />
       </div>
       <div className={s.avatar}>
         <Avatar src={user?.photoURL || ''} />

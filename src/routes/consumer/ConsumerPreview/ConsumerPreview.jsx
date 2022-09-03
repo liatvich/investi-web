@@ -10,7 +10,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { useDatabase } from '../../../Hooks';
 import s from './ConsumerPreview.module.scss';
-import { Logo } from '../../../assets/logo';
+import { Logo } from '../../../components/Logo';
 import { TextFieldMuiStyle } from '../../../common/styleConsts';
 import { EmailTextbox } from '../../../components/EmailTextbox';
 
@@ -44,12 +44,7 @@ export function ConsumerPreview() {
 
   return (
     <div className={s.root}>
-      <div className={s.logo}>
-        <Logo className={s.icon} color="#104C43" />
-        <Typography variant="subtitle1" component="div" className={s.text}>
-          INVESTI PET
-        </Typography>
-      </div>
+      <Logo />
       <div className={s.content}>
         <Typography variant="h5" gutterBottom component="div" className={s.title}>
           Please enter research code
