@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
@@ -11,9 +12,10 @@ import {
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
-  collection, query, where, getDocs,
+  doc, getDoc, updateDoc,
 } from 'firebase/firestore/lite';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import { useDatabase, useProvideAuth } from '../../Hooks';
 import s from './Participants.module.scss';
 import { PARTICIPANT_STATUS } from '../../common/consts';
 
@@ -21,6 +23,13 @@ import { PARTICIPANT_STATUS } from '../../common/consts';
 export function Participants({
   participants, createResearch, researchTitle, back,
 }) {
+  const { getDatabase } = useDatabase();
+  const dataBase = getDatabase();
+
+  const updateStatus = async () => {
+    const frankDocRef = doc(dataBase, 'users', 'frank');
+  };
+
   const theme = createTheme({
     // status: {
     //   danger: '#e53e3e',
@@ -91,6 +100,11 @@ export function Participants({
     },
   });
 
+  const spreadDocData = (docData) => docData && Object.values(docData)?.reduce(
+    (spreadData, currData) => [...spreadData, ...currData],
+    [],
+  );
+
   const columns = [
     { id: 'Number', label: 'Number', minWidth: 17 },
     {
@@ -115,16 +129,18 @@ export function Participants({
       // eslint-disable-next-line react/no-unstable-nested-components
       format: (value) => (
         <div className={s.display}>
-          <IconButton
+          <Button
             disableRipple
-            disabled={!value}
+            disabled={!value && value?.[0]}
+            className={s.text}
             onClick={() => {
-              setResponses(Object.values(value)); handleOpen();
+              setResponses(spreadDocData(Object.values(value)));
+              handleOpen();
             }}
+            startIcon={<VisibilityIcon sx={{ color: '#104C43' }} />}
           >
-            <VisibilityIcon sx={{ color: '#104C43' }} />
-          </IconButton>
-          <Typography variant="subtitle2" className={s.text}> View </Typography>
+            View
+          </Button>
         </div>
       ),
     },
@@ -231,20 +247,19 @@ export function Participants({
             {
             !responses ? <div> No responses </div> : (
               responses?.filter(
-                (response) => response?.length > 0 && response[0].content && response[0].attrs,
+                (response) => response?.content && response?.attrs,
               )
                 ?.map((response) => (
                   <div className={s.response}>
                     <Typography variant="subtitle2" gutterBottom>
-                      {response[0].content[0].text}
+                      {response?.content?.[0]?.text || ''}
                       :
                     </Typography>
                     <Typography variant="body2" gutterBottom className={s.answer}>
-                      {response[0].attrs.value}
+                      {response?.attrs?.value || ''}
                     </Typography>
                   </div>
                 )))
-
           }
           </Box>
         </Modal>

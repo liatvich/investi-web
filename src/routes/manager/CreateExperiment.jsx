@@ -23,6 +23,7 @@ import { RoundButton } from '../../components/RoundButton';
 import { RESEARCH_STATUS } from '../../common/consts';
 import './CreateExperiment.scss';
 
+// eslint-disable-next-line react/prop-types
 export function CreateExperiment({ onComplete }) {
   const [experimentTitle, setExperimentTitle] = useState('');
   // eslint-disable-next-line no-unused-vars
@@ -159,7 +160,7 @@ export function CreateExperiment({ onComplete }) {
                 title: experimentTitle,
                 date: Date.now(),
                 data: { ...currentResearchJson },
-                status: STATUS.DRAFT,
+                status: RESEARCH_STATUS.DRAFT,
               });
               onComplete();
               setCurrentDocId(docRef.id);

@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.f072b33b.css",
+    "main.js": "/static/js/main.b3e10c83.js",
+    "static/media/welcome.png": "/static/media/welcome.4a1c775acee9e51bbbd7.png",
+    "index.html": "/index.html",
+    "static/media/undoIcon.svg": "/static/media/undoIcon.4cffa71e297db30e8a677c723d53f8eb.svg",
+    "static/media/redoIcon.svg": "/static/media/redoIcon.5ed3a94fb0752755cda334d2c0c08236.svg",
+    "main.f072b33b.css.map": "/static/css/main.f072b33b.css.map",
+    "main.b3e10c83.js.map": "/static/js/main.b3e10c83.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f072b33b.css",
+    "static/js/main.b3e10c83.js"
+  ]
+}

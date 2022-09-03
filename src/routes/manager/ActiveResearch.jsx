@@ -15,14 +15,12 @@ import {
   collection, query, where, getDocs,
 } from 'firebase/firestore/lite';
 import s from './ActiveResearch.module.scss';
-import { ResearchPreview } from '../../components/App/Preview/ResearchPreview';
 import { useDatabase, useProvideAuth } from '../../Hooks';
 import { RESEARCH_STATUS } from '../../common/consts';
 
 // eslint-disable-next-line react/prop-types
 export function ActiveResearch({ createResearch, participantsSelected }) {
   const [researches, setResearches] = useState([]);
-  const [displayedResearch, setDisplayedResearch] = useState(1);
   const { getDatabase } = useDatabase();
   const { user } = useProvideAuth();
   const CssTableContainer = styled(TableContainer)({
@@ -70,7 +68,6 @@ export function ActiveResearch({ createResearch, participantsSelected }) {
             // eslint-disable-next-line no-unused-vars
             const participantsData = signups?.docs?.map((doc) => ({ ...doc.data(), id: doc.id }));
             research.signups = signups?.docs?.length;
-            debugger;
             research.actionsData = {
               signups: signups?.docs?.length,
               participantsData,
