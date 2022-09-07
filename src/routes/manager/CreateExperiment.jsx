@@ -29,7 +29,9 @@ export function CreateExperiment({
 }) {
   const [experimentTitle, setExperimentTitle] = useState(title || '');
   // eslint-disable-next-line no-unused-vars
-  const [currentResearchJson, setCurrentResearchJson] = useState(Object.values(researchJson) || []);
+  const [currentResearchJson, setCurrentResearchJson] = useState((
+    Boolean(researchJson) && Object.values(researchJson))
+    || []);
   const [pagesCounter, setPagesCounter] = useState(0);
   const [totalPages, setTotalPages] = useState(
     (researchJson && Object.values(researchJson).length) || 1,
