@@ -49,7 +49,7 @@ export function App() {
                       The place where pet investigations are easier to create and track
                       (also to participate).
                     </Typography>
-                    <Typography variant="h5" gutterBottom component="div" className={s.description}>
+                    <Typography variant="h5" gutterBottom component="div" className={s.descriptionActions}>
                       Choose what you are here for
                     </Typography>
 

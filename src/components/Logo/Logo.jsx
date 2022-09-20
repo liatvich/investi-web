@@ -16,13 +16,13 @@ export function Logo({ withoutPaddingTop, color }) {
       })}
     >
       <LogoIcon className={s.icon} color={color || '#104C43'} />
-      <div className={s.separator} style={{ background: color || '#104C43' }} />
-      <img src={tech4animals} alt="tech4animals" className={s.image} />
-      <div className={s.separator} style={{ background: color || '#104C43' }} />
-      <img src={hunter} alt="hunter" className={s.image} />
       <Typography variant="subtitle1" component="div" className={s.text} style={{ color: color || '#104C43' }}>
         INVESTI PET
       </Typography>
+      <div className={s.contributes}>
+        <img src={tech4animals} alt="tech4animals" className={s.image} />
+        <img src={hunter} alt="hunter" className={s.image} />
+      </div>
     </div>
   );
 }

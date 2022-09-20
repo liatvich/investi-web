@@ -21,7 +21,8 @@
 }
 
 .image {
-    width: 60px;
+    width: 39px;
+    margin: 9px;
 }
 
 .separator {
@@ -30,4 +31,12 @@
     background: #104C43;
     margin: 0 9px;
     opacity: 10%;
+}
+
+.contributes {
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgb(255 255 255 / 15%);
+    margin-left: 18px;
+    opacity: 0.95;
 }
