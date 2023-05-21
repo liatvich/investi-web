@@ -13,7 +13,7 @@ import {
   // DialogTitle,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import GroupsIcon from '@mui/icons-material/Groups';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
@@ -23,8 +23,10 @@ import { RESEARCH_STATUS } from '../../common/consts';
 import { useDatabase, useProvideAuth } from '../../Hooks';
 import s from './ActiveResearch.module.scss';
 
-// eslint-disable-next-line react/prop-types
-export function ActiveResearch({ createResearch, participantsSelected, onEditExperiment }) {
+export function ActiveResearch({
+  // eslint-disable-next-line react/prop-types
+  createResearch, participantsSelected, onEditExperiment, onSetResearch,
+}) {
   const [researches, setResearches] = useState([]);
   const { getDatabase } = useDatabase();
   const { user } = useProvideAuth();
@@ -120,7 +122,8 @@ export function ActiveResearch({ createResearch, participantsSelected, onEditExp
       minWidth: 70,
       // eslint-disable-next-line react/no-unstable-nested-components
       format: (value) => {
-        const status = value === RESEARCH_STATUS.PUBLISHED ? 'success' : 'warning';
+        const status = value === RESEARCH_STATUS.PUBLISHED ? 'success'
+          : value === RESEARCH_STATUS.DRAFT ? 'warning' : 'info';
         return <Chip label={value} color={status} />;
       },
     },
@@ -156,31 +159,35 @@ export function ActiveResearch({ createResearch, participantsSelected, onEditExp
           <IconButton
             disableRipple
             disabled={!value || !value?.signups || value?.signups === 0}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               participantsSelected({
                 participants: value?.participantsData,
                 researchTitle: value?.researchTitle,
               });
             }}
           >
-            <VisibilityIcon />
+            <GroupsIcon />
           </IconButton>
           <IconButton
             disableRipple
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               onEditExperiment({
                 title: value?.title,
                 researchJson: value?.researchJson,
                 updateResearchId: value?.id,
               });
             }}
-            disabled={value?.status === RESEARCH_STATUS.PUBLISHED}
+            disabled={value?.status === RESEARCH_STATUS.PUBLISHED
+              || value?.status === RESEARCH_STATUS.STARTED}
           >
             <CreateIcon />
           </IconButton>
           <IconButton
             disableRipple
-            onClick={async () => {
+            onClick={async (e) => {
+              e.stopPropagation();
               const dataBase = getDatabase();
               const researchRef = doc(dataBase, `experiments/${value?.id}`);
               await deleteDoc(researchRef);
@@ -188,7 +195,8 @@ export function ActiveResearch({ createResearch, participantsSelected, onEditExp
               const researchesList = researches.filter((research) => research.id !== value?.id);
               setResearches(researchesList);
             }}
-            disabled={value?.status === RESEARCH_STATUS.PUBLISHED}
+            disabled={value?.status === RESEARCH_STATUS.PUBLISHED
+              || value?.status === RESEARCH_STATUS.STARTED}
           >
             <DeleteIcon />
           </IconButton>
@@ -260,6 +268,12 @@ export function ActiveResearch({ createResearch, participantsSelected, onEditExp
                         role="checkbox"
                         tabIndex={-1}
                         key={research.id}
+                        onClick={() => {
+                          if (research.status === RESEARCH_STATUS.PUBLISHED
+                             || research.status === RESEARCH_STATUS.STARTED) {
+                            onSetResearch(research);
+                          }
+                        }}
                       >
                         {columns.map((column) => {
                           const value = research[column.id];

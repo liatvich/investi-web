@@ -37,9 +37,6 @@ export function Participants({
   };
 
   const theme = createTheme({
-    // status: {
-    //   danger: '#e53e3e',
-    // },
     palette: {
       neutralReverse: {
         main: '#104C43',
@@ -213,9 +210,9 @@ export function Participants({
             </Typography>
           </div>
 
-          <Button disableRipple className={s.create} onClick={createResearch}>
+          {/* <Button disableRipple className={s.create} onClick={createResearch}>
             + Create document
-          </Button>
+          </Button> */}
         </div>
         <div className={s.table}>
           <CssTableContainer sx={{ borderRadius: '12px 12px 0px 0px' }}>

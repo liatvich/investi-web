@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
@@ -8,6 +9,7 @@ import { EDITOR_ELEMENTS_TYPES } from '../../common/consts';
 import { useDatabase } from '../../Hooks';
 import { ResearchPreview } from '../../components/App/Preview/ResearchPreview';
 import { emailValidation } from '../../common/general';
+import { UploadImageResearchContent } from './UploadImageResearchContent';
 
 export function ConsumerResearchPreview() {
   const { activeResearch, email } = useParams();
@@ -15,6 +17,9 @@ export function ConsumerResearchPreview() {
   const navigate = useNavigate();
   const [research, setResearch] = useState(null);
   const [title, setTitle] = useState('');
+  const [managerId, setManagerId] = useState('');
+  const [imageUploadDescription, setImageUploadDescription] = useState('');
+  const [consumerStage, setConsumerStage] = useState('ResearchPreview');
 
   useEffect(() => {
     async function fetchResearch() {
@@ -25,10 +30,19 @@ export function ConsumerResearchPreview() {
       const dataBase = getDatabase();
       const docRef = doc(dataBase, 'experiments', activeResearch);
       const docResearch = await getDoc(docRef);
-
       if (docResearch.exists() && docResearch.data()?.data) {
-        setResearch(docResearch.data()?.data);
-        setTitle(docResearch.data()?.title);
+        const signupRef = doc(dataBase, 'experiments', activeResearch, 'signups', email);
+        const signupDoc = await getDoc(signupRef);
+        if (signupDoc.exists()) {
+          if (signupDoc.data()?.status === 'approved' && docResearch.data()?.status === 'started') {
+            setImageUploadDescription(docResearch.data()?.description);
+            setManagerId(docResearch.data()?.user_id);
+            setConsumerStage('ImageUpload');
+          }
+        } else {
+          setResearch(docResearch.data()?.data);
+          setTitle(docResearch.data()?.title);
+        }
       } else {
         navigate(-1);
       }
@@ -39,7 +53,7 @@ export function ConsumerResearchPreview() {
 
   return (
     <div>
-      {research
+      {research && consumerStage === 'ResearchPreview'
         ? (
           <ResearchPreview
             research={research}
@@ -63,7 +77,16 @@ export function ConsumerResearchPreview() {
               });
             }}
           />
-        ) : <div>NO RESEARCH FOUND</div>}
+        ) : (consumerStage === 'ImageUpload'
+          ? (
+            <UploadImageResearchContent
+              description={imageUploadDescription}
+              participantEmail={email}
+              researchId={activeResearch}
+              managerId={managerId}
+            />
+          )
+          : <div />)}
     </div>
   );
 }

@@ -14,6 +14,7 @@ export const EDITOR_ELEMENTS_TYPES = {
 export const RESEARCH_STATUS = {
   DRAFT: 'draft',
   PUBLISHED: 'published',
+  STARTED: 'started',
 };
 
 export const PARTICIPANT_STATUS = {

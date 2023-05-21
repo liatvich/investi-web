@@ -9,11 +9,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Image from '@tiptap/extension-image';
-import {
-  collection, addDoc, setDoc, doc,
-} from 'firebase/firestore/lite';
 import CreateIcon from '@mui/icons-material/Create';
-import { useDatabase, useProvideAuth } from '../../Hooks';
 import MenuBar from '../../components/Editor/MenuBar';
 import ValidationCheckboxExtension from '../../components/Editor/ReactComponents/ValidationCheckboxExtension';
 import TextboxExtension from '../../components/Editor/ReactComponents/TextboxExtension';
@@ -25,7 +21,7 @@ import './CreateExperiment.scss';
 
 export function CreateExperiment({
   // eslint-disable-next-line react/prop-types, no-unused-vars
-  onComplete, title, updateResearchId, researchJson,
+  onComplete, title, updateResearchId, researchJson, onSaveResearch,
 }) {
   const [experimentTitle, setExperimentTitle] = useState(title || '');
   // eslint-disable-next-line no-unused-vars
@@ -36,9 +32,6 @@ export function CreateExperiment({
   const [totalPages, setTotalPages] = useState(
     (researchJson && Object.values(researchJson).length) || 1,
   );
-
-  const { getDatabase } = useDatabase();
-  const { user } = useProvideAuth();
 
   const editor = useEditor({
     extensions: [
@@ -164,22 +157,8 @@ export function CreateExperiment({
             size="large"
             className={s.draft}
             onClick={async () => {
-              const dataBase = getDatabase();
-              const experimentsRef = collection(dataBase, 'experiments');
               currentResearchJson[pagesCounter] = editor.getJSON();
-              const experimentData = {
-                user_id: user?.uid,
-                title: experimentTitle,
-                date: Date.now(),
-                data: { ...currentResearchJson },
-                status: RESEARCH_STATUS.DRAFT,
-              };
-              if (updateResearchId) {
-                const participantRef = doc(dataBase, `experiments/${updateResearchId}`);
-                await setDoc(participantRef, experimentData);
-              } else {
-                await addDoc(experimentsRef, experimentData);
-              }
+              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.DRAFT);
               onComplete();
             }}
           >
@@ -191,23 +170,8 @@ export function CreateExperiment({
             variant="contained"
             className={s.submit}
             onClick={async () => {
-              const dataBase = getDatabase();
-              const experimentsRef = collection(dataBase, 'experiments');
               currentResearchJson[pagesCounter] = editor.getJSON();
-              const experimentData = {
-                user_id: user?.uid,
-                title: experimentTitle,
-                date: Date.now(),
-                data: { ...currentResearchJson },
-                status: RESEARCH_STATUS.PUBLISHED,
-              };
-              if (updateResearchId) {
-                const participantRef = doc(dataBase, `experiments/${updateResearchId}`);
-                await setDoc(participantRef, experimentData);
-              } else {
-                await addDoc(experimentsRef, experimentData);
-              }
-
+              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.PUBLISHED);
               onComplete();
             }}
           >
