@@ -80,6 +80,7 @@ export function ActiveResearch({
             status: research.status,
             title: research.title,
             researchJson: research?.data || [],
+            researchType: research?.researchType,
           };
           if (signups?.docs.length > 0) {
             // eslint-disable-next-line no-unused-vars
@@ -164,6 +165,7 @@ export function ActiveResearch({
               participantsSelected({
                 participants: value?.participantsData,
                 researchTitle: value?.researchTitle,
+                researchType: value?.researchType,
               });
             }}
           >
@@ -225,7 +227,7 @@ export function ActiveResearch({
             Your researches
           </Typography>
           <Button disableRipple className={s.create} onClick={createResearch}>
-            + Create document
+            + Create Research
           </Button>
         </div>
         {researches.length === 0 ? (
@@ -239,7 +241,7 @@ export function ActiveResearch({
               adding your guidelines instructions there
             </Typography>
             <Button disableRipple className={s.create} onClick={createResearch}>
-              + Create document
+              + Create Research
             </Button>
           </div>
         ) : (

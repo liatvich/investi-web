@@ -10,17 +10,17 @@ import TextField from '@mui/material/TextField';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Image from '@tiptap/extension-image';
 import CreateIcon from '@mui/icons-material/Create';
-import MenuBar from '../../components/Editor/MenuBar';
-import ValidationCheckboxExtension from '../../components/Editor/ReactComponents/ValidationCheckboxExtension';
-import TextboxExtension from '../../components/Editor/ReactComponents/TextboxExtension';
-import RadioButtonExtension from '../../components/Editor/ReactComponents/RadioButtonExtension';
-import ExternalVideoExtension from '../../components/Editor/ReactComponents/ExternalVideoExtension';
-import s from './CreateExperiment.module.scss';
-import { RoundButton } from '../../components/RoundButton';
-import { RESEARCH_STATUS } from '../../common/consts';
-import './CreateExperiment.scss';
+import MenuBar from '../../../components/Editor/MenuBar';
+import TextboxExtension from '../../../components/Editor/ReactComponents/TextboxExtension';
+import ExternalVideoExtension from '../../../components/Editor/ReactComponents/ExternalVideoExtension';
+import RadioButtonExtension from '../../../components/Editor/ReactComponents/RadioButtonExtension';
 
-export function CreateExperiment({
+import s from './QuickAddExperiment.module.scss';
+import { RoundButton } from '../../../components/RoundButton';
+import { RESEARCH_STATUS } from '../../../common/consts';
+import './QuickAddExperiment.scss';
+
+export function QuickAddExperiment({
   // eslint-disable-next-line react/prop-types, no-unused-vars
   onComplete, title, updateResearchId, researchJson, onSaveResearch,
 }) {
@@ -37,19 +37,11 @@ export function CreateExperiment({
   const editor = useEditor({
     extensions: [
       StarterKit,
-      //   TaskList,
-      //   TaskItem.configure({
-      //     nested: true,
-      //   }),
-      ValidationCheckboxExtension,
       TextboxExtension,
       RadioButtonExtension,
       Image,
       Dropcursor,
       ExternalVideoExtension,
-    //   ListItem.extend({
-    //     content: 'text*',
-    //   }),
     ],
     content: `
       <p>
@@ -100,7 +92,6 @@ export function CreateExperiment({
             disableRipple
             onChange={(event) => { setExperimentTitle(event.target.value); }}
             className={s.title}
-            disableUnderline={false}
             sx={{
               width: 300,
               '& .MuiInput-underline:before': {
@@ -205,17 +196,8 @@ export function CreateExperiment({
         )}
         <EditorContent className="editor-content" editor={editor} />
       </div>
-      {/* {
-        currentDocId && (
-        <Typography variant="contained" gutterBottom component="div">
-          currentDocId:
-          {' '}
-          {currentDocId}
-        </Typography>
-        )
-      } */}
     </div>
   );
 }
 
-export default CreateExperiment;
+export default QuickAddExperiment;

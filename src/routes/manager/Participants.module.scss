@@ -93,3 +93,21 @@
         margin-left: 3px;
     }
 }
+
+.pages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .placeholder {
+      width: 39px;
+      height: 39px;
+    }
+
+    .text {
+      color: #104C43;
+      font-weight: 350;
+      font-size: 23px;
+      margin: 0px 9px;
+    }
+  }

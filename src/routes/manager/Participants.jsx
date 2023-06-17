@@ -18,10 +18,12 @@ import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useDatabase, useProvideAuth } from '../../Hooks';
 import s from './Participants.module.scss';
 import { PARTICIPANT_STATUS } from '../../common/consts';
+import { PreviewParser } from '../../components/App/Preview/PreviewParser';
+import { RoundButton } from '../../components/RoundButton';
 
 // eslint-disable-next-line react/prop-types
 export function Participants({
-  participants, createResearch, researchTitle, back,
+  participants, researchTitle, back, researchType,
 }) {
   const { getDatabase } = useDatabase();
   const dataBase = getDatabase();
@@ -61,9 +63,13 @@ export function Participants({
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [responses, setResponses] = useState(null);
+  const [filledResearch, setFilledResearch] = useState(null);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const [currIndex, setCurrIndex] = useState(0);
+  const handleOpen = () => {
+    setOpen(true);
+    setCurrIndex(0);
+  };
   const handleClose = () => setOpen(false);
 
   const handleChangePage = (event, newPage) => {
@@ -107,6 +113,53 @@ export function Participants({
     [],
   );
 
+  const createApproveOrDeniedOptions = () => (researchType === 'REGULAR' ? ({
+    id: 'status',
+    label: 'Participant Status',
+    minWidth: 50,
+    align: 'right',
+    // eslint-disable-next-line react/no-unstable-nested-components
+    format: (participant) => (
+      !participant?.status ? (
+        <ThemeProvider theme={theme}>
+          <div className={s.status}>
+            <Button
+              disableRipple
+              variant="contained"
+              color="neutral"
+              className={s.button}
+              onClick={() => {
+                updateStatus(
+                  participant,
+                  PARTICIPANT_STATUS.APPROVED,
+                );
+              }}
+            >
+              ACCEPT
+            </Button>
+            <Button
+              disableRipple
+              variant="outlined"
+              color="neutralReverse"
+              onClick={() => {
+                updateStatus(
+                  participant,
+                  PARTICIPANT_STATUS.DENIED,
+                );
+              }}
+            >
+              DECLINE
+            </Button>
+          </div>
+        </ThemeProvider>
+      ) : (
+        participant?.status === PARTICIPANT_STATUS.APPROVED ? (
+          <Typography variant="subtitle2"> APPROVED </Typography>
+        ) : (<Typography variant="subtitle2"> DENIED </Typography>)
+      )
+    ),
+  }) : ({}));
+
   const columns = [
     { id: 'Number', label: 'Number', minWidth: 17 },
     {
@@ -128,7 +181,7 @@ export function Participants({
     },
     { id: 'email', label: 'Email', minWidth: 50 },
     {
-      id: 'inputs',
+      id: 'filledResearch',
       label: 'Responses',
       minWidth: 50,
       // eslint-disable-next-line react/no-unstable-nested-components
@@ -139,7 +192,7 @@ export function Participants({
             disabled={!value && value?.[0]}
             className={s.text}
             onClick={() => {
-              setResponses(spreadDocData(Object.values(value)));
+              setFilledResearch(value);
               handleOpen();
             }}
             startIcon={<VisibilityIcon sx={{ color: '#104C43' }} />}
@@ -149,52 +202,7 @@ export function Participants({
         </div>
       ),
     },
-    {
-      id: 'status',
-      label: 'Participant Status',
-      minWidth: 50,
-      align: 'right',
-      // eslint-disable-next-line react/no-unstable-nested-components
-      format: (participant) => (
-        !participant?.status ? (
-          <ThemeProvider theme={theme}>
-            <div className={s.status}>
-              <Button
-                disableRipple
-                variant="contained"
-                color="neutral"
-                className={s.button}
-                onClick={() => {
-                  updateStatus(
-                    participant,
-                    PARTICIPANT_STATUS.APPROVED,
-                  );
-                }}
-              >
-                ACCEPT
-              </Button>
-              <Button
-                disableRipple
-                variant="outlined"
-                color="neutralReverse"
-                onClick={() => {
-                  updateStatus(
-                    participant,
-                    PARTICIPANT_STATUS.DENIED,
-                  );
-                }}
-              >
-                DECLINE
-              </Button>
-            </div>
-          </ThemeProvider>
-        ) : (
-          participant?.status === PARTICIPANT_STATUS.APPROVED ? (
-            <Typography variant="subtitle2"> APPROVED </Typography>
-          ) : (<Typography variant="subtitle2"> DENIED </Typography>)
-        )
-      ),
-    },
+    { ...createApproveOrDeniedOptions() },
   ];
 
   return (
@@ -271,24 +279,48 @@ export function Participants({
           aria-labelledby="participant"
           aria-describedby="participant"
         >
-          <Box sx={boxStyle}>
-            {
-            !responses ? <div> No responses </div> : (
-              responses?.filter(
-                (response) => response?.content && response?.attrs,
-              )
-                ?.map((response) => (
-                  <div className={s.response}>
-                    <Typography variant="subtitle2" gutterBottom>
-                      {response?.content?.[0]?.text || ''}
-                      :
-                    </Typography>
-                    <Typography variant="body2" gutterBottom className={s.answer}>
-                      {response?.attrs?.value || ''}
-                    </Typography>
-                  </div>
-                )))
-          }
+          <Box sx={boxStyle} className={s.modal}>
+            <div className={s.pages}>
+              {(filledResearch && Object.keys(filledResearch)?.length > 1 && currIndex > 0) ? (
+                <RoundButton
+                  className={s.backButton}
+                  height="39px"
+                  width="39px"
+                  arrowHeight="8px"
+                  arrowWidth="14px"
+                  isBack
+                  onClick={() => {
+                    setCurrIndex(currIndex - 1);
+                  }}
+                />
+              ) : <div className={s.placeholder} />}
+              <Typography variant="h5" component="div" className={s.text}>
+                Pages
+                {' '}
+                {currIndex + 1}
+                {' '}
+                /
+                {' '}
+                {filledResearch && Object.keys(filledResearch)?.length}
+              </Typography>
+              {(filledResearch && Object.keys(filledResearch)?.length > 1
+            && currIndex + 1 < Object.keys(filledResearch)?.length) && (
+            <RoundButton
+              height="39px"
+              width="39px"
+              arrowHeight="8px"
+              arrowWidth="14px"
+              onClick={() => {
+                setCurrIndex(currIndex + 1);
+              }}
+            />
+              )}
+            </div>
+
+            <PreviewParser
+              researchData={filledResearch?.[currIndex.toString()]}
+              disable
+            />
           </Box>
         </Modal>
       </div>

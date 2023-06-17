@@ -12,6 +12,7 @@ import {
 import s from './PreviewParser.module.scss';
 import { PreviewText } from './PreviewText';
 import { PreviewValidationCheckbox } from './PreviewValidationCheckbox';
+import { PreviewRadioButtonGroup } from './PreviewRadioButtonGroup';
 import { PreviewTextbox } from './PreviewTextbox';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 
@@ -60,6 +61,7 @@ const renderList = (listNode) => (
 
 export function PreviewParser({
   researchData,
+  disable: disabled = false,
 }) {
   return (
     <div className={s.main} key={Math.floor(Math.random() * 1000 + 1)}>
@@ -77,8 +79,22 @@ export function PreviewParser({
                 node={node}
               />
             );
+          } if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+            return (
+              <PreviewRadioButtonGroup
+                node={node}
+                disabled={disabled}
+                key={Math.floor(Math.random() * 1000 + 1)}
+              />
+            );
           } if (node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX) {
-            return <PreviewTextbox node={node} />;
+            return (
+              <PreviewTextbox
+                node={node}
+                disabled={disabled}
+                key={Math.floor(Math.random() * 1000 + 1)}
+              />
+            );
           } if (node.type === EDITOR_ELEMENTS_TYPES.IMAGE) {
             return renderImage(node);
           } if (node.type === EDITOR_ELEMENTS_TYPES.EXTERNAL_VIDEO) {

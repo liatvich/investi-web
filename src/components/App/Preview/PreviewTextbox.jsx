@@ -5,7 +5,7 @@ import { TextField } from '@mui/material';
 import s from './PreviewParser.module.scss';
 import { PreviewText } from './PreviewText';
 
-export function PreviewTextbox({ node }) {
+export function PreviewTextbox({ node, disabled }) {
   const [value, setValue] = useState(node?.attrs?.value);
 
   useEffect(() => {
@@ -21,6 +21,7 @@ export function PreviewTextbox({ node }) {
         variant="standard"
         className={s.textbox}
         value={value}
+        disabled={disabled}
         onChange={(event) => {
           // eslint-disable-next-line no-param-reassign
           if (node?.attrs) {

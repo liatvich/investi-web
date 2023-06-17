@@ -1,6 +1,5 @@
 /* eslint-disable global-require */
 import React, { useEffect } from 'react';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase/compat/app';
 import Typography from '@mui/material/Typography';
 import 'firebase/compat/auth';
@@ -8,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useProvideAuth } from '../../Hooks'; // useAuth
 import s from './SignInScreen.module.scss';
 import { Logo } from '../../components/Logo';
+import { StyledFirebaseAuth } from '../../components/StyledFirebaseAuth';
 
 export function SignInScreen() {
 //   const { getLoggedUser } = useContext(UserContext);
@@ -20,8 +20,8 @@ export function SignInScreen() {
   // Configure FirebaseUI.
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
-  //   signInFlow: 'popup',
-    signInFlow: 'redirect',
+    signInFlow: 'popup',
+    // signInFlow: 'redirect',
     // We will display Google and Facebook as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -59,7 +59,11 @@ export function SignInScreen() {
       </div>
 
       <div className={s.googlesignin}>
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
+        <StyledFirebaseAuth
+          uiConfig={uiConfig}
+          firebaseAuth={firebase.auth()}
+          signInSuccessWithAuthResult={(user) => setUser(user)}
+        />
       </div>
     </div>
 

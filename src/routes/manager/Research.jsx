@@ -9,28 +9,28 @@ import {
   Typography,
   IconButton,
   Button,
-  TextField,
+  // TextField,
 } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import GroupsIcon from '@mui/icons-material/Groups';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import { styled } from '@mui/material/styles';
+// import { styled } from '@mui/material/styles';
 import s from './Research.module.scss';
-import { TextFieldMuiStyle } from '../../common/styleConsts';
+// import { TextFieldMuiStyle } from '../../common/styleConsts';
 
-const CssTextField = styled(TextField)(TextFieldMuiStyle);
+// const CssTextField = styled(TextField)(TextFieldMuiStyle);
 
 export function Research({
-  research, back, participantsSelected, startResearch, saveResearchAsDraft,
+  research, back, participantsSelected, startResearch, // saveResearchAsDraft,
 }) {
-  const getResearchStage = () => {
-    if (research.status === 'published') return 'not started';
-    if (research.status === 'started') return 'started';
-    return '';
-  };
+  // const getResearchStage = () => {
+  //   if (research.status === 'published') return 'not started';
+  //   if (research.status === 'started') return 'started';
+  //   return '';
+  // };
 
   const [currentResearch, setResearch] = useState(research);
-  const [currentDescription, setDescription] = useState(currentResearch?.description || '');
+  // const [currentDescription, setDescription] = useState(currentResearch?.description || '');
   useEffect(() => {
     setResearch(research);
   }, [research]);
@@ -57,8 +57,8 @@ export function Research({
           <Typography variant="h4" gutterBottom component="div" className={s.title}>
             {currentResearch?.title}
             {', '}
-            {getResearchStage()}
-            {', '}
+            {/* {getResearchStage()}
+            {', '} */}
             {currentResearch?.signups || '0'}
             {' '}
             participants
@@ -68,7 +68,7 @@ export function Research({
             {' '}
             {currentResearch?.id}
           </Typography>
-          <Typography variant="h5" gutterBottom component="div" className={s.description}>
+          {/* <Typography variant="h5" gutterBottom component="div" className={s.description}>
             Research Type: Photo Upload
             <Typography variant="h5" gutterBottom component="div" className={s.note}>
               (We will have more types in the future :) stay tuned!)
@@ -90,7 +90,7 @@ export function Research({
                 disabled={currentResearch?.status === 'started'}
               />
             </Typography>
-          </div>
+          </div> */}
 
           {currentResearch?.signups && currentResearch?.signups > 0 ? (
             <>
@@ -130,7 +130,7 @@ export function Research({
               </div>
             )}
 
-          {currentResearch?.status === 'published' && (
+          {/* {currentResearch?.status === 'published' && (
             <div className={s.rootAction}>
               <Button
                 disableRipple
@@ -141,11 +141,13 @@ export function Research({
               >
                 Start Research
               </Button>
-              <Button disableRipple size="large" className={s.draft} onClick={() => saveResearchAsDraft(currentResearch, currentDescription)}>
+              <Button disableRipple size="large"
+              className={s.draft}
+              onClick={() => saveResearchAsDraft(currentResearch, currentDescription)}>
                 Save As Draft
               </Button>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

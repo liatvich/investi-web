@@ -43,15 +43,24 @@ import 'firebase/compat/auth';
 
 // Add your Firebase credentials
 // Configure Firebase.
+// const firebaseConfig = {
+//   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+//   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+//   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+//   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+//   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+//   appId: process.env.REACT_APP_FIREBASE_APP_ID,
+// };
+
 const firebaseConfig = {
-  apiKey: 'AIzaSyDPuVNfCGlfrgMbNX-jD-i1ndh3tFXFguA',
-  authDomain: 'investitest-5253f.firebaseapp.com',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   // The value of `databaseURL` depends on the location of the database
   // databaseURL: "https://DATABASE_NAME.firebaseio.com", - real time :/
-  projectId: 'investitest-5253f',
-  storageBucket: 'investitest-5253f.appspot.com',
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   // messagingSenderId: "SENDER_ID",
-  appId: '1:644024387343:ios:8d646c4aed67cc13b1a07a',
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
 firebase.initializeApp(firebaseConfig);
 

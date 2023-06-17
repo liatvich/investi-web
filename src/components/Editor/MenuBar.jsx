@@ -13,7 +13,7 @@ import { styled, alpha } from '@mui/material/styles';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
@@ -181,12 +181,12 @@ function MenuBar({
         </IconButton>
         <IconButton
           disableRipple
-          onClick={() => editor.chain().focus().toggleValidationCheckbox().run()}
+          onClick={() => editor.chain().focus().toggleRadioButton().run()}
           className={classNames({
-            [s.selected]: editor.isActive('validationCheckbox'),
+            [s.selected]: editor.isActive('radioButton'),
           })}
         >
-          <CheckBoxOutlinedIcon sx={{ color: 'text.primary' }} />
+          <RadioButtonCheckedIcon sx={{ color: 'text.primary' }} />
         </IconButton>
         <IconButton
           disableRipple

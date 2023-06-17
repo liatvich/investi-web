@@ -4,6 +4,8 @@ export const EDITOR_ELEMENTS_TYPES = {
   BULLET_LIST: 'bulletList',
   ORDERED_LIST: 'orderedList',
   VALIDATION_CHECKBOX: 'validationCheckbox',
+  RADIO_BUTTON: 'radioButton',
+  RADIO_BUTTON_GROUP: 'radioButtonGroup',
   TEXTBOX: 'textbox',
   TEXT: 'text',
   HARD_BREAK: 'hardBreak',

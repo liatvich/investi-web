@@ -21,6 +21,31 @@ export function ConsumerResearchPreview() {
   const [imageUploadDescription, setImageUploadDescription] = useState('');
   const [consumerStage, setConsumerStage] = useState('ResearchPreview');
 
+  const groupRadioButtons = (researchData) => Object.values(researchData)?.map(
+    (page) => page?.content?.reduce(
+      (acc, node) => {
+        if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON) {
+          if (acc[acc.length - 1]?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+            acc[acc.length - 1].content.push(node);
+          } else {
+            acc.push({
+              type: EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP,
+              content: [node],
+              attrs: { chosenValue: '0' },
+            });
+          }
+        } else {
+          acc.push(node);
+        }
+        return acc;
+      },
+      [],
+    ),
+  ).reduce((acc, page) => {
+    acc.push({ content: page, type: 'doc' });
+    return acc;
+  }, []);
+
   useEffect(() => {
     async function fetchResearch() {
       if (!emailValidation(email)) {
@@ -34,13 +59,17 @@ export function ConsumerResearchPreview() {
         const signupRef = doc(dataBase, 'experiments', activeResearch, 'signups', email);
         const signupDoc = await getDoc(signupRef);
         if (signupDoc.exists()) {
-          if (signupDoc.data()?.status === 'approved' && docResearch.data()?.status === 'started') {
+          if (docResearch.data()?.researchType === 'QUICK') {
+            // user is refilling the research -- think if we want to allow that
+            setResearch({ ...groupRadioButtons(docResearch.data()?.data) });
+            setTitle(docResearch.data()?.title);
+          } else if (signupDoc.data()?.status === 'approved' && docResearch.data()?.status === 'started') {
             setImageUploadDescription(docResearch.data()?.description);
             setManagerId(docResearch.data()?.user_id);
             setConsumerStage('ImageUpload');
           }
         } else {
-          setResearch(docResearch.data()?.data);
+          setResearch({ ...groupRadioButtons(docResearch.data()?.data) });
           setTitle(docResearch.data()?.title);
         }
       } else {
@@ -61,17 +90,20 @@ export function ConsumerResearchPreview() {
             title={title}
             // eslint-disable-next-line no-unused-vars
             submitOnClick={async (filledResearch) => {
-              const userInputs = Object.keys(filledResearch)?.reduce((inputs, docIndex) => {
-                const teaxtboxes = filledResearch[docIndex]?.content
-                  ?.filter((node) => node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX);
-                // eslint-disable-next-line no-param-reassign
-                inputs[docIndex] = teaxtboxes;
-                return inputs;
-              }, {});
+              // const userInputs = Object.keys(filledResearch)?.reduce((inputs, docIndex) => {
+              //   const teaxtboxes = filledResearch[docIndex]?.content
+              //     ?.filter((node) => node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX);
+              //   // eslint-disable-next-line no-param-reassign
+              //   inputs[docIndex] = teaxtboxes;
+              //   return inputs;
+              // }, {});
+
+              // I used to save only the text box answer - I decided to save all the docs
+              // I can reduce the amount of saved data tremendously
 
               const dataBase = getDatabase();
               await setDoc(doc(dataBase, `experiments/${activeResearch}/signups`, email), {
-                inputs: userInputs,
+                filledResearch,
                 email,
                 date: Date.now(),
               });
