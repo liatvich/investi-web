@@ -321,6 +321,7 @@ export function Participants({
               researchData={filledResearch?.[currIndex.toString()]}
               disable
             />
+            {/* define image preview */}
           </Box>
         </Modal>
       </div>

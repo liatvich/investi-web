@@ -29,7 +29,7 @@ const ArrowIconStyle = {
 };
 
 export function ResearchPreviewMobile({
-  research, submitOnClick, title,
+  research, submitOnClick, title, managerId, participantEmail, researchId,
 }) {
   const [currPage, setCurrPage] = useState(0);
   // const [validationError, setValidationError] = useState(false);
@@ -48,6 +48,9 @@ export function ResearchPreviewMobile({
     research ? (
       <PreviewParser
         researchData={research[currPage]}
+        participantEmail={participantEmail}
+        researchId={researchId}
+        managerId={managerId}
       />
     ) : <div>Empty</div>
   );

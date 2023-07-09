@@ -8,6 +8,8 @@ import { useProvideAuth } from '../../Hooks'; // useAuth
 import s from './SignInScreen.module.scss';
 import { Logo } from '../../components/Logo';
 import { StyledFirebaseAuth } from '../../components/StyledFirebaseAuth';
+// import { ThemeProvider } from '@mui/material/styles';
+// import { manropeTheme } from './common/styleConsts';
 
 export function SignInScreen() {
 //   const { getLoggedUser } = useContext(UserContext);

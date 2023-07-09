@@ -11,6 +11,7 @@ export const EDITOR_ELEMENTS_TYPES = {
   HARD_BREAK: 'hardBreak',
   IMAGE: 'image',
   EXTERNAL_VIDEO: 'externalVideo',
+  IMAGE_UPLOADER: 'imageUploader',
 };
 
 export const RESEARCH_STATUS = {

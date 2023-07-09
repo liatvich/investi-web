@@ -31,7 +31,7 @@ const ArrowIconStyle = {
 
 // isConsumer - SUPER UGLY!
 export function ResearchPreview({
-  research, isConsumer, submitOnClick, title,
+  research, isConsumer, submitOnClick, title, participantEmail, researchId, managerId,
 }) {
   const [currPage, setCurrPage] = useState(0);
   // const [validationError, setValidationError] = useState(false);
@@ -50,6 +50,9 @@ export function ResearchPreview({
     research ? (
       <PreviewParser
         researchData={research[currPage]}
+        participantEmail={participantEmail}
+        researchId={researchId}
+        managerId={managerId}
       />
     ) : <div>Empty</div>
   );
@@ -152,6 +155,9 @@ export function ResearchPreview({
             research={research}
             submitOnClick={submitOnClick}
             title={title}
+            participantEmail={participantEmail}
+            researchId={researchId}
+            managerId={managerId}
           />
         )
           : isSubmittedExperiment ? (
@@ -178,14 +184,5 @@ export function ResearchPreview({
     </>
   );
 }
-
-// { /*
-//         {validationError
-//               && (
-//               <Typography variant="h5" gutterBottom component="div">
-//                 Please Check requested checkboxes
-//               </Typography>
-//               )}
-//       </div> */ }
 
 export default ResearchPreview;

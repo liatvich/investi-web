@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   collection, addDoc, setDoc, doc,
 } from 'firebase/firestore/lite';
+import { ThemeProvider } from '@mui/material/styles';
 import { TopBar } from './TopBar';
 import { ActiveResearch } from '../../routes/manager/ActiveResearch';
 import { CreateExperiment } from '../../routes/manager/CreateExperiment';
@@ -10,6 +11,8 @@ import { QuickAddExperiment } from '../../routes/manager/quickAdd';
 import { Participants } from '../../routes/manager/Participants';
 import { Research } from '../../routes/manager/Research';
 import { useDatabase, useProvideAuth } from '../../Hooks';
+import { manropeTheme } from '../../common/styleConsts';
+
 import s from './AppLayout.module.scss';
 
 const Steps = {
@@ -65,10 +68,11 @@ export function AppLayout({ children }) {
   };
 
   return (
-    <div className={s.main}>
-      <TopBar className={s.topBar} />
-      <div className={s.content}>
-        {
+    <ThemeProvider theme={manropeTheme}>
+      <div className={s.main}>
+        <TopBar className={s.topBar} />
+        <div className={s.content}>
+          {
           (step.id === Steps.LIST && (
             <ActiveResearch
               createResearch={() => setStep({ id: Steps.QUICK_ADD, data: {} })}
@@ -178,8 +182,9 @@ export function AppLayout({ children }) {
               />
               ))
         }
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 

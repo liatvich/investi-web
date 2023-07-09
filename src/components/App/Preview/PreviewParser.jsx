@@ -13,8 +13,10 @@ import s from './PreviewParser.module.scss';
 import { PreviewText } from './PreviewText';
 import { PreviewValidationCheckbox } from './PreviewValidationCheckbox';
 import { PreviewRadioButtonGroup } from './PreviewRadioButtonGroup';
+import { PreviewImage } from './PreviewImage';
 import { PreviewTextbox } from './PreviewTextbox';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
+import ImageUploader from '../../Editor/ReactComponents/ImageUploader';
 
 const renderImage = (node) => (
   <div>
@@ -62,6 +64,9 @@ const renderList = (listNode) => (
 export function PreviewParser({
   researchData,
   disable: disabled = false,
+  participantEmail = '',
+  researchId = '',
+  managerId = '',
 }) {
   return (
     <div className={s.main} key={Math.floor(Math.random() * 1000 + 1)}>
@@ -87,7 +92,27 @@ export function PreviewParser({
                 key={Math.floor(Math.random() * 1000 + 1)}
               />
             );
-          } if (node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX) {
+          } if (node.type === EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER) {
+            if (disabled) {
+              return (
+                <PreviewImage
+                  key={Math.floor(Math.random() * 1000 + 1)}
+                  node={node}
+                />
+              );
+            }
+            return (
+              <ImageUploader
+                key={Math.floor(Math.random() * 1000 + 1)}
+                disabled={false}
+                researchId={researchId}
+                managerId={managerId}
+                participantEmail={participantEmail}
+                node={node}
+              />
+            );
+          }
+          if (node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX) {
             return (
               <PreviewTextbox
                 node={node}

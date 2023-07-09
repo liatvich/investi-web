@@ -14,6 +14,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
@@ -196,6 +197,15 @@ function MenuBar({
           })}
         >
           <DriveFileRenameOutlineOutlinedIcon sx={{ color: 'text.primary' }} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => editor.chain().focus().toggleImageUploader().run()}
+          className={classNames({
+            [s.selected]: editor.isActive('imageUploader'),
+          })}
+        >
+          <PhotoCameraIcon sx={{ color: 'text.primary' }} />
         </IconButton>
       </div>
       <div className={s.media}>

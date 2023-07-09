@@ -1,4 +1,5 @@
-/* eslint-disable no-nested-ternary */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable global-require */
 /* eslint-disable react/no-this-in-sfc */
@@ -6,21 +7,16 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Link, IconButton, Typography, Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom'; // Outlet
-import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
-import s from './App.module.scss';
-// import { SignInScreen } from './routes/manager';
-import { ProvideAuth, useProvideAuth } from './Hooks';
-import { AppLayout } from './components/App/AppLayout';
+import s from './Appmobile.module.scss';
 import { Logo as LogoIcon } from './assets/logo';
 import { Logo } from './components/Logo';
-import welcome from './assets/welcome.png';
 import personalize from './assets/personalize_icon.png';
 import anna from './assets/team/Anna.png';
 import annaAvatar from './assets/team/AnnaAvatar.png';
@@ -34,22 +30,35 @@ import initiate from './assets/initiate_new_experiment_icon.png';
 import distribute from './assets/distribute_icon.png';
 import fistSectionInto from './assets/fistSectionInto.png';
 import { Loader as LoaderIcon } from './assets/loader';
-import { AppMobile } from './AppMobile';
+import { LogoNew as LogoIconNew } from './assets/logonew';
+import tech4animals from './assets/Logo-4site.png';
 
-export function App() {
-  //   const { loggedUser } = useContext(UserContext);
-  const { user } = useProvideAuth();
+export function AppMobile() {
   const navigate = useNavigate();
-  const isMobile = window.matchMedia('only screen and (max-width: 760px)').matches;
 
-  const AppDeskTop = (
+  // document.getElementById('secondSection').style.minHeight = `${window.innerHeight}px`;
+
+  const firstSection = useRef(null);
+  const secondSection = useRef(null);
+
+  useEffect(() => {
+    if (firstSection?.current?.style) {
+      firstSection.current.style.minHeight = `${window.innerHeight}px`;
+    }
+
+    if (secondSection?.current?.style) {
+      secondSection.current.style.minHeight = `${window.innerHeight}px`;
+    }
+  }, [firstSection, secondSection]);
+
+  return (
     <div className={s.root}>
       <div className={s.content}>
         <div className={s.firstSection}>
-          <Logo color="#B6E4E4" withoutPaddingTop />
-          <div className={s.firstSectionContent}>
+          <div className={s.firstSectionContent} ref={firstSection}>
             <div className={s.texts}>
               <div className={s.titleBlock}>
+                <LogoIconNew color="#104C43" />
                 <Typography variant="h2" component="div" className={s.title} style={{ color: '#1f1f1f' }}>
                   pet
                 </Typography>
@@ -64,14 +73,6 @@ export function App() {
                 AI-powered Citizen Science: Fast-track animal research, collect data, collaborate globally. Join now for scientific breakthroughs!
               </Typography>
               <div className={s.buttons}>
-                <Button
-                  variant="contained"
-                  onClick={() => { navigate('/signin'); }}
-                  startIcon={<TextSnippetOutlinedIcon className={s.note} />}
-                  className={s.manager}
-                >
-                  Research Manager
-                </Button>
                 <Button variant="contained" onClick={() => { navigate('/research'); }} startIcon={<LogoIcon color="#ffffff" />} className={s.consumer}>
                   Research Participant
                 </Button>
@@ -80,7 +81,7 @@ export function App() {
             <img src={fistSectionInto} alt="firstSectionIntro" className={s.image} />
           </div>
         </div>
-        <div className={s.secondSection}>
+        <div className={s.secondSection} ref={secondSection}>
           <Typography variant="h2" gutterBottom component="div" className={s.title}>
             Power up your research in three steps:
           </Typography>
@@ -96,7 +97,9 @@ export function App() {
               </Typography>
             </div>
             <div className={s.loader}>
-              <LoaderIcon />
+              <div className={s.first} />
+              <div className={s.second} />
+              <div className={s.third} />
             </div>
             <div className={s.phase}>
               <img src={personalize} alt="personalize" className={s.image} />
@@ -105,7 +108,9 @@ export function App() {
               </Typography>
             </div>
             <div className={s.loader}>
-              <LoaderIcon />
+              <div className={s.first} />
+              <div className={s.second} />
+              <div className={s.third} />
             </div>
             <div className={s.phase}>
               <img src={distribute} alt="distribute" className={s.image} />
@@ -114,9 +119,6 @@ export function App() {
               </Typography>
             </div>
           </div>
-          <Typography variant="h4" gutterBottom component="div" className={s.bottomText}>
-            Join now and transform your research process with ease!
-          </Typography>
         </div>
         <div className={s.thirdSection}>
           <div className={s.top}>
@@ -198,6 +200,17 @@ export function App() {
             </div>
           </div>
           <div className={s.footer}>
+            <div
+              className={s.pet}
+              onClick={() => { window.open('https://www.tech4animals.org/', '_blank'); }}
+            >
+              <img
+                src={tech4animals}
+                alt="tech4animals"
+                className={s.petLogo}
+              />
+            </div>
+            <div className={s.separatorFirst} />
             <div className={s.findUs}>
               <div className={s.haifa}>
                 <Typography variant="h4" gutterBottom component="div" className={s.description}>
@@ -220,7 +233,7 @@ export function App() {
                 </div>
               </div>
             </div>
-            <div className={s.separatorFirst} />
+            <div className={s.separatorSecond} />
             <div className={s.email}>
               <Link
                 component="a"
@@ -231,7 +244,7 @@ export function App() {
                 tech4a.haifa@gmail.com
               </Link>
             </div>
-            <div className={s.separatorSecond} />
+            <div className={s.separatorThird} />
             <div className={s.social}>
               <IconButton disableRipple onClick={() => { window.open('https://twitter.com/tech4animals', '_blank'); }}>
                 <FacebookOutlinedIcon className={s.icon} />
@@ -251,18 +264,6 @@ export function App() {
       </div>
     </div>
   );
-
-  return (
-    <ProvideAuth>
-      <div>
-        {user ? <AppLayout />
-          : isMobile ? (<AppMobile />) : (
-            AppDeskTop
-          )}
-      </div>
-    </ProvideAuth>
-  );
 }
 
-export default App;
-// 3 dots instead the line
+export default AppMobile;

@@ -14,6 +14,7 @@ import MenuBar from '../../components/Editor/MenuBar';
 import ValidationCheckboxExtension from '../../components/Editor/ReactComponents/ValidationCheckboxExtension';
 import TextboxExtension from '../../components/Editor/ReactComponents/TextboxExtension';
 import RadioButtonExtension from '../../components/Editor/ReactComponents/RadioButtonExtension';
+import ImageUploaderExtension from '../../components/Editor/ReactComponents/ImageUploaderExtension';
 import ExternalVideoExtension from '../../components/Editor/ReactComponents/ExternalVideoExtension';
 import s from './CreateExperiment.module.scss';
 import { RoundButton } from '../../components/RoundButton';
@@ -44,6 +45,7 @@ export function CreateExperiment({
       ValidationCheckboxExtension,
       TextboxExtension,
       RadioButtonExtension,
+      ImageUploaderExtension,
       Image,
       Dropcursor,
       ExternalVideoExtension,

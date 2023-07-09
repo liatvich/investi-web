@@ -14,6 +14,7 @@ import MenuBar from '../../../components/Editor/MenuBar';
 import TextboxExtension from '../../../components/Editor/ReactComponents/TextboxExtension';
 import ExternalVideoExtension from '../../../components/Editor/ReactComponents/ExternalVideoExtension';
 import RadioButtonExtension from '../../../components/Editor/ReactComponents/RadioButtonExtension';
+import ImageUploaderExtension from '../../../components/Editor/ReactComponents/ImageUploaderExtension';
 
 import s from './QuickAddExperiment.module.scss';
 import { RoundButton } from '../../../components/RoundButton';
@@ -39,6 +40,7 @@ export function QuickAddExperiment({
       StarterKit,
       TextboxExtension,
       RadioButtonExtension,
+      ImageUploaderExtension,
       Image,
       Dropcursor,
       ExternalVideoExtension,

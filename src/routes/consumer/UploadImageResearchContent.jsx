@@ -1,7 +1,6 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-loop-func */
 /* eslint-disable no-restricted-syntax */
-/* eslint-disable no-debugger */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-unused-vars */
 /* eslint-disable default-case */

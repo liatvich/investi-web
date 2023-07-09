@@ -1,19 +1,25 @@
 .logo {
     display: flex;
     align-items: center;
-    padding-left: 33px;
+    text-align: center;
 
     .icon {
-
     }
 
     .text {
         color: #104C43;
         font-weight: 500;
-        font-size: 18px;
+        font-size: 25px;
         line-height: 28px;
-        margin-left: 10px;
     }
+}
+
+.top {
+    margin: 9px;
+    width: min-content;
+    background: #F8F9FD;
+    padding: 9px;
+    border-radius: 0.5rem;
 }
 
 .paddingTop {

@@ -6,9 +6,11 @@ import {
   Routes,
   Route,
 } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
 import { App } from './App';
 import { ConsumerPreview } from './routes/consumer/ConsumerPreview/ConsumerPreview';
 import { ConsumerResearchPreview } from './routes/consumer/ConsumerResearchPreview';
+import { manropeTheme } from './common/styleConsts';
 
 import {
   routes,
@@ -16,27 +18,28 @@ import {
 } from './routes/manager'; //  CreateExperiment, , ActiveResearch,
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        {/* <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
+  <ThemeProvider theme={manropeTheme}>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />} />
+          {/* <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
           <Route path="active" element={<ActiveResearch />} />
         </Route> */}
-        <Route path={routes.SIGN_IN} element={<SignInScreen />} />
-        <Route path="research" element={<ConsumerPreview />} />
-        <Route path="research/:activeResearch/:email" element={<ConsumerResearchPreview />} />
-        <Route
-          path="*"
-          element={(
-            <App />
+          <Route path={routes.SIGN_IN} element={<SignInScreen />} />
+          <Route path="research" element={<ConsumerPreview />} />
+          <Route path="research/:activeResearch/:email" element={<ConsumerResearchPreview />} />
+          <Route
+            path="*"
+            element={(
+              <App />
       )}
-        />
-      </Routes>
+          />
+        </Routes>
 
-      {/* <Route path="/" element={<SignInScreen />} /> */}
-      {/* <Route path="/" element={<App />}> */}
-      {/* //    <Route
+        {/* <Route path="/" element={<SignInScreen />} /> */}
+        {/* <Route path="/" element={<App />}> */}
+        {/* //    <Route
         //     index
         //     element={
         //     <main style={{ padding: "1rem" }}>
@@ -44,7 +47,7 @@ ReactDOM.render(
         //         </main>
         //         }
         //     />  THIS IS THE DEFAULT OUTLET */}
-      {/* <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
+        {/* <Route path={routes.CREATE_EXPERIMENT} element={<CreateExperiment />} />
           <Route path={routes.SIGN_IN} element={<SignInScreen />} />
           <Route path="active" element={<ActiveResearch />} />
         </Route>
@@ -57,8 +60,9 @@ ReactDOM.render(
             </main>
       )}
         /> */}
-    </BrowserRouter>
-  </React.StrictMode>,
+      </BrowserRouter>
+    </React.StrictMode>
+  </ThemeProvider>,
   document.getElementById('root'),
 );
 

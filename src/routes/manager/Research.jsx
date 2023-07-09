@@ -5,6 +5,8 @@
 /*  eslint-disable-next-line react/prop-types  */
 
 import React, { useState, useEffect } from 'react';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 import {
   Typography,
   IconButton,
@@ -14,11 +16,45 @@ import {
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import GroupsIcon from '@mui/icons-material/Groups';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import {
+  getStorage, ref, listAll, getMetadata, getDownloadURL,
+} from 'firebase/storage';
 // import { styled } from '@mui/material/styles';
 import s from './Research.module.scss';
 // import { TextFieldMuiStyle } from '../../common/styleConsts';
 
 // const CssTextField = styled(TextField)(TextFieldMuiStyle);
+
+export const downloadFolderAsZip = async (path) => {
+  const jszip = new JSZip();
+  const storage = getStorage();
+  const folderRef = ref(
+    storage,
+    path,
+  );
+  const folder = await listAll(folderRef);
+  const participantFolders = folder.prefixes;
+
+  // eslint-disable-next-line no-restricted-syntax
+  // for (const participantFolder of participantFolders) {
+  // eslint-disable-next-line max-len
+  const innerFolders = await Promise.all(participantFolders.map(async (participantFolder) => listAll(participantFolder)));
+  const allItems = innerFolders.reduce((acc, curr) => [...acc, ...curr.items], []);
+
+  const promises = allItems
+    .map(async (item) => {
+      const file = await getMetadata(item);
+      const fileRef = ref(storage, item.fullPath);
+      const fileBlob = await getDownloadURL(fileRef)
+        .then((url) => fetch(url).then((response) => response.blob()))
+        .catch((error) => { console.log(error); });
+      jszip.file(file.name, fileBlob);
+    })
+    .reduce((acc, curr) => acc.then(() => curr), Promise.resolve());
+  await promises;
+  const blob = await jszip.generateAsync({ type: 'blob' });
+  saveAs(blob, 'download.zip');
+};
 
 export function Research({
   research, back, participantsSelected, startResearch, // saveResearchAsDraft,
@@ -68,29 +104,6 @@ export function Research({
             {' '}
             {currentResearch?.id}
           </Typography>
-          {/* <Typography variant="h5" gutterBottom component="div" className={s.description}>
-            Research Type: Photo Upload
-            <Typography variant="h5" gutterBottom component="div" className={s.note}>
-              (We will have more types in the future :) stay tuned!)
-            </Typography>
-          </Typography>
-          <div>
-            <Typography variant="h5" gutterBottom component="div" className={s.description}>
-              Description of the images you want to collect:
-              <Typography variant="h5" gutterBottom component="div" className={s.note}>
-                (This is the description that will be shown to the participants)
-              </Typography>
-              <CssTextField
-                id="standard-multiline-static"
-                multiline
-                rows={4}
-                value={currentDescription}
-                onChange={(e) => setDescription(e.target.value)}
-                className={s.descriptionInput}
-                disabled={currentResearch?.status === 'started'}
-              />
-            </Typography>
-          </div> */}
 
           {currentResearch?.signups && currentResearch?.signups > 0 ? (
             <>
@@ -116,6 +129,9 @@ export function Research({
                 </Typography>
                 <IconButton
                   className={s.actions}
+                  onClick={() => {
+                    downloadFolderAsZip(`images/${research?.user_id}/${research?.id}`);
+                  }}
                 >
                   <CloudDownloadIcon />
                 </IconButton>

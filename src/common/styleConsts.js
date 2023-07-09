@@ -1,3 +1,5 @@
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
+
 export const TextFieldMuiStyle = {
   '.MuiTextField-root': {
     borderColor: '#104C43',
@@ -26,6 +28,13 @@ export const TextFieldMuiStyle = {
   },
 };
 
+export const manropeTheme = responsiveFontSizes(createTheme({
+  typography: {
+    fontFamily: "'Manrope', sans-serif",
+  },
+}));
+
 export default {
   TextFieldMuiStyle,
+  manropeTheme,
 };
