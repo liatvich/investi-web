@@ -15,6 +15,7 @@ import { useDatabase } from '../../Hooks';
 import { ResearchPreview } from '../../components/App/Preview/ResearchPreview';
 import { emailValidation } from '../../common/general';
 import { UploadImageResearchContent } from './UploadImageResearchContent';
+import s from './ConsumerResearchPreview.module.scss';
 
 export function ConsumerResearchPreview() {
   const { activeResearch, email } = useParams();
@@ -91,7 +92,7 @@ export function ConsumerResearchPreview() {
   }, []);
 
   return (
-    <div>
+    <div className={s.main}>
       {research && consumerStage === 'ResearchPreview'
         ? (
           <ResearchPreview

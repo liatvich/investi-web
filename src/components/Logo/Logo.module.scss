@@ -4,12 +4,13 @@
     text-align: center;
 
     .icon {
+        margin-right: 3px;
     }
 
     .text {
-        color: #104C43;
-        font-weight: 500;
-        font-size: 25px;
+        color: #2C3D8F;
+        font-weight: 700;
+        font-size: 24px;
         line-height: 28px;
     }
 }
@@ -17,7 +18,7 @@
 .top {
     margin: 9px;
     width: min-content;
-    background: #F8F9FD;
+    // background: #F8F9FD;
     padding: 9px;
     border-radius: 0.5rem;
 }
@@ -34,7 +35,7 @@
 .separator {
     width: 2px;
     height: 35px;
-    background: #104C43;
+    background: #2C3D8F;
     margin: 0 9px;
     opacity: 10%;
 }

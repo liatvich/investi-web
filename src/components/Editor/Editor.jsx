@@ -118,7 +118,7 @@
 //                 borderBottom: 0,
 //               },
 //               '& .MuiInput-input': {
-//                 color: '#104C43',
+//                 color: '#2C3D8F',
 //                 fontSize: 24,
 //               },
 //             }}
@@ -126,7 +126,7 @@
 //           <CreateIcon sx={{
 //             width: '20px',
 //             height: '25px',
-//             color: '#104C43',
+//             color: '#2C3D8F',
 //             marginLeft: '17px',
 //           }}
 //           />

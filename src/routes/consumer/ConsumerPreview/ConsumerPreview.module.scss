@@ -1,7 +1,8 @@
 @media only screen and (max-width: 767px) {
 .root {
-    background: #FFFFFF;
+    background: #F2F5FF;
     height: 100vh;
+    margin: -8px;
 
     .content {
         display: flex;
@@ -14,7 +15,7 @@
         display: flex;
         align-items: center;
         text-align: center;
-        color: #104C43;
+        color: #2C3D8F;
         margin: 60px 0px 30px 20px;
     }
 
@@ -34,17 +35,19 @@
             font-weight: 400;
             font-size: 18px;
             line-height: 20px;
-            color: #104C43;
+            color: #2C3D8F;
             margin-bottom: 11px;
         }
 
         .textfield {
-            width: 100%;
+            max-width: 100%;
+            background: #FFFFFF;
         }
 
         .submit {
+            text-transform: none;
             height: 60px;
-            background: #104C43;
+            background: #2C3D8F;
             border-radius: 8px;
             font-weight: 400;
             font-size: 20px;
@@ -66,8 +69,9 @@
 
 @media only screen and (min-width: 768px) {
     .root {
-        background: #E5E5E5;
+        background: #F2F5FF;
         height: 100vh;
+        margin: -8px;
 
         .logo {
             display: flex;
@@ -76,7 +80,7 @@
             padding-left: 33px; 
         
             .text {
-                color: #104C43;
+                color: #2C3D8F;
                 font-weight: 500;
                 font-size: 18px;
                 line-height: 28px;
@@ -96,7 +100,7 @@
             display: flex;
             align-items: center;
             text-align: center;
-            color: #104C43;
+            color: #2C3D8F;
             margin: 60px 0px 30px 0px;
         }
 
@@ -112,21 +116,23 @@
                 font-weight: 400;
                 font-size: 18px;
                 line-height: 20px;
-                color: #104C43;
+                color: #2C3D8F;
                 margin-bottom: 11px;
             }
 
             .textfield {
                 // margin-bottom: 1px;;
-                // border: 2px solid #104C43;
+                // border: 2px solid #2C3D8F;
                 // border-radius: 8px;
-                width: 382px;
+                max-width: 382px;
+                background: #FFFFFF;
                 // height: 65px;
             }
 
             .submit {
+                text-transform: none;
                 height: 60px;
-                background: #104C43;
+                background: #2C3D8F;
                 border-radius: 8px;
                 font-weight: 400;
                 font-size: 20px;

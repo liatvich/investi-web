@@ -11,7 +11,7 @@ import { emailValidation } from '../../common/general';
 const CssTextField = styled(TextField)(TextFieldMuiStyle);
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
-export function EmailTextbox({ onEmailChange }) {
+export function EmailTextbox({ onEmailChange, className }) {
   const [email, setEmail] = useState('');
   const [showEmailValidationError, setShowEmailValidationError] = useState(false);
 
@@ -38,6 +38,7 @@ export function EmailTextbox({ onEmailChange }) {
         }}
         placeholder="your email"
         error={showEmailValidationError}
+        className={className}
       />
       {showEmailValidationError
         ? (

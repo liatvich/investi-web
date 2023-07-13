@@ -41,10 +41,10 @@ export function Participants({
   const theme = createTheme({
     palette: {
       neutralReverse: {
-        main: '#104C43',
+        main: '#2C3D8F',
       },
       neutral: {
-        main: '#104C43',
+        main: '#2C3D8F',
         contrastText: '#fff',
       },
     },
@@ -195,7 +195,7 @@ export function Participants({
               setFilledResearch(value);
               handleOpen();
             }}
-            startIcon={<VisibilityIcon sx={{ color: '#104C43' }} />}
+            startIcon={<VisibilityIcon sx={{ color: '#2C3D8F' }} />}
           >
             View
           </Button>
@@ -211,7 +211,7 @@ export function Participants({
         <div className={s.titleSection}>
           <div className={s.back}>
             <IconButton disableRipple onClick={back}>
-              <KeyboardBackspaceIcon sx={{ color: '#104C43' }} />
+              <KeyboardBackspaceIcon sx={{ color: '#2C3D8F' }} />
             </IconButton>
             <Typography variant="h5" component="div" className={s.title}>
               {researchTitle}

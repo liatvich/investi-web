@@ -23,7 +23,7 @@ export function RoundButton({
   const ArrowIconStyle = {
     width: arrowWidth,
     height: arrowHeight,
-    color: '#104C43',
+    color: '#2C3D8F',
   };
 
   return (

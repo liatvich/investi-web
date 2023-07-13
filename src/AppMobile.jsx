@@ -56,7 +56,7 @@ export function AppMobile() {
           <div className={s.firstSectionContent} ref={firstSection}>
             <div className={s.texts}>
               <div className={s.titleBlock}>
-                <LogoIconNew color="#104C43" />
+                <LogoIconNew color="#2C3D8F" />
                 <Typography variant="h2" component="div" className={s.title} style={{ color: '#1f1f1f' }}>
                   pets
                 </Typography>

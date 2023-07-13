@@ -108,13 +108,14 @@ function ImageUploader(props) {
           variant="contained"
           disabled={currDisabled}
           sx={{
-            background: '#104C43',
+            background: '#2C3D8F',
             borderRadius: '8px',
             color: '#FFFFFF',
             '&:hover': {
               background: '#1D8A7A',
             },
           }}
+          className="zIndex"
           component="label"
         >
           { image ? 'Change Image' : 'Upload Image' }
@@ -124,6 +125,7 @@ function ImageUploader(props) {
         && (
           <div className="delete">
             <IconButton
+              className="zIndex"
               onClick={onImageRemove}
               disabled={currDisabled}
             >
@@ -134,6 +136,7 @@ function ImageUploader(props) {
         { image
         && (
         <IconButton
+          className="zIndex"
           onClick={uploadImage}
           disabled={currDisabled}
         >

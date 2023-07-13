@@ -73,7 +73,9 @@ export function ConsumerPreview() {
           <Typography variant="subtitle1" gutterBottom component="div" className={s.boxtitle}>
             Email
           </Typography>
-          <EmailTextbox onEmailChange={
+          <EmailTextbox
+            className={s.textfield}
+            onEmailChange={
               (currEmail, isCurrEmailValid) => {
                 setEmail({ email: currEmail, isValid: isCurrEmailValid });
               }

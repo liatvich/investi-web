@@ -75,7 +75,7 @@ export function Research({
         <div className={s.titleSection}>
           <div className={s.back}>
             <IconButton disableRipple onClick={back}>
-              <KeyboardBackspaceIcon sx={{ color: '#104C43' }} />
+              <KeyboardBackspaceIcon sx={{ color: '#2C3D8F' }} />
             </IconButton>
             <Typography variant="h5" component="div" className={s.title}>
               {currentResearch?.title}

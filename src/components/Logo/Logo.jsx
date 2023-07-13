@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import classNames from 'classnames';
 import { LogoNew as LogoIcon } from '../../assets/logonew';
 import s from './Logo.module.scss';
-import tech4animals from '../../assets/Logo-4site.png';
+// import tech4animals from '../../assets/Logo-4site.png';
 
 // eslint-disable-next-line react/prop-types
 export function Logo({ withoutPaddingTop, color }) {
@@ -15,7 +15,9 @@ export function Logo({ withoutPaddingTop, color }) {
         [s.top]: true,
       })}
     >
-      <LogoIcon className={s.icon} color={color || '#104C43'} />
+      <div className={s.icon}>
+        <LogoIcon color={color || '#2C3D8F'} width="35px" />
+      </div>
       <Typography variant="subtitle1" component="div" className={s.text} style={{ color: '#1f1f1f' }}>
         pets
       </Typography>
@@ -25,9 +27,9 @@ export function Logo({ withoutPaddingTop, color }) {
       <Typography variant="subtitle1" component="div" className={s.text} style={{ color: '#1f1f1f' }}>
         lab
       </Typography>
-      <div className={s.contributes}>
+      {/* <div className={s.contributes}>
         <img src={tech4animals} alt="tech4animals" className={s.image} />
-      </div>
+      </div> */}
     </div>
   );
 }

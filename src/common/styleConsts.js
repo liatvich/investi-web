@@ -2,27 +2,27 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
 export const TextFieldMuiStyle = {
   '.MuiTextField-root': {
-    borderColor: '#104C43',
+    borderColor: '#2C3D8F',
     borderWidth: '2px',
   },
   '& label.Mui-focused': {
-    color: '#104C43',
+    color: '#2C3D8F',
     borderWidth: '2px',
   },
   '& .MuiInput-underline:after': {
-    borderBottomColor: '#104C43',
+    borderBottomColor: '#2C3D8F',
   },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      borderColor: '#104C43',
+      borderColor: '#2C3D8F',
       borderWidth: '2px',
     },
     '&:hover fieldset': {
-      borderColor: '#104C43',
+      borderColor: '#2C3D8F',
       borderWidth: '2px',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#104C43',
+      borderColor: '#2C3D8F',
       borderWidth: '2px',
     },
   },

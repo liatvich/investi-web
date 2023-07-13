@@ -26,7 +26,7 @@ const IconRoundButton = styled(IconButton)({
 const ArrowIconStyle = {
   width: '40px',
   height: '25px',
-  color: '#104C43',
+  color: '#2C3D8F',
 };
 
 // isConsumer - SUPER UGLY!
@@ -113,7 +113,7 @@ export function ResearchPreview({
                       }
                     }}
                     sx={{
-                      background: '#104C43',
+                      background: '#2C3D8F',
                       borderRadius: '8px',
                       color: '#FFFFFF',
                       '&:hover': {
@@ -167,7 +167,7 @@ export function ResearchPreview({
                 <CheckCircleIcon sx={{
                   width: '165px',
                   height: '162px',
-                  color: '#104C43',
+                  color: '#2C3D8F',
                   marginBottom: '62px',
                 }}
                 />
