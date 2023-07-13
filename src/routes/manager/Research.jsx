@@ -10,8 +10,6 @@ import { saveAs } from 'file-saver';
 import {
   Typography,
   IconButton,
-  Button,
-  // TextField,
 } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -57,7 +55,7 @@ export const downloadFolderAsZip = async (path) => {
 };
 
 export function Research({
-  research, back, participantsSelected, startResearch, // saveResearchAsDraft,
+  research, back, participantsSelected, // startResearch, // saveResearchAsDraft,
 }) {
   // const getResearchStage = () => {
   //   if (research.status === 'published') return 'not started';
@@ -83,11 +81,11 @@ export function Research({
               {currentResearch?.title}
             </Typography>
           </div>
-          {currentResearch?.status === 'published' && (
+          {/* {currentResearch?.status === 'published' && (
           <Button disableRipple className={s.create} onClick={() => startResearch(currentResearch)}>
             Start Research
           </Button>
-          )}
+          )} */}
         </div>
         <div className={s.content}>
           <Typography variant="h4" gutterBottom component="div" className={s.title}>

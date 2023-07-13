@@ -11,7 +11,7 @@
     display: grid;
     grid-template-columns: 100%;
     grid-gap: 1px;
-    grid-auto-rows: 100vh;
+    grid-template-rows: 100vh 100vh 100vh max-content;
 }
 .firstSection {
     display: inline-grid;
@@ -22,21 +22,20 @@
         display: flex;
     }
 
-
     .title {
-        font-weight: 500;
-        font-size: 5.5rem;
-        margin-bottom: 18px;
+        font-weight: 700;
+        font-size: 72px;
+        margin-bottom: 30px;
+        line-height: 98.35px;
     }
 
     .description {
-        font-weight: 400;
-        margin-top: 30px;
-        margin-left: 18px;
+        font-weight: 300;
         color: #4d4d4d;
         text-align: center;
-        font-size: 24px;
-        max-width: 600px;
+        font-size: 20px;
+        line-height: 27.32px;
+        max-width: 513px;
     }
 
     .firstSectionContent {
@@ -46,38 +45,44 @@
     }
 
     .image {
-        max-width: 100%;
-        min-width: 700px;
-        height: auto;
+        height: 80vh;
         border-radius: 1.5rem 0rem 0rem 1.5rem;
-        margin-bottom: 60px;
-        // margin-left: auto;
+        margin: 10vh 0px;
     }
 
-    .texts {
-        max-width: 900px;
+    .outer {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        // margin-right: auto;
-        // margin-left: auto;
-        margin: 0px 120px;
+        height: 100vh;
+
+        .texts {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            margin-top: -136px;
+        }
+
+        .logo {
+            margin: 36px;
+            position: relative;
+        } 
     }
 
+
     .buttons {
-        margin-top: 60px;
+        margin-top: 52px;
         display: flex;
-        margin-left: 18px;
 
         .manager {
             text-transform: none;
-            width: 316px;
+            width: 254px;
             height:70px;
-            margin-right: 22px;
-            font-size: 24px;
-            line-height: 28px;
-            font-weight: 400;
+            margin-right: 15px;
+            font-size: 20px;
+            line-height: 27.32px;
+            font-weight: 300;
             background: #5a81fa;
             color: #ffffff;
             box-shadow: none;
@@ -91,11 +96,11 @@
         
         .consumer {
             text-transform: none;
-            width: 316px;
+            // width: 316px;
             height: 70px;
-            font-size: 24px;
-            line-height: 28px;
-            font-weight: 400;
+            font-size: 20px;
+            line-height: 27.32px;
+            font-weight: 300;
             color: #ffffff;
             background: #2c3d8f;
             box-shadow: none;
@@ -105,21 +110,21 @@
 }
 
 .secondSection {
-    // background: #A8B1CE ;
     background: #2c3d8f ;
     display: flex;
     flex-direction: column;
-    padding: 36px 18px;
+    // padding: 36px 18px;
     align-items: center;
 
     .title {
         max-width: 1200px;
         text-align: center;
-        font-weight: 500;
+        font-weight: 700;
         font-size: 60px;
-        margin-bottom: 18px;
+        // margin-bottom: 18px; 
         color: #ffffff;
-        margin-top: 60px;
+        margin-top: 10vh;
+        line-height: 81.96px;
     }
 
     .outer {
@@ -137,15 +142,15 @@
 
             .image {
                 border-radius: 9rem;
-                width: 230px;
+                width: 178px;
             }
 
             .text {
                 max-width: 300px;
-                font-size: 24px;
-                line-height: 28px;
-                font-weight: 400;
-                margin-top: 30px;
+                font-size: 20px;
+                line-height: 27.32px;
+                font-weight: 300;
+                margin-top: 22px;
                 // color: #4d4d4d;
                 color: #ffffff;
                 text-align: center;
@@ -153,51 +158,89 @@
         }
 
         .loader {
-            margin-top: 46px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 70px;
+
+            .first {
+                width: 16px;
+                height: 16px;
+                background: #ffffff;
+                border-radius: 10rem;
+                opacity: 0.25;
+                margin-right: 22px;
+            }
+
+            .second {
+                width: 16px;
+                height: 16px;
+                background: #ffffff;
+                border-radius: 10rem;
+                opacity: 0.5;
+                margin-right: 22px;
+            }
+
+            .third {
+                width: 16px;
+                height: 16px;
+                background: #ffffff;
+                border-radius: 10rem;
+            }
         }
     }
 
     .bottomText {
         margin-top: auto;
-        margin-bottom: 90px;
+        font-weight: 700;
+        font-size: 24px;
+        margin-bottom: 10vh;
         color: #ffffff;
     }   
 }
 
 .thirdSection {
     background: #e6eaf9 ;
-    display: grid;
-    grid-auto-rows: max-content 1fr;
+    // display: grid;
+    // grid-auto-rows: max-content 1fr;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
 
     .top {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin: 60px;
+        margin-top: 10vh;
 
 
         .title {
-            font-weight: 500;
+            font-weight: 700;
             font-size: 60px;
             margin-bottom: 18px;
+            line-height: 81.96px;
             color: #1f1f1f;
         }
 
         .description {
-            font-weight: 400;
-            margin-top: 30px;
-            margin-left: 18px;
+            font-weight: 300;
+            margin-top: 22px;
+            line-height: 27.32px;
             color: #4d4d4d;
             text-align: center;
-            font-size: 24px;
+            font-size: 20px;
+            max-width: 330px;
         }
     }
 
     .cardSection {
         display: flex;
         justify-content: space-around;
-        margin: 30px 0px;
+        margin: 10vh 0px;
+        flex-grow: 1;
+        align-items: center;
 
         .card {
             height: max-content;
@@ -206,9 +249,10 @@
             display: flex;
             flex-direction: column;
             border-radius: 1rem;
+            max-width: 260px;
 
             .imageInner {
-                width: 350px;
+                max-width: 260px;
                 border-radius: 1rem 1rem 0rem  0rem ;
             }
     
@@ -216,111 +260,168 @@
                 display: flex;
                 flex-direction: column;
                 padding: 9px;
-                max-width: 332px;
                 align-items: center;
                 min-height: 110px;
     
                 .cardTitle {
-                    font-weight: 500;
-                    font-size: 33px;
+                    font-weight: 700;
+                    font-size: 20px;
                     color: #1f1f1f;
                 }
     
                 .description {
-                    font-weight: 400;
+                    font-weight: 300;
                     color: #1f1f1f;
                     text-align: center;
-                    font-size: 20px;
+                    font-size: 16px;
                 }
             }
         }
-    }
-
-    .footer {
-        background: #2c3d8f;
-        color: #ffffff;
-        padding: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .findUs {
-            display: flex;
-
-            .haifa {
-                display: flex;
-                flex-direction: column;
-
-                .description {
-                    font-weight: 400;
-                    font-size: 20px;
-                    line-height: 24px;
-                }
-
-                .link {
-                    display: flex;
-
-                    .linkText {
-                        font-weight: 400;
-                        font-size: 20px;
-                        color: #ffffff;
-                        line-height: 24px;
-                        margin-bottom: 7px;
-                        margin-left: 5px;
-                    }
-                }
-            }
-        }
-
-        .email {
-            .link {
-                font-weight: 400;
-                font-size: 20px;
-                color: #ffffff;
-                line-height: 24px;
-                margin-bottom: 7px;
-                margin-left: 5px; 
-            }
-        }
-
-        .social {
-            .icon {
-                fill: #ffffff;
-                height: 39px;
-                width: 39px;
-            }
-        }
-
-        .copyRight {
-            .description {
-                font-weight: 400;
-                font-size: 20px;
-                line-height: 24px;
-            }
-        }
-    }
-
-    .separator {
-        width: 10px;
-        height: 10px;
-        border-radius: 10rem;
-        background: #ffffff;
-    }
-    
-    .separatorFirst {
-        width: 10px;
-        height: 10px;
-        border-radius: 10rem;
-        background: #ffffff;
-        opacity: 0.2;
-    }
-
-    .separatorSecond {
-        width: 10px;
-        height: 10px;
-        border-radius: 10rem;
-        background: #ffffff;
-        opacity: 0.6;
     }
 }
 
+.footer {
+    background: #2c3d8f;
+    color: #ffffff;
+    display: flex;
+    padding: 30px;
+    flex-direction: column;
+
+    .top {
+        display: flex;
+        justify-content: space-between;
+        display: flex;
+    .names {
+            .logo {
+                display: flex;
+
+                .image {
+                    width: 30px;
+                }
+
+                .texts {
+                    margin-top: 9px;
+                    display: flex;
+                    align-items: center;
+
+                    .logoTexts{
+                        font-weight: 500;
+                        font-size: 24px;
+                    }
+                }
+            }
+
+            .pet {
+                background: white;
+                opacity: 0.95;
+                width: max-content;
+                padding: 2px;
+                border-radius: 2PX;
+        
+                .petLogo {
+                    width: 35px;
+                }
+            }
+        }
+
+    .right {
+        display: flex;
+        .social {
+            display: flex;
+            color: #ffffff;
+            flex-direction: column;
+            align-items: baseline;
+
+            .title {
+                // margin-left: 10px;
+                // width: 30px;
+                font-weight: 700;
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+
+            .linkText {
+                    font-weight: 200;
+                    font-size: 20px;
+                    color: #ffffff;
+                    line-height: 45px;
+            }
+        }
+
+        .location {
+            display: flex;
+            color: #ffffff;
+            flex-direction: column;
+            align-items: baseline;
+            margin-left: 45px;
+
+            .title {
+                // margin-left: 10px;
+                // width: 30px;
+                font-weight: 700;
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+
+            .linkText {
+                    font-weight: 200;
+                    font-size: 20px;
+                    color: #ffffff;
+                    line-height: 45px;
+            } 
+        }
+            .contact {
+                margin-left: 45px;
+                display: flex;
+                flex-direction: column;
+
+                .title {
+                    font-weight: 700;
+                    font-size: 20px;
+                    margin-bottom: 15px;
+                }
+
+                .haifa {
+                    display: flex;
+                    flex-direction: column;
+
+                    .description {
+                        font-weight: 200;
+                        font-size: 20px;
+                        color: #ffffff;
+                        line-height: 45px;
+                    }
+
+                    .link {
+                        display: flex;
+
+                        .linkText {
+                            font-weight: 100;
+                            font-size: 20px;
+                            color: #ffffff;
+                            line-height: 45px;
+                            margin-left: 5px;
+                        }
+                    }
+                }
+                .linkText {
+                    font-weight: 100;
+                    font-size: 20px;
+                    color: #ffffff;
+                    line-height: 45px;
+                }
+            }
+    }
+}
+
+.bottom {
+    .copyRight {
+        .description {
+            font-weight: 100;
+            font-size: 12px;
+            line-height: 24px;
+        }
+    }
+}
+    
+}

@@ -280,7 +280,7 @@ export function ActiveResearch({
                         {columns.map((column) => {
                           const value = research[column.id];
                           return (
-                            <TableCell key={column.id} align={column.align}>
+                            <TableCell key={column.id} align={column.align} className={s.cell}>
                               {column.id === 'Number' ? (index + page * index + 1)
                                 : (column.format ? column.format(value) : (value || ''))}
                             </TableCell>

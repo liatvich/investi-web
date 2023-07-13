@@ -17,7 +17,7 @@ export function Logo({ withoutPaddingTop, color }) {
     >
       <LogoIcon className={s.icon} color={color || '#104C43'} />
       <Typography variant="subtitle1" component="div" className={s.text} style={{ color: '#1f1f1f' }}>
-        pet
+        pets
       </Typography>
       <Typography variant="subtitle1" component="div" className={s.text} style={{ color: '#3D67F3' }}>
         data

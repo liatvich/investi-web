@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable global-require */
@@ -33,8 +35,9 @@ import liatAvatar from './assets/team/liatAvatar.png';
 import initiate from './assets/initiate_new_experiment_icon.png';
 import distribute from './assets/distribute_icon.png';
 import fistSectionInto from './assets/fistSectionInto.png';
-import { Loader as LoaderIcon } from './assets/loader';
 import { AppMobile } from './AppMobile';
+import { LogoNew } from './assets/logonew';
+import tech4animals from './assets/Logo-4site.png';
 
 export function App() {
   //   const { loggedUser } = useContext(UserContext);
@@ -46,35 +49,40 @@ export function App() {
     <div className={s.root}>
       <div className={s.content}>
         <div className={s.firstSection}>
-          <Logo color="#B6E4E4" withoutPaddingTop />
           <div className={s.firstSectionContent}>
-            <div className={s.texts}>
-              <div className={s.titleBlock}>
-                <Typography variant="h2" component="div" className={s.title} style={{ color: '#1f1f1f' }}>
-                  pet
-                </Typography>
-                <Typography variant="h2" component="div" className={s.title} style={{ color: '#3D67F3' }}>
-                  data
-                </Typography>
-                <Typography variant="h2" component="div" className={s.title} style={{ color: '#1f1f1f' }}>
-                  lab
-                </Typography>
+            <div className={s.outer}>
+              <div className={s.logo}>
+                <LogoNew className={s.logo} />
               </div>
-              <Typography variant="h4" gutterBottom component="div" className={s.description}>
-                AI-powered Citizen Science: Fast-track animal research, collect data, collaborate globally. Join now for scientific breakthroughs!
-              </Typography>
-              <div className={s.buttons}>
-                <Button
-                  variant="contained"
-                  onClick={() => { navigate('/signin'); }}
-                  startIcon={<TextSnippetOutlinedIcon className={s.note} />}
-                  className={s.manager}
-                >
-                  Research Manager
-                </Button>
-                <Button variant="contained" onClick={() => { navigate('/research'); }} startIcon={<LogoIcon color="#ffffff" />} className={s.consumer}>
-                  Research Participant
-                </Button>
+              <div className={s.texts}>
+                <div className={s.titleBlock}>
+                  <Typography variant="h2" component="div" className={s.title} style={{ color: '#1f1f1f' }}>
+                    pets
+                  </Typography>
+                  <Typography variant="h2" component="div" className={s.title} style={{ color: '#3D67F3' }}>
+                    data
+                  </Typography>
+                  <Typography variant="h2" component="div" className={s.title} style={{ color: '#1f1f1f' }}>
+                    lab
+                  </Typography>
+                </div>
+                <Typography variant="h4" gutterBottom component="div" className={s.description}>
+                  AI-powered Citizen Science: Fast-track animal research, collect data, collaborate globally. Join now for scientific breakthroughs!
+                </Typography>
+                <div className={s.buttons}>
+                  <Button
+                    variant="contained"
+                    onClick={() => { navigate('/signin'); }}
+                    startIcon={<TextSnippetOutlinedIcon className={s.note} />}
+                    className={s.manager}
+                    disableRipple
+                  >
+                    Research Manager
+                  </Button>
+                  <Button disableRipple variant="contained" onClick={() => { navigate('/research'); }} startIcon={<LogoIcon color="#ffffff" />} className={s.consumer}>
+                    Research Participant
+                  </Button>
+                </div>
               </div>
             </div>
             <img src={fistSectionInto} alt="firstSectionIntro" className={s.image} />
@@ -88,15 +96,17 @@ export function App() {
             <div className={s.phase}>
               <img
                 src={initiate}
-                alt="initiate"
+                alt="Start"
                 className={s.image}
               />
               <Typography variant="h4" gutterBottom component="div" className={s.text}>
-                Initiate a new experiment
+                Start a new experiment
               </Typography>
             </div>
             <div className={s.loader}>
-              <LoaderIcon />
+              <div className={s.first} />
+              <div className={s.second} />
+              <div className={s.third} />
             </div>
             <div className={s.phase}>
               <img src={personalize} alt="personalize" className={s.image} />
@@ -105,7 +115,9 @@ export function App() {
               </Typography>
             </div>
             <div className={s.loader}>
-              <LoaderIcon />
+              <div className={s.first} />
+              <div className={s.second} />
+              <div className={s.third} />
             </div>
             <div className={s.phase}>
               <img src={distribute} alt="distribute" className={s.image} />
@@ -197,56 +209,184 @@ export function App() {
               </div>
             </div>
           </div>
-          <div className={s.footer}>
-            <div className={s.findUs}>
-              <div className={s.haifa}>
-                <Typography variant="h4" gutterBottom component="div" className={s.description}>
-                  Haifa University,
-                </Typography>
-                <div className={s.link}>
-                  <Typography variant="h4" gutterBottom component="div" className={s.description}>
-                    Department of
+        </div>
+        <div className={s.footer}>
+          <div className={s.top}>
+            <div className={s.names}>
+              <div className={s.logo}>
+                <LogoNew width="30px" />
+                <div className={s.texts}>
+                  <Typography variant="h5" component="div" className={s.logoTexts} style={{ color: '#FFFFFF' }}>
+                    pets
                   </Typography>
+                  <Typography variant="h5" component="div" className={s.logoTexts} style={{ color: '#3D67F3' }}>
+                    data
+                  </Typography>
+                  <Typography variant="h5" component="div" className={s.logoTexts} style={{ color: '#FFFFFF' }}>
+                    lab
+                  </Typography>
+                </div>
+              </div>
+              <div
+                className={s.pet}
+                onClick={() => { window.open('https://www.tech4animals.org/', '_blank'); }}
+              >
+                <img
+                  src={tech4animals}
+                  alt="tech4animals"
+                  className={s.petLogo}
+                />
+              </div>
+            </div>
+            <div className={s.right}>
+              <div className={s.social}>
+                <Typography variant="h6" component="div" className={s.title} style={{ color: '#FFFFFF' }}>
+                  Follow
+                </Typography>
+                <Link
+                  component="button"
+                  variant="body2"
+                  className={s.linkText}
+                  onClick={() => { window.open('https://twitter.com/tech4animals', '_blank'); }}
+                  underline="none"
+                >
+                  Twitter
+                </Link>
+                <Link
+                  component="button"
+                  variant="body2"
+                  className={s.linkText}
+                  onClick={() => { window.open('https://www.facebook.com/tech4animals', '_blank'); }}
+                  underline="none"
+                >
+                  Facebook
+                </Link>
+              </div>
+              <div className={s.contact}>
+                <Typography variant="h6" component="div" className={s.title} style={{ color: '#FFFFFF' }}>
+                  Contact us
+                </Typography>
+                <div className={s.haifa}>
+                  <Typography variant="h6" component="div" className={s.description}>
+                    Haifa University,
+                  </Typography>
+                  <div className={s.link}>
+                    <Typography variant="h6" component="div" className={s.description}>
+                      Department of
+                    </Typography>
+                    <Link
+                      component="button"
+                      variant="body2"
+                      className={s.linkText}
+                      underline="none"
+                      onClick={() => {
+                        window.open('https://is-web.hevra.haifa.ac.il/index.php/en/', '_blank');
+                      }}
+                    >
+                      Information Systems
+                    </Link>
+                  </div>
                   <Link
-                    component="button"
+                    component="a"
                     variant="body2"
                     className={s.linkText}
-                    onClick={() => {
-                      window.open('https://is-web.hevra.haifa.ac.il/index.php/en/', '_blank');
-                    }}
+                    underline="none"
+                    height="mailto:liatvai@gmail.com"
                   >
-                    Information Systems
+                    liatvai@gmail.com
                   </Link>
                 </div>
               </div>
+              <div className={s.location}>
+                <Typography variant="h6" component="div" className={s.title} style={{ color: '#FFFFFF' }}>
+                  Location
+                </Typography>
+                <Link
+                  component="button"
+                  variant="body2"
+                  className={s.linkText}
+                  underline="none"
+                  onClick={() => {
+                    window.open('https://www.google.com/maps/place/Rabin+Building,+University+of+Haifa/@32.7611883,35.0199683,15z/data=!4m6!3m5!1s0x151dbab9c4b12a97:0x9c2e673af21b5b9c!8m2!3d32.7611883!4d35.0199683!16s%2Fg%2F11c6x97rb9?entry=ttu', '_blank');
+                  }}
+                >
+                  Rabin Building
+                </Link>
+                <Link
+                  component="button"
+                  variant="body2"
+                  className={s.linkText}
+                  underline="none"
+                  onClick={() => {
+                    window.open('https://www.google.com/maps/place/University+of+Haifa/@32.724029,35.0357874,12.07z/data=!4m6!3m5!1s0x151dbab83f7be8ab:0x475fdbcf84359ab8!8m2!3d32.7614296!4d35.0195184!16zL20vMDIwNzA1?entry=ttu', '_blank');
+                  }}
+                >
+                  Abba Khoushy Ave 199,
+                </Link>
+                <Link
+                  component="button"
+                  variant="body2"
+                  className={s.linkText}
+                  underline="none"
+                  onClick={() => {
+                    window.open('https://www.google.com/maps/place/University+of+Haifa/@32.724029,35.0357874,12.07z/data=!4m6!3m5!1s0x151dbab83f7be8ab:0x475fdbcf84359ab8!8m2!3d32.7614296!4d35.0195184!16zL20vMDIwNzA1?entry=ttu', '_blank');
+                  }}
+                >
+                  Haifa, 3498838
+                </Link>
+              </div>
             </div>
-            <div className={s.separatorFirst} />
-            <div className={s.email}>
-              <Link
-                component="a"
-                variant="body2"
-                className={s.link}
-                height="mailto:tech4a.haifa@gmail.com"
-              >
-                tech4a.haifa@gmail.com
-              </Link>
-            </div>
-            <div className={s.separatorSecond} />
-            <div className={s.social}>
-              <IconButton disableRipple onClick={() => { window.open('https://twitter.com/tech4animals', '_blank'); }}>
-                <FacebookOutlinedIcon className={s.icon} />
-              </IconButton>
-              <IconButton disableRipple onClick={() => { window.open('https://www.facebook.com/tech4animals', '_blank'); }}>
-                <TwitterIcon className={s.icon} />
-              </IconButton>
-            </div>
-            <div className={s.separator} />
+          </div>
+          <div className={s.bottom}>
             <div className={s.copyRight}>
               <Typography variant="h4" gutterBottom component="div" className={s.description}>
                 © 2023 by Tech4Animals
               </Typography>
             </div>
           </div>
+          {/* <div className={s.findUs}>
+            <div className={s.haifa}>
+              <Typography variant="h4" gutterBottom component="div" className={s.description}>
+                Haifa University,
+              </Typography>
+              <div className={s.link}>
+                <Typography variant="h4" gutterBottom component="div" className={s.description}>
+                  Department of
+                </Typography>
+                <Link
+                  component="button"
+                  variant="body2"
+                  className={s.linkText}
+                  onClick={() => {
+                    window.open('https://is-web.hevra.haifa.ac.il/index.php/en/', '_blank');
+                  }}
+                >
+                  Information Systems
+                </Link>
+              </div>
+            </div>
+          </div>
+          <div className={s.separatorFirst} />
+          <div className={s.email}>
+            <Link
+              component="a"
+              variant="body2"
+              className={s.link}
+              height="mailto:liatvai@gmail.com"
+            >
+              liatvai@gmail.com
+            </Link>
+          </div>
+          <div className={s.separatorSecond} />
+          <div className={s.social}>
+            <IconButton disableRipple onClick={() => { window.open('https://twitter.com/tech4animals', '_blank'); }}>
+              <FacebookOutlinedIcon className={s.icon} />
+            </IconButton>
+            <IconButton disableRipple onClick={() => { window.open('https://www.facebook.com/tech4animals', '_blank'); }}>
+              <TwitterIcon className={s.icon} />
+            </IconButton>
+          </div>
+          <div className={s.separator} /> */}
         </div>
       </div>
     </div>

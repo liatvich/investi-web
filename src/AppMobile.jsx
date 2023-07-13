@@ -16,7 +16,6 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import s from './Appmobile.module.scss';
 import { Logo as LogoIcon } from './assets/logo';
-import { Logo } from './components/Logo';
 import personalize from './assets/personalize_icon.png';
 import anna from './assets/team/Anna.png';
 import annaAvatar from './assets/team/AnnaAvatar.png';
@@ -29,7 +28,6 @@ import liatAvatar from './assets/team/liatAvatar.png';
 import initiate from './assets/initiate_new_experiment_icon.png';
 import distribute from './assets/distribute_icon.png';
 import fistSectionInto from './assets/fistSectionInto.png';
-import { Loader as LoaderIcon } from './assets/loader';
 import { LogoNew as LogoIconNew } from './assets/logonew';
 import tech4animals from './assets/Logo-4site.png';
 
@@ -60,7 +58,7 @@ export function AppMobile() {
               <div className={s.titleBlock}>
                 <LogoIconNew color="#104C43" />
                 <Typography variant="h2" component="div" className={s.title} style={{ color: '#1f1f1f' }}>
-                  pet
+                  pets
                 </Typography>
                 <Typography variant="h2" component="div" className={s.title} style={{ color: '#3D67F3' }}>
                   data
@@ -89,11 +87,11 @@ export function AppMobile() {
             <div className={s.phase}>
               <img
                 src={initiate}
-                alt="initiate"
+                alt="Start"
                 className={s.image}
               />
               <Typography variant="h4" gutterBottom component="div" className={s.text}>
-                Initiate a new experiment
+                Start a new experiment
               </Typography>
             </div>
             <div className={s.loader}>
@@ -239,9 +237,9 @@ export function AppMobile() {
                 component="a"
                 variant="body2"
                 className={s.link}
-                height="mailto:tech4a.haifa@gmail.com"
+                height="mailto:liatvai@gmail.com"
               >
-                tech4a.haifa@gmail.com
+                liatvai@gmail.com
               </Link>
             </div>
             <div className={s.separatorThird} />
