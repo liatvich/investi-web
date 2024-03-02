@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
@@ -14,6 +15,8 @@ import { PreviewParser } from './PreviewParser';
 import s from './ResearchPreviewMobile.module.scss';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 import { Logo } from '../../Logo';
+import { EmailTextbox } from '../../EmailTextbox';
+import { emailValidation } from '../../../common/general';
 
 const IconRoundButton = styled(IconButton)({
   width: '24px',
@@ -29,11 +32,12 @@ const ArrowIconStyle = {
 };
 
 export function ResearchPreviewMobile({
-  research, submitOnClick, title, managerId, participantEmail, researchId,
+  research, submitOnClick, title, managerId, participantId, researchId,
 }) {
   const [currPage, setCurrPage] = useState(0);
   // const [validationError, setValidationError] = useState(false);
   const [isSubmittedExperiment, setIsSubmittedExperiment] = useState(false);
+  const [email, setEmail] = useState('');
 
   const isCheckboxValid = () => {
     const isValid = research[currPage]?.content
@@ -48,7 +52,7 @@ export function ResearchPreviewMobile({
     research ? (
       <PreviewParser
         researchData={research[currPage]}
-        participantEmail={participantEmail}
+        participantId={participantId}
         researchId={researchId}
         managerId={managerId}
       />
@@ -108,30 +112,47 @@ export function ResearchPreviewMobile({
         {
             (currPage + 1) === Object.keys(research).length
               && (
-                <div className={s.submit}>
-                  <Typography variant="subtitle1" component="div" className={s.text}>
-                    To finish your application click in the subscribe button
-                  </Typography>
-                  <Button
-                    disableRipple
-                    onClick={() => {
-                      if (isCheckboxValid()) {
-                        submitOnClick(research);
-                        setIsSubmittedExperiment(true);
-                      }
-                    }}
-                    sx={{
-                      background: '#2C3D8F',
-                      borderRadius: '8px',
-                      color: '#FFFFFF',
-                      '&:hover': {
-                        background: '#1D8A7A',
-                      },
-                    }}
-                  >
-                    Submit Application
-                  </Button>
-                </div>
+                <>
+                  {!emailValidation(participantId) && (
+                    <div className={s.mail}>
+                      <Typography variant="subtitle1" gutterBottom component="div">
+                        If you would like to receive additional research data, please provide your email address:
+                      </Typography>
+                      <EmailTextbox
+                        className={s.textfield}
+                        onEmailChange={
+                                  (currEmail, isCurrEmailValid) => {
+                                    setEmail({ email: currEmail, isValid: isCurrEmailValid });
+                                  }
+                                }
+                      />
+                    </div>
+                  )}
+                  <div className={s.submit}>
+                    <Typography variant="subtitle1" component="div" className={s.text}>
+                      To finish your application click in the subscribe button
+                    </Typography>
+                    <Button
+                      disableRipple
+                      onClick={() => {
+                        if (isCheckboxValid()) {
+                          submitOnClick(research, email);
+                          setIsSubmittedExperiment(true);
+                        }
+                      }}
+                      sx={{
+                        background: '#2C3D8F',
+                        borderRadius: '8px',
+                        color: '#FFFFFF',
+                        '&:hover': {
+                          background: '#1D8A7A',
+                        },
+                      }}
+                    >
+                      Submit Application
+                    </Button>
+                  </div>
+                </>
               )
           }
       </div>

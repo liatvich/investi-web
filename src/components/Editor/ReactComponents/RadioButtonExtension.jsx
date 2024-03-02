@@ -4,8 +4,16 @@ import RadioButton from './RadioButton';
 
 export default Node.create({
   name: 'radioButton',
+  allowGapCursor: true,
+  atom: true,
+  selectable: true,
   group: 'block',
+  draggable: true,
+  isolating: false,
+  marks: '_',
   content: 'text*',
+  defining: true,
+
   addAttributes() {
     return {
       value: {
@@ -13,11 +21,30 @@ export default Node.create({
       },
     };
   },
+  // parseHTML() {
+  //   return [
+  //     {
+  //       tag: 'radioButton',
+  //     },
+  //   ];
+  // },
+
   parseHTML() {
     return [
       {
-        tag: 'radioButton',
+        tag: `li[data-type="${this.name}"]`,
       },
+    ];
+  },
+
+  // renderHTML({ HTMLAttributes }) {
+  //   return ['radioButton', mergeAttributes(HTMLAttributes)];
+  // },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      'li',
+      ['radioButton', mergeAttributes(HTMLAttributes)],
     ];
   },
 
@@ -29,25 +56,20 @@ export default Node.create({
     };
   },
 
-  // addKeyboardShortcuts() {
-  //   const shortcuts = {
-  //     Enter: () => {
-  //       this.editor.commands.sinkListItem('radioButton');
-  //     },
-  //   };
+  addKeyboardShortcuts() {
+    const shortcuts = {
+      Enter: () => this.editor.commands.splitListItem(this.name),
+      'Shift-Tab': () => this.editor.commands.liftListItem(this.name),
+    };
 
-  //   if (!this.options.nested) {
-  //     return shortcuts;
-  //   }
+    if (!this.options.nested) {
+      return shortcuts;
+    }
 
-  //   return {
-  //     ...shortcuts,
-  //     Tab: () => this.editor.commands.sinkListItem('radioButton'),
-  //   };
-  // },
-
-  renderHTML({ HTMLAttributes }) {
-    return ['radioButton', mergeAttributes(HTMLAttributes)];
+    return {
+      ...shortcuts,
+      Tab: () => this.editor.commands.sinkListItem(this.name),
+    };
   },
 
   addNodeView() {

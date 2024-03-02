@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-nested-ternary */
 import React, { useState, useEffect } from 'react';
@@ -27,6 +28,7 @@ export function ConsumerResearchPreview() {
   const [imageUploadDescription, setImageUploadDescription] = useState('');
   const [consumerStage, setConsumerStage] = useState('ResearchPreview');
   const [storage, setStorage] = useState(null);
+  const [participantId, setParticipantId] = useState('');
 
   const groupRadioButtons = (researchData) => Object.values(researchData)?.map(
     (page) => page?.content?.reduce(
@@ -55,15 +57,16 @@ export function ConsumerResearchPreview() {
 
   useEffect(() => {
     async function fetchResearch() {
-      if (!emailValidation(email)) {
-        navigate(-1);
-      }
-
       const dataBase = getDatabase();
       const docRef = doc(dataBase, 'experiments', activeResearch);
       const docResearch = await getDoc(docRef);
       if (docResearch.exists() && docResearch.data()?.data) {
-        const signupRef = doc(dataBase, 'experiments', activeResearch, 'signups', email);
+        if (!docResearch.data()?.researchType === 'QUICK' && !emailValidation(email)) {
+          navigate(-1);
+        }
+        const _participantId = email || (Date.now()).toString();
+        setParticipantId(_participantId);
+        const signupRef = doc(dataBase, 'experiments', activeResearch, 'signups', _participantId);
         setManagerId(docResearch.data()?.user_id);
         const signupDoc = await getDoc(signupRef);
         if (signupDoc.exists()) {
@@ -100,7 +103,12 @@ export function ConsumerResearchPreview() {
             isConsumer
             title={title}
             // eslint-disable-next-line no-unused-vars
-            submitOnClick={async (filledResearch) => {
+            submitOnClick={async (filledResearch, filledEmail) => {
+              let _participantId = participantId;
+              if (filledEmail?.email && filledEmail?.isValid) {
+                setParticipantId(filledEmail.email);
+                _participantId = filledEmail.email;
+              }
               let filedTypes = {};
               // eslint-disable-next-line guard-for-in
               for (const page in filledResearch) {
@@ -111,7 +119,7 @@ export function ConsumerResearchPreview() {
               }
 
               if (filedTypes[EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER]) {
-                const path = `images/${managerId}/${activeResearch}/${email}/`;
+                const path = `images/${managerId}/${activeResearch}/${_participantId}/`;
                 const listRef = ref(storage, path);
 
                 // Find all the prefixes and items.
@@ -142,13 +150,14 @@ export function ConsumerResearchPreview() {
               }
 
               const dataBase = getDatabase();
-              await setDoc(doc(dataBase, `experiments/${activeResearch}/signups`, email), {
+              // Date.now() is the ID
+              await setDoc(doc(dataBase, `experiments/${activeResearch}/signups`, _participantId), {
                 filledResearch,
-                email,
+                email: _participantId,
                 date: Date.now(),
               });
             }}
-            participantEmail={email}
+            participantId={participantId}
             researchId={activeResearch}
             managerId={managerId}
           />
@@ -156,7 +165,7 @@ export function ConsumerResearchPreview() {
           ? (
             <UploadImageResearchContent
               description={imageUploadDescription}
-              participantEmail={email}
+              participantId={participantId}
               researchId={activeResearch}
               managerId={managerId}
             />

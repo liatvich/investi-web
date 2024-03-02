@@ -1,22 +1,40 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { useState, useEffect } from 'react';
+import AWS from 'aws-sdk';
 
-import {
-  getStorage, ref, getDownloadURL,
-} from 'firebase/storage';
+// const S3_BUCKET_NAME = 'pets-data-lab-storage';
+// const S3_BUCKET_REGION = 'eu-north-1';
+const accessKeyId = process.env.REACT_APP_AWS_ACCESS_KEY;
+const secretAccessKey = process.env.REACT_APP_AWS_SECRET_KEY;
 
 export function PreviewImage({ node }) {
   const [imagePath, setImagePath] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
-    if (imagePath) {
-      const storage = getStorage();
-      getDownloadURL(ref(storage, imagePath))
-        .then((url) => {
-          setImageUrl(url);
-        });
+    if (imagePath !== null) {
+      // eslint-disable-next-line no-debugger
+      // debugger;
+      AWS.config.update({
+        accessKeyId,
+        secretAccessKey,
+      });
+
+      // const petsDataLabBucket = new AWS.S3({
+      //   params: { Bucket: S3_BUCKET_NAME },
+      //   region: S3_BUCKET_REGION,
+      // });
+
+      // const params = {
+      //   Bucket: S3_BUCKET_NAME,
+      //   Key: imagePath,
+      // };
+
+      // WORKS NOT GGOOD±±!!
+      const url = ''; // petsDataLabBucket.getSignedUrl('getObject', params);
+      setImageUrl(url);
     }
   }, [imagePath]);
 
@@ -26,7 +44,10 @@ export function PreviewImage({ node }) {
 
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
-    imageUrl ? <img src={imageUrl} style={{ objectFit: 'scale-down' }} /> : <div />
+    imageUrl
+      ? (
+        <img src={imageUrl} style={{ objectFit: 'scale-down' }} />
+      ) : <div />
   );
 }
 

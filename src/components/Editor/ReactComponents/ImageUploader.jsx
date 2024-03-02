@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/prop-types */
@@ -5,150 +6,123 @@
 import React, { useState, useEffect } from 'react';
 import { NodeViewWrapper } from '@tiptap/react';
 import './ImageUploader.scss';
-import { Button, IconButton, Typography } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import UploadIcon from '@mui/icons-material/Upload';
-import CircularProgress from '@mui/material/CircularProgress';
-import DoneIcon from '@mui/icons-material/Done';
+import AWS from 'aws-sdk';
+import { UploadOutlined } from '@ant-design/icons';
+import { Button, Space, Upload } from 'antd';
 
-import {
-  getStorage, ref, uploadBytesResumable,
-} from 'firebase/storage';
+const S3_BUCKET_NAME = 'pets-data-lab-storage';
+const S3_BUCKET_REGION = 'eu-north-1';
+const accessKeyId = process.env.REACT_APP_AWS_ACCESS_KEY;
+const secretAccessKey = process.env.REACT_APP_AWS_SECRET_KEY;
 
 function ImageUploader(props) {
   const {
     disabled = true,
     managerId = '',
     researchId = '',
-    participantEmail = '',
+    participantEmail = 'testMail@test.com',
     node,
   } = props;
 
-  const [image, setImage] = useState(null);
-  const [storage, setStorage] = useState(null);
-  const [isUploading, setIsUploading] = useState(null);
-  const [isUploadFailed, setIsUploadFailed] = useState(null);
+  const [fileList, setFileList] = useState([]);
   const [currDisabled, setCurrDisabled] = useState(disabled);
-  const [isUploaded, setIsUploaded] = useState(disabled);
+  const [petsDataLabBucket, setPetsDataLabBucket] = useState(null);
 
   useEffect(() => {
-    // eslint-disable-next-line no-underscore-dangle
-    const _storage = getStorage();
-    setStorage(_storage);
+    AWS.config.update({
+      accessKeyId,
+      secretAccessKey,
+    });
+
+    const newBucket = new AWS.S3({
+      params: { Bucket: S3_BUCKET_NAME },
+      region: S3_BUCKET_REGION,
+    });
+
+    setPetsDataLabBucket(newBucket);
   }, []);
 
+  const getFilePath = (file) => `images/${managerId}/${researchId}/${participantEmail}/${file?.name}`;
+
   const onImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      const img = event.target.files[0];
-      const imageUrl = URL.createObjectURL(img);
-      setImage({ imageUrl, file: img });
+    if (event.fileList && event.fileList[0]) {
+      setFileList((currentFileList) => [...currentFileList, ...event.fileList]);
     }
   };
 
-  // Create the file metadata
-  const metadata = {
-    contentType: 'image/jpeg',
-    customMetadata: { expiry: new Date(Date.now() + 30 * 60000).toUTCString() },
-  };
-
-  const uploadImage = () => {
+  const onImageRemove = (file) => {
     if (!currDisabled) {
-      const path = `images/${managerId}/${researchId}/${participantEmail}/${image?.file?.name}`;
-      const storageRef = ref(storage, path);
-      const uploadTask = uploadBytesResumable(storageRef, image?.file, metadata);
+      const params = {
+        Bucket: S3_BUCKET_NAME,
+        Key: getFilePath(file),
+      };
 
-      // Listen for state changes, errors, and completion of the upload.
-
-      // onChange={(event) => {
-      //   // eslint-disable-next-line no-param-reassign
-      //   if (node?.attrs) {
-      //     // eslint-disable-next-line no-param-reassign
-      //     node.attrs.value = event.target.value;
-      //   }
-      //   setValue(event.target.value);
-      // }}
-
-      uploadTask.on(
-        'state_changed',
-        () => {
-          setIsUploading(true);
-          setCurrDisabled(true);
-        },
-        () => {
-          setIsUploading(false);
-          setIsUploadFailed(true);
-          setCurrDisabled(false);
-        },
-        () => {
-          // eslint-disable-next-line no-param-reassign
-          if (node?.attrs) {
-            node.attrs.filePath = path;
-          }
-
-          setIsUploading(false);
-          setIsUploadFailed(false);
-          setCurrDisabled(true);
-          setIsUploaded(true);
-        },
-      );
+      petsDataLabBucket.deleteObject(params, (err) => {
+        // eslint-disable-next-line no-console
+        if (err) console.log(err, err.stack); // error
+        else {
+          setFileList((currentFileList) => currentFileList.filter((f) => f.name !== file.name));
+        }
+      });
     }
   };
 
-  const onImageRemove = () => {
-    setImage(null);
-    setIsUploadFailed(false);
+  const changeFileStatus = (file, status, uploadPresents) => {
+    const currFile = fileList.find((f) => f.uid === file.uid);
+    currFile.status = status;
+    if (status === 'uploading') {
+      currFile.percent = uploadPresents;
+    }
+    setFileList([...fileList]);
+  };
+
+  const customRequest = ({ file }) => {
+    if (!currDisabled) {
+      const params = {
+        ACL: 'public-read',
+        Body: file,
+        Bucket: S3_BUCKET_NAME,
+        Key: getFilePath(file),
+      };
+
+      petsDataLabBucket.putObject(params)
+        .on('httpUploadProgress', (evt) => {
+          setCurrDisabled(true);
+          changeFileStatus(file, 'uploading', Math.round((evt.loaded / evt.total) * 100));
+          if (evt.loaded === evt.total) {
+            changeFileStatus(file, 'done');
+            setCurrDisabled(false);
+
+            // eslint-disable-next-line no-param-reassign
+            if (node?.attrs) {
+              node.attrs.filePath = getFilePath(file);
+            }
+          }
+        })
+        .send((err) => {
+          if (err) {
+            changeFileStatus(file, 'error');
+            setCurrDisabled(false);
+          }
+        });
+    }
   };
 
   return (
     <NodeViewWrapper>
       <div suppressContentEditableWarning className="content" contentEditable="false">
-        {image && <img src={image.imageUrl} className="image" />}
-        <Button
-          disableRipple
-          variant="contained"
-          disabled={currDisabled}
-          sx={{
-            background: '#2C3D8F',
-            borderRadius: '8px',
-            color: '#FFFFFF',
-            '&:hover': {
-              background: '#1D8A7A',
-            },
-          }}
-          className="zIndex"
-          component="label"
-        >
-          { image ? 'Change Image' : 'Upload Image' }
-          <input hidden accept="image/*" type="file" disabled={currDisabled} onChange={onImageChange} />
-        </Button>
-        { image
-        && (
-          <div className="delete">
-            <IconButton
-              className="zIndex"
-              onClick={onImageRemove}
-              disabled={currDisabled}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </div>
-        )}
-        { image
-        && (
-        <IconButton
-          className="zIndex"
-          onClick={uploadImage}
-          disabled={currDisabled}
-        >
-          {isUploading ? <CircularProgress color="info" size={20} />
-            : isUploaded ? <DoneIcon color="success" /> : <UploadIcon className="done" />}
-        </IconButton>
-        )}
-        { image && isUploadFailed && (
-        <Typography variant="subtitle1" component="div" className="failed">
-          <div className="failedDiv">Upload failed please try again</div>
-        </Typography>
-        )}
+        <Space direction="vertical" style={{ width: '100%' }} size="large">
+          <Upload
+            listType="picture"
+            maxCount={1}
+            customRequest={customRequest}
+            onChange={onImageChange}
+            fileList={fileList}
+            onRemove={onImageRemove}
+          >
+            <Button icon={<UploadOutlined />} disabled={currDisabled}>Upload</Button>
+          </Upload>
+        </Space>
       </div>
     </NodeViewWrapper>
   );

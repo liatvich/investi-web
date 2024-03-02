@@ -30,12 +30,13 @@ export function ConsumerPreview() {
     if (!email.isValid) {
       return;
     }
+
     const dataBase = getDatabase();
     const docRef = doc(dataBase, 'experiments', researchCode);
     const docResearch = await getDoc(docRef);
 
     if (docResearch.exists() && docResearch.data()?.data?.[0]) {
-      navigate(`${researchCode}/${email.email}`);
+      navigate(`${researchCode}`);
     } else {
       setIsError(true);
     }
@@ -87,7 +88,7 @@ export function ConsumerPreview() {
             onClick={start}
             className={s.submit}
           >
-            SEE RESEARCH
+            {'Let\'s go'}
           </Button>
         </div>
       </div>

@@ -28,6 +28,7 @@ ReactDOM.render(
         </Route> */}
           <Route path={routes.SIGN_IN} element={<SignInScreen />} />
           <Route path="research" element={<ConsumerPreview />} />
+          <Route path="research/:activeResearch" element={<ConsumerResearchPreview />} />
           <Route path="research/:activeResearch/:email" element={<ConsumerResearchPreview />} />
           <Route
             path="*"

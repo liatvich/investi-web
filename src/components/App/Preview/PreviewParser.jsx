@@ -14,6 +14,7 @@ import { PreviewText } from './PreviewText';
 import { PreviewValidationCheckbox } from './PreviewValidationCheckbox';
 import { PreviewRadioButtonGroup } from './PreviewRadioButtonGroup';
 import { PreviewImage } from './PreviewImage';
+import { PreviewScale } from './PreviewScale';
 import { PreviewTextbox } from './PreviewTextbox';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 import ImageUploader from '../../Editor/ReactComponents/ImageUploader';
@@ -64,7 +65,7 @@ const renderList = (listNode) => (
 export function PreviewParser({
   researchData,
   disable: disabled = false,
-  participantEmail = '',
+  participantId = '',
   researchId = '',
   managerId = '',
 }) {
@@ -107,8 +108,16 @@ export function PreviewParser({
                 disabled={false}
                 researchId={researchId}
                 managerId={managerId}
-                participantEmail={participantEmail}
+                participantId={participantId}
                 node={node}
+              />
+            );
+          } if (node.type === EDITOR_ELEMENTS_TYPES.SCALE) {
+            return (
+              <PreviewScale
+                node={node}
+                disabled={disabled}
+                key={Math.floor(Math.random() * 1000 + 1)}
               />
             );
           }

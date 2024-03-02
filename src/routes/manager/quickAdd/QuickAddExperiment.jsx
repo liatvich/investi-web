@@ -14,6 +14,8 @@ import MenuBar from '../../../components/Editor/MenuBar';
 import TextboxExtension from '../../../components/Editor/ReactComponents/TextboxExtension';
 import ExternalVideoExtension from '../../../components/Editor/ReactComponents/ExternalVideoExtension';
 import RadioButtonExtension from '../../../components/Editor/ReactComponents/RadioButtonExtension';
+import TaskItem from '../../../components/Editor/ReactComponents/ListItem';
+import ScaleExtension from '../../../components/Editor/ReactComponents/ScaleExtension';
 import ImageUploaderExtension from '../../../components/Editor/ReactComponents/ImageUploaderExtension';
 
 import s from './QuickAddExperiment.module.scss';
@@ -40,6 +42,8 @@ export function QuickAddExperiment({
       StarterKit,
       TextboxExtension,
       RadioButtonExtension,
+      TaskItem.configure({}),
+      ScaleExtension,
       ImageUploaderExtension,
       Image,
       Dropcursor,

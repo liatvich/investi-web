@@ -12,6 +12,7 @@ export const EDITOR_ELEMENTS_TYPES = {
   IMAGE: 'image',
   EXTERNAL_VIDEO: 'externalVideo',
   IMAGE_UPLOADER: 'imageUploader',
+  SCALE_RATIO_BUTTON: 'scale_ratio_button',
 };
 
 export const RESEARCH_STATUS = {

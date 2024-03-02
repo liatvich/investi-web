@@ -5,17 +5,13 @@ import {
   Typography, Button,
   Table, TableBody, TableCell,
   TableHead, TableRow, TableContainer, TablePagination, Chip,
-  IconButton,
-  // Dialog,
-  // DialogActions,
-  // DialogContent,
-  // DialogContentText,
-  // DialogTitle,
+  IconButton, Snackbar, Alert,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import GroupsIcon from '@mui/icons-material/Groups';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ShareIcon from '@mui/icons-material/Share';
 import {
   collection, query, where, getDocs, deleteDoc, doc,
 } from 'firebase/firestore/lite';
@@ -28,6 +24,8 @@ export function ActiveResearch({
   createResearch, participantsSelected, onEditExperiment, onSetResearch,
 }) {
   const [researches, setResearches] = useState([]);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+
   const { getDatabase } = useDatabase();
   const { user } = useProvideAuth();
   const CssTableContainer = styled(TableContainer)({
@@ -162,6 +160,26 @@ export function ActiveResearch({
             disabled={!value || !value?.signups || value?.signups === 0}
             onClick={(e) => {
               e.stopPropagation();
+              navigator.clipboard.writeText(`petsdatalab.com/research/${value?.id}`);
+              setIsShareOpen(true);
+            }}
+          >
+            <ShareIcon />
+          </IconButton>
+          <Snackbar
+            open={isShareOpen}
+            autoHideDuration={6000}
+            onClose={() => setIsShareOpen(false)}
+          >
+            <Alert onClose={() => setIsShareOpen(false)} severity="success" sx={{ width: '100%' }}>
+              Direct link to research copied to clipboard
+            </Alert>
+          </Snackbar>
+          <IconButton
+            disableRipple
+            disabled={!value || !value?.signups || value?.signups === 0}
+            onClick={(e) => {
+              e.stopPropagation();
               participantsSelected({
                 participants: value?.participantsData,
                 researchTitle: value?.researchTitle,
@@ -181,8 +199,6 @@ export function ActiveResearch({
                 updateResearchId: value?.id,
               });
             }}
-            disabled={value?.status === RESEARCH_STATUS.PUBLISHED
-              || value?.status === RESEARCH_STATUS.STARTED}
           >
             <CreateIcon />
           </IconButton>
@@ -190,6 +206,7 @@ export function ActiveResearch({
             disableRipple
             onClick={async (e) => {
               e.stopPropagation();
+              // Add here if you are sure you want to delete popup
               const dataBase = getDatabase();
               const researchRef = doc(dataBase, `experiments/${value?.id}`);
               await deleteDoc(researchRef);
@@ -197,8 +214,6 @@ export function ActiveResearch({
               const researchesList = researches.filter((research) => research.id !== value?.id);
               setResearches(researchesList);
             }}
-            disabled={value?.status === RESEARCH_STATUS.PUBLISHED
-              || value?.status === RESEARCH_STATUS.STARTED}
           >
             <DeleteIcon />
           </IconButton>
@@ -303,11 +318,6 @@ export function ActiveResearch({
           </div>
         )}
       </div>
-      {/* <SimpleDialog
-        selectedValue={selectedValue}
-        open={open}
-        onClose={handleClose}
-      /> */}
     </div>
   );
 }

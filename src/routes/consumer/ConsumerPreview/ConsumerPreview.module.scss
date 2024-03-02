@@ -45,6 +45,7 @@
         }
 
         .submit {
+            margin-top: 18px;
             text-transform: none;
             height: 60px;
             background: #2C3D8F;
@@ -125,11 +126,13 @@
                 // border: 2px solid #2C3D8F;
                 // border-radius: 8px;
                 max-width: 382px;
+                min-width: 250px;
                 background: #FFFFFF;
                 // height: 65px;
             }
 
             .submit {
+                margin-top: 18px;
                 text-transform: none;
                 height: 60px;
                 background: #2C3D8F;

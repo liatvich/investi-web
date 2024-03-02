@@ -14,6 +14,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
@@ -188,6 +189,15 @@ function MenuBar({
           })}
         >
           <RadioButtonCheckedIcon sx={{ color: 'text.primary' }} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => editor.chain().focus().toggleScaleRadioButton().run()}
+          className={classNames({
+            [s.selected]: editor.isActive('scale_ratio_button'),
+          })}
+        >
+          <LinearScaleIcon sx={{ color: 'text.primary' }} />
         </IconButton>
         <IconButton
           disableRipple

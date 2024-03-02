@@ -1,10 +1,11 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react/prop-types */
 /* eslint-disable global-require */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconButton, Button, Typography } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -15,6 +16,8 @@ import s from './ResearchPreview.module.scss';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 import { Logo } from '../../Logo';
 import { ResearchPreviewMobile } from './ResearchPreviewMobile';
+import { EmailTextbox } from '../../EmailTextbox';
+import { emailValidation } from '../../../common/general';
 
 const IconRoundButton = styled(IconButton)({
   width: '184px',
@@ -31,11 +34,11 @@ const ArrowIconStyle = {
 
 // isConsumer - SUPER UGLY!
 export function ResearchPreview({
-  research, isConsumer, submitOnClick, title, participantEmail, researchId, managerId,
+  research, isConsumer, submitOnClick, title, participantId, researchId, managerId,
 }) {
   const [currPage, setCurrPage] = useState(0);
-  // const [validationError, setValidationError] = useState(false);
   const [isSubmittedExperiment, setIsSubmittedExperiment] = useState(false);
+  const [email, setEmail] = useState('');
 
   const isCheckboxValid = () => {
     const isValid = research[currPage]?.content
@@ -50,7 +53,7 @@ export function ResearchPreview({
     research ? (
       <PreviewParser
         researchData={research[currPage]}
-        participantEmail={participantEmail}
+        participantId={participantId}
         researchId={researchId}
         managerId={managerId}
       />
@@ -100,30 +103,47 @@ export function ResearchPreview({
             isConsumer
             && (currPage + 1) === Object.keys(research).length
               && (
-                <div className={s.submit}>
-                  <Typography variant="subtitle1" component="div" className={s.text}>
-                    To finish your application click in the subscribe button
-                  </Typography>
-                  <Button
-                    disableRipple
-                    onClick={() => {
-                      if (isCheckboxValid()) {
-                        submitOnClick(research);
-                        setIsSubmittedExperiment(true);
-                      }
-                    }}
-                    sx={{
-                      background: '#2C3D8F',
-                      borderRadius: '8px',
-                      color: '#FFFFFF',
-                      '&:hover': {
-                        background: '#1D8A7A',
-                      },
-                    }}
-                  >
-                    Submit Application
-                  </Button>
-                </div>
+                <>
+                  { !emailValidation(participantId) && (
+                  <div className={s.mail}>
+                    <Typography variant="subtitle1" gutterBottom component="div">
+                      If you would like to receive additional research data, please provide your email address:
+                    </Typography>
+                    <EmailTextbox
+                      className={s.textfield}
+                      onEmailChange={
+                                (currEmail, isCurrEmailValid) => {
+                                  setEmail({ email: currEmail, isValid: isCurrEmailValid });
+                                }
+                              }
+                    />
+                  </div>
+                  )}
+                  <div className={s.submit}>
+                    <Typography variant="subtitle1" component="div" className={s.text}>
+                      To finish your application click in the subscribe button
+                    </Typography>
+                    <Button
+                      disableRipple
+                      onClick={() => {
+                        if (isCheckboxValid()) {
+                          submitOnClick(research, email);
+                          setIsSubmittedExperiment(true);
+                        }
+                      }}
+                      sx={{
+                        background: '#2C3D8F',
+                        borderRadius: '8px',
+                        color: '#FFFFFF',
+                        '&:hover': {
+                          background: '#1D8A7A',
+                        },
+                      }}
+                    >
+                      Submit Application
+                    </Button>
+                  </div>
+                </>
               )
           }
         </div>
@@ -155,7 +175,7 @@ export function ResearchPreview({
             research={research}
             submitOnClick={submitOnClick}
             title={title}
-            participantEmail={participantEmail}
+            participantId={participantId}
             researchId={researchId}
             managerId={managerId}
           />

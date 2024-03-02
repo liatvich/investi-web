@@ -1,46 +1,49 @@
 import { Node } from '@tiptap/core';
 import { ReactNodeViewRenderer, mergeAttributes } from '@tiptap/react';
-import ImageUploader from './ImageUploader';
+import Scale from './Scale';
 
 export default Node.create({
-  name: 'imageUploader',
+  name: 'scale_ratio_button',
+  // group: 'block',
+  // content: 'text*',
   allowGapCursor: true,
   atom: true,
   selectable: true,
-
   group: 'block',
-
-  content: 'inline*',
-
   draggable: true,
+  isolating: false,
+  marks: '_',
+  content: 'text*',
+  defining: true,
 
-  isolating: true,
   addAttributes() {
     return {
-      filePath: '',
+      value: {
+        chosenValue: '1',
+      },
     };
   },
   parseHTML() {
     return [
       {
-        tag: 'imageUploader',
+        tag: 'scale_ratio_button',
       },
     ];
   },
 
   addCommands() {
     return {
-      toggleImageUploader: () => ({ commands }) => {
+      toggleScaleRadioButton: () => ({ commands }) => {
         commands.toggleNode(this.name, 'text', {});
       },
     };
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['imageUploader', mergeAttributes(HTMLAttributes)];
+    return ['scale_ratio_button', mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ImageUploader);
+    return ReactNodeViewRenderer(Scale);
   },
 });
