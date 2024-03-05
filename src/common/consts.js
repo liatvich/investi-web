@@ -12,7 +12,7 @@ export const EDITOR_ELEMENTS_TYPES = {
   IMAGE: 'image',
   EXTERNAL_VIDEO: 'externalVideo',
   IMAGE_UPLOADER: 'imageUploader',
-  SCALE_RATIO_BUTTON: 'scale_ratio_button',
+  SCALE_CONTINUES: 'scale_continues',
 };
 
 export const RESEARCH_STATUS = {

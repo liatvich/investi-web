@@ -15,6 +15,7 @@ import { PreviewValidationCheckbox } from './PreviewValidationCheckbox';
 import { PreviewRadioButtonGroup } from './PreviewRadioButtonGroup';
 import { PreviewImage } from './PreviewImage';
 import { PreviewScale } from './PreviewScale';
+import { PreviewContinuesScale } from './PreviewContinuesScale';
 import { PreviewTextbox } from './PreviewTextbox';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 import ImageUploader from '../../Editor/ReactComponents/ImageUploader';
@@ -82,6 +83,7 @@ export function PreviewParser({
           } if (node.type === EDITOR_ELEMENTS_TYPES.VALIDATION_CHECKBOX) {
             return (
               <PreviewValidationCheckbox
+                key={Math.floor(Math.random() * 1000 + 1)}
                 node={node}
               />
             );
@@ -120,6 +122,13 @@ export function PreviewParser({
                 key={Math.floor(Math.random() * 1000 + 1)}
               />
             );
+          }
+          if (node.type === EDITOR_ELEMENTS_TYPES.SCALE_CONTINUES) {
+            return (<PreviewContinuesScale
+              node={node}
+              disabled={disabled}
+              key={Math.floor(Math.random() * 1000 + 1)}
+            />);
           }
           if (node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX) {
             return (

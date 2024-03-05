@@ -1,10 +1,6 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable global-require */
 /* eslint-disable react/no-this-in-sfc */
 /* eslint-disable no-return-assign */
-/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 import React, { useRef, useEffect } from 'react';

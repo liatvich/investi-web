@@ -24,6 +24,7 @@ import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import classNames from 'classnames';
 import RedoIcon from '../../assets/icons/redoIcon.svg';
 import UndoIcon from '../../assets/icons/undoIcon.svg';
+import { ColumnWidthOutlined } from '@ant-design/icons';
 import s from './MenuBar.module.scss';
 
 const StyledMenu = styled((props) => (
@@ -146,6 +147,7 @@ function MenuBar({
             title, action, isActive, variant,
           }) => (
             <MenuItem
+              key={Math.floor(Math.random() * 1000 + 1)}
               onClick={() => {
                 action();
                 handleClose();
@@ -198,6 +200,22 @@ function MenuBar({
           })}
         >
           <LinearScaleIcon sx={{ color: 'text.primary' }} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => {
+            if (!editor.isActive('scale_continues')) {
+              editor.chain().focus().toggleScaleContinues().run();
+            } else {
+              editor.chain().focus().unToggleScaleContinues()
+                .run();
+            }
+          }}
+          className={classNames({
+            [s.selected]: editor.isActive('scale_continues'),
+          })}
+        >
+          <ColumnWidthOutlined />
         </IconButton>
         <IconButton
           disableRipple

@@ -108,7 +108,9 @@ export function ActiveResearch({
       setResearches(researchList);
     }
 
-    fetchResearch();
+    if(user?.uid) {
+      fetchResearch();
+    }
   }, [user?.uid]);
 
   const columns = [

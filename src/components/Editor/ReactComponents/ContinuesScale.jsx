@@ -2,22 +2,22 @@
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react'; // NodeViewContent
-import {
-  Radio,
-} from '@mui/material';
-import './RadioButton.scss';
+import { Slider } from 'antd';
+import './ContinuesScale.scss';
 
-function RadioButton() {
+function ContinuesScale() {
+  // const [value, setValue] = useState(0);
+
   return (
     <NodeViewWrapper>
       <div suppressContentEditableWarning className="content" contentEditable="true">
-        <div contentEditable="true">
-          <Radio />
-        </div>
         <NodeViewContent />
+        <div className="continues_slide">
+          <Slider defaultValue={50} />
+        </div>
       </div>
     </NodeViewWrapper>
   );
 }
 
-export default RadioButton;
+export default ContinuesScale;

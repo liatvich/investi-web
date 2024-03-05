@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 /* eslint-disable no-nested-ternary */
-/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { useState, useEffect } from 'react';

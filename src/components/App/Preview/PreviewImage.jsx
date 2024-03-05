@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { useState, useEffect } from 'react';
@@ -43,7 +42,6 @@ export function PreviewImage({ node }) {
   }, [node]);
 
   return (
-    // eslint-disable-next-line jsx-a11y/alt-text
     imageUrl
       ? (
         <img src={imageUrl} style={{ objectFit: 'scale-down' }} />
