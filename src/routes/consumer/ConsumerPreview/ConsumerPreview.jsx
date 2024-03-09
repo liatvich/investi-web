@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -13,21 +13,28 @@ import { Logo } from '../../../components/Logo';
 import { TextFieldMuiStyle } from '../../../common/styleConsts';
 import { EmailTextbox } from '../../../components/EmailTextbox';
 
+
 const CssTextField = styled(TextField)(TextFieldMuiStyle);
 
 export function ConsumerPreview() {
   const [researchCode, setResearchCode] = useState('');
   const [isError, setIsError] = useState(false);
   const [email, setEmail] = useState({ email: '', isValid: false });
+  const emailRef = useRef(null);
   const navigate = useNavigate();
   const { getDatabase } = useDatabase();
 
-  const start = async () => {
+  const validate= () => {
+    const isEmailValid = emailRef?.current?.validate(email);
     if (researchCode === '') {
       setIsError(true);
-      return;
     }
-    if (!email.isValid) {
+
+    return isEmailValid && researchCode !== '';
+  }
+
+  const start = async () => {
+    if (!validate()) {
       return;
     }
 
@@ -36,7 +43,7 @@ export function ConsumerPreview() {
     const docResearch = await getDoc(docRef);
 
     if (docResearch.exists() && docResearch.data()?.data?.[0]) {
-      navigate(`${researchCode}`);
+      navigate(`${researchCode}/${email.email}`);
     } else {
       setIsError(true);
     }
@@ -75,6 +82,7 @@ export function ConsumerPreview() {
             Email
           </Typography>
           <EmailTextbox
+            ref={emailRef}
             className={s.textfield}
             onEmailChange={
               (currEmail, isCurrEmailValid) => {

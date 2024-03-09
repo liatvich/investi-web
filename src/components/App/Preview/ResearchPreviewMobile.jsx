@@ -32,12 +32,11 @@ const ArrowIconStyle = {
 };
 
 export function ResearchPreviewMobile({
-  research, submitOnClick, title, managerId, participantId, researchId,
+  research, submitOnClick, title, managerId, participantId, researchId, email
 }) {
   const [currPage, setCurrPage] = useState(0);
   // const [validationError, setValidationError] = useState(false);
   const [isSubmittedExperiment, setIsSubmittedExperiment] = useState(false);
-  const [email, setEmail] = useState('');
 
   const isCheckboxValid = () => {
     const isValid = research[currPage]?.content
@@ -113,24 +112,9 @@ export function ResearchPreviewMobile({
             (currPage + 1) === Object.keys(research).length
               && (
                 <>
-                  {!emailValidation(participantId) && (
-                    <div className={s.mail}>
-                      <Typography variant="subtitle1" gutterBottom component="div">
-                        If you would like to receive additional research data, please provide your email address:
-                      </Typography>
-                      <EmailTextbox
-                        className={s.textfield}
-                        onEmailChange={
-                                  (currEmail, isCurrEmailValid) => {
-                                    setEmail({ email: currEmail, isValid: isCurrEmailValid });
-                                  }
-                                }
-                      />
-                    </div>
-                  )}
                   <div className={s.submit}>
                     <Typography variant="subtitle1" component="div" className={s.text}>
-                      To finish your application click in the subscribe button
+                      To finish your application click in the submit button
                     </Typography>
                     <Button
                       disableRipple

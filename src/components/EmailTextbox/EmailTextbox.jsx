@@ -1,5 +1,5 @@
 import React, {
-  useState, useCallback,
+  useState, useCallback, forwardRef, useImperativeHandle
 } from 'react';
 import { TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -11,9 +11,29 @@ import { emailValidation } from '../../common/general';
 const CssTextField = styled(TextField)(TextFieldMuiStyle);
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
-export function EmailTextbox({ onEmailChange, className }) {
+export const EmailTextbox =  forwardRef(function EmailTextbox({ onEmailChange, className }, ref) {
   const [email, setEmail] = useState('');
   const [showEmailValidationError, setShowEmailValidationError] = useState(false);
+  const [showEmptyValidationError, setShowEmptyValidationError] = useState(false);
+
+  useImperativeHandle(ref, () => {
+    return {
+      validate: (value) => {
+          if (value?.email === '') {
+            setShowEmptyValidationError(true);
+            return false;
+          }
+
+          if (!emailValidation(value?.email)) {
+            setShowEmailValidationError(true);
+            return false;
+          }
+        
+          return true;
+        }
+    };
+  }, []);
+
 
   const handleEmailValidationChange = (value) => {
     if (emailValidation(value)) {
@@ -33,11 +53,19 @@ export function EmailTextbox({ onEmailChange, className }) {
         id="standard-error"
         value={email}
         onChange={(event) => {
-          setEmail(event.target.value);
-          onChangeMailValidation(event.target.value);
+          setShowEmptyValidationError(false);
+          if(event.target.value === '') {
+            setShowEmailValidationError(false);
+            setEmail('');
+            onEmailChange('', false);
+          } else {
+            setEmail(event.target.value);
+            onChangeMailValidation(event.target.value);
+          }
         }}
         placeholder="your email"
-        error={showEmailValidationError}
+        error={showEmailValidationError 
+          || showEmptyValidationError}
         className={className}
       />
       {showEmailValidationError
@@ -46,8 +74,14 @@ export function EmailTextbox({ onEmailChange, className }) {
             Please enter correct email
           </Typography>
         ) : <div className={s.emptyError} />}
+      {showEmptyValidationError
+        ? (
+          <Typography variant="caption" component="div" className={s.error}>
+            Please enter a mail
+          </Typography>
+        ) : <div className={s.emptyError} />}
     </>
   );
-}
+});
 
 export default EmailTextbox;

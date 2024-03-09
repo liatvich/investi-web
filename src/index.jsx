@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { App } from './App';
-import { ConsumerPreview } from './routes/consumer/ConsumerPreview/ConsumerPreview';
+import { ConsumerPreview, ConsumerPreviewMailOnly } from './routes/consumer/ConsumerPreview';
 import { ConsumerResearchPreview } from './routes/consumer/ConsumerResearchPreview';
 import { manropeTheme } from './common/styleConsts';
 
@@ -30,7 +30,7 @@ root.render(
         </Route> */}
           <Route path={routes.SIGN_IN} element={<SignInScreen />} />
           <Route path="research" element={<ConsumerPreview />} />
-          <Route path="research/:activeResearch" element={<ConsumerResearchPreview />} />
+          <Route path="research/:activeResearch" element={<ConsumerPreviewMailOnly />} />
           <Route path="research/:activeResearch/:email" element={<ConsumerResearchPreview />} />
           <Route
             path="*"

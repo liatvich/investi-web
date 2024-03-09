@@ -91,6 +91,10 @@ export function ConsumerResearchPreview() {
       }
     }
 
+    if (!emailValidation(email) && email !== '') {
+      navigate(`/research/${activeResearch}`);
+    }
+
     fetchResearch();
   }, []);
 
@@ -103,12 +107,7 @@ export function ConsumerResearchPreview() {
             isConsumer
             title={title}
             // eslint-disable-next-line no-unused-vars
-            submitOnClick={async (filledResearch, filledEmail) => {
-              let _participantId = participantId;
-              if (filledEmail?.email && filledEmail?.isValid) {
-                setParticipantId(filledEmail.email);
-                _participantId = filledEmail.email;
-              }
+            submitOnClick={async (filledResearch) => {
               let filedTypes = {};
               // eslint-disable-next-line guard-for-in
               for (const page in filledResearch) {
@@ -119,7 +118,7 @@ export function ConsumerResearchPreview() {
               }
 
               if (filedTypes[EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER]) {
-                const path = `images/${managerId}/${activeResearch}/${_participantId}/`;
+                const path = `images/${managerId}/${activeResearch}/${participantId}/`;
                 const listRef = ref(storage, path);
 
                 // Find all the prefixes and items.
@@ -151,9 +150,9 @@ export function ConsumerResearchPreview() {
 
               const dataBase = getDatabase();
               // Date.now() is the ID
-              await setDoc(doc(dataBase, `experiments/${activeResearch}/signups`, _participantId), {
+              await setDoc(doc(dataBase, `experiments/${activeResearch}/signups`, participantId), {
                 filledResearch,
-                email: _participantId,
+                email,
                 date: Date.now(),
               });
             }}
