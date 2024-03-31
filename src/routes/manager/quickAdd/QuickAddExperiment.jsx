@@ -14,10 +14,14 @@ import MenuBar from '../../../components/Editor/MenuBar';
 import TextboxExtension from '../../../components/Editor/ReactComponents/TextboxExtension';
 import ExternalVideoExtension from '../../../components/Editor/ReactComponents/ExternalVideoExtension';
 import RadioButtonExtension from '../../../components/Editor/ReactComponents/RadioButtonExtension';
+import CheckboxExtension from '../../../components/Editor/ReactComponents/CheckboxExtension';
+import TextAreaExtension from '../../../components/Editor/ReactComponents/TextAreaExtension';
 import TaskItem from '../../../components/Editor/ReactComponents/ListItem';
 import ScaleExtension from '../../../components/Editor/ReactComponents/ScaleExtension';
 import ContinuesScaleExtension from '../../../components/Editor/ReactComponents/ContinuesScaleExtension';
 import ImageUploaderExtension from '../../../components/Editor/ReactComponents/ImageUploaderExtension';
+import Focus from '@tiptap/extension-focus'
+
 
 import s from './QuickAddExperiment.module.scss';
 import { RoundButton } from '../../../components/RoundButton';
@@ -43,6 +47,8 @@ export function QuickAddExperiment({
       StarterKit,
       TextboxExtension,
       RadioButtonExtension,
+      CheckboxExtension,
+      TextAreaExtension,
       TaskItem.configure({}),
       ScaleExtension,
       ContinuesScaleExtension,
@@ -50,12 +56,18 @@ export function QuickAddExperiment({
       Image,
       Dropcursor,
       ExternalVideoExtension,
+      Focus.configure({
+        className: 'has-focus',
+        mode: 'all',
+      }),
+
     ],
     content: `
       <p>
         Start Writing Your New Research Here!
       </p>
     `,
+    autofocus: true,
   });
 
   useEffect(() => {
@@ -202,7 +214,7 @@ export function QuickAddExperiment({
           totalPages={totalPages}
         />
         )}
-        <EditorContent className="editor-content" editor={editor} />
+        <EditorContent className={'editor-content'} editor={editor} />
       </div>
     </div>
   );

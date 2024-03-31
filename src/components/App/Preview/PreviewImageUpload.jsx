@@ -3,18 +3,17 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { useState, useEffect } from 'react';
-import { NodeViewWrapper, NodeViewContent } from '@tiptap/react';
-import './ImageUploader.scss';
 import AWS from 'aws-sdk';
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Space, Upload } from 'antd';
+import s from './PreviewImageUpload.module.scss';
 
 const S3_BUCKET_NAME = 'pets-data-lab-storage';
 const S3_BUCKET_REGION = 'eu-north-1';
 const accessKeyId = process.env.REACT_APP_AWS_ACCESS_KEY;
 const secretAccessKey = process.env.REACT_APP_AWS_SECRET_KEY;
 
-function ImageUploader(props) {
+export function PreviewImageUpload(props) {
   const {
     disabled = true,
     managerId = '',
@@ -23,10 +22,10 @@ function ImageUploader(props) {
     node,
   } = props;
 
-  debugger;
   const [fileList, setFileList] = useState([]);
   const [currDisabled, setCurrDisabled] = useState(disabled);
   const [petsDataLabBucket, setPetsDataLabBucket] = useState(null);
+  const [downloadURL, setDownloadURL] = useState(null);
 
   useEffect(() => {
     AWS.config.update({
@@ -40,6 +39,22 @@ function ImageUploader(props) {
     });
 
     setPetsDataLabBucket(newBucket);
+
+    if(node?.attrs?.filePath) {
+        setCurrDisabled(true);
+
+        const petsDataLabBucket = new AWS.S3({
+        params: { Bucket: S3_BUCKET_NAME },
+        region: S3_BUCKET_REGION,
+      });
+
+      const params = {
+        Bucket: S3_BUCKET_NAME,
+        Key: node?.attrs?.filePath,
+      };
+
+      setDownloadURL(petsDataLabBucket.getSignedUrl('getObject', params));
+    }
   }, []);
 
   const getFilePath = (file) => `images/${managerId}/${researchId}/${participantEmail}/${file?.name}`;
@@ -109,24 +124,22 @@ function ImageUploader(props) {
   };
 
   return (
-    <NodeViewWrapper>
-      <div suppressContentEditableWarning className="content" contentEditable="false">
-      <NodeViewContent />
-        <Space direction="vertical" style={{ width: '100%' }} size="large">
-          <Upload
-            listType="picture"
-            maxCount={1}
-            customRequest={customRequest}
-            onChange={onImageChange}
-            fileList={fileList}
-            onRemove={onImageRemove}
-          >
-            <Button icon={<UploadOutlined />} disabled={currDisabled}>Upload</Button>
-          </Upload>
-        </Space>
-      </div>
-    </NodeViewWrapper>
+    <Space direction="vertical" style={{ width: '100%' }} size="large">
+        <div className={s.main}>
+        <Upload
+        listType="picture"
+        maxCount={1}
+        customRequest={customRequest}
+        onChange={onImageChange}
+        fileList={fileList}
+        onRemove={onImageRemove}
+        >
+        <Button icon={<UploadOutlined />} disabled={currDisabled}>Upload</Button>
+        </Upload>
+        {downloadURL && <img className={s.image} src={downloadURL} style={{ objectFit: 'scale-down', height: '50px' }} />}
+        </div>
+    </Space>
   );
 }
 
-export default ImageUploader;
+export default PreviewImageUpload;

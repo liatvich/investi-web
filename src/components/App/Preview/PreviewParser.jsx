@@ -12,13 +12,16 @@ import {
 import s from './PreviewParser.module.scss';
 import { PreviewText } from './PreviewText';
 import { PreviewValidationCheckbox } from './PreviewValidationCheckbox';
+import { PreviewCheckbox } from './PreviewCheckbox';
 import { PreviewRadioButtonGroup } from './PreviewRadioButtonGroup';
 import { PreviewImage } from './PreviewImage';
 import { PreviewScale } from './PreviewScale';
 import { PreviewContinuesScale } from './PreviewContinuesScale';
 import { PreviewTextbox } from './PreviewTextbox';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
-import ImageUploader from '../../Editor/ReactComponents/ImageUploader';
+// import ImageUploader from '../../Editor/ReactComponents/ImageUploader';
+import { PreviewImageUpload } from './PreviewImageUpload';
+import { PreviewTextArea } from './PreviewTextArea';
 
 const renderImage = (node) => (
   <div>
@@ -63,6 +66,20 @@ const renderList = (listNode) => (
   </List>
 );
 
+const wrapWithExteriorDiv = (children) => ( 
+  <div className={s.preview_node}>
+    {children}
+  </div>
+);
+
+
+const wrapWithExteriorDivOnTop = (children) => ( 
+  <div className={s.preview_node_top}>
+    {children}
+  </div>
+);
+
+
 export function PreviewParser({
   researchData,
   disable: disabled = false,
@@ -73,65 +90,83 @@ export function PreviewParser({
   return (
     <div className={s.main} key={Math.floor(Math.random() * 1000 + 1)}>
       {
-        researchData?.content?.map((node, index) => {
+        researchData?.content?.filter(node=>Object.values(node).length>1).map((node, index) => {
+          // <div className={s.preview_node}>{}</div>;
           if (node.type === EDITOR_ELEMENTS_TYPES.HEADING
             || node.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) {
-            return <PreviewText key={Math.floor(Math.random() * 1000 + 1)} node={node} />;
+            return wrapWithExteriorDivOnTop(<PreviewText key={Math.floor(Math.random() * 1000 + 1)} node={node} />);
           } if (node.type === EDITOR_ELEMENTS_TYPES.BULLET_LIST
             || node.type === EDITOR_ELEMENTS_TYPES.ORDERED_LIST) {
-            return renderList(node);
+            return wrapWithExteriorDiv(renderList(node));
           } if (node.type === EDITOR_ELEMENTS_TYPES.VALIDATION_CHECKBOX) {
             return (
-              <PreviewValidationCheckbox
+              wrapWithExteriorDiv(<PreviewValidationCheckbox
                 key={Math.floor(Math.random() * 1000 + 1)}
                 node={node}
-              />
+              />)
             );
-          } if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+          } 
+          if (node.type === EDITOR_ELEMENTS_TYPES.CHECKBOX) {
             return (
-              <PreviewRadioButtonGroup
+              wrapWithExteriorDiv(<PreviewCheckbox
+                key={Math.floor(Math.random() * 1000 + 1)}
+                node={node}
+              />)
+            );
+          } 
+          if (node.type === EDITOR_ELEMENTS_TYPES.TEXTAREA) {
+            return (
+              wrapWithExteriorDiv(<PreviewTextArea
+                key={Math.floor(Math.random() * 1000 + 1)}
+                node={node}
+              />)
+            );
+          } 
+          if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+            return (
+              wrapWithExteriorDiv(<PreviewRadioButtonGroup
                 node={node}
                 disabled={disabled}
                 key={Math.floor(Math.random() * 1000 + 1)}
-              />
+              />)
             );
           } if (node.type === EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER) {
             if (disabled) {
               return (
-                <PreviewImage
+                wrapWithExteriorDiv(<PreviewImage
                   key={Math.floor(Math.random() * 1000 + 1)}
                   node={node}
-                />
+                />)
               );
             }
             return (
-              <ImageUploader
+              wrapWithExteriorDiv(<PreviewImageUpload
                 key={Math.floor(Math.random() * 1000 + 1)}
                 disabled={false}
                 researchId={researchId}
                 managerId={managerId}
                 participantId={participantId}
                 node={node}
-              />
+              />)
             );
           } if (node.type === EDITOR_ELEMENTS_TYPES.SCALE) {
             return (
-              <PreviewScale
+              wrapWithExteriorDiv(<PreviewScale
                 node={node}
                 disabled={disabled}
                 key={Math.floor(Math.random() * 1000 + 1)}
-              />
+              />)
             );
           }
           if (node.type === EDITOR_ELEMENTS_TYPES.SCALE_CONTINUES) {
-            return (<PreviewContinuesScale
+            return wrapWithExteriorDiv(<PreviewContinuesScale
               node={node}
               disabled={disabled}
               key={Math.floor(Math.random() * 1000 + 1)}
             />);
           }
           if (node.type === EDITOR_ELEMENTS_TYPES.TEXTBOX) {
-            return (
+            return wrapWithExteriorDiv(
               <PreviewTextbox
                 node={node}
                 disabled={disabled}
@@ -139,11 +174,12 @@ export function PreviewParser({
               />
             );
           } if (node.type === EDITOR_ELEMENTS_TYPES.IMAGE) {
-            return renderImage(node);
+            return wrapWithExteriorDiv(renderImage(node));
           } if (node.type === EDITOR_ELEMENTS_TYPES.EXTERNAL_VIDEO) {
-            return renderExternalVideo(node);
+            return wrapWithExteriorDiv(renderExternalVideo(node));
           }
           return <div key={Math.floor(Math.random() * 1000 + 1)} />;
+          
         })
       }
     </div>

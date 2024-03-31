@@ -6,9 +6,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
   doc, getDoc, setDoc,
 } from 'firebase/firestore/lite';
-import {
-  getStorage, ref, listAll, updateMetadata,
-} from 'firebase/storage';
 import _ from 'lodash';
 import { EDITOR_ELEMENTS_TYPES } from '../../common/consts';
 
@@ -27,7 +24,6 @@ export function ConsumerResearchPreview() {
   const [managerId, setManagerId] = useState('');
   const [imageUploadDescription, setImageUploadDescription] = useState('');
   const [consumerStage, setConsumerStage] = useState('ResearchPreview');
-  const [storage, setStorage] = useState(null);
   const [participantId, setParticipantId] = useState('');
 
   const groupRadioButtons = (researchData) => Object.values(researchData)?.map(
@@ -62,7 +58,7 @@ export function ConsumerResearchPreview() {
       const docResearch = await getDoc(docRef);
       if (docResearch.exists() && docResearch.data()?.data) {
         if (!docResearch.data()?.researchType === 'QUICK' && !emailValidation(email)) {
-          navigate(-1);
+          navigate(`/research/${activeResearch}`);
         }
         const _participantId = email || (Date.now()).toString();
         setParticipantId(_participantId);
@@ -72,22 +68,18 @@ export function ConsumerResearchPreview() {
         if (signupDoc.exists()) {
           if (docResearch.data()?.researchType === 'QUICK') {
             // user is refilling the research -- think if we want to allow that
-            setResearch({ ...groupRadioButtons(docResearch.data()?.data) });
+            setResearch({...groupRadioButtons(signupDoc.data()?.filledResearch)});
             setTitle(docResearch.data()?.title);
           } else if (signupDoc.data()?.status === 'approved' && docResearch.data()?.status === 'started') {
             setImageUploadDescription(docResearch.data()?.description);
             setConsumerStage('ImageUpload');
           }
         } else {
-          // eslint-disable-next-line no-underscore-dangle
-          const _storage = getStorage();
-          setStorage(_storage);
-
           setResearch({ ...groupRadioButtons(docResearch.data()?.data) });
           setTitle(docResearch.data()?.title);
         }
       } else {
-        navigate(-1);
+        navigate(`/research/${activeResearch}`);
       }
     }
 
@@ -108,6 +100,7 @@ export function ConsumerResearchPreview() {
             title={title}
             // eslint-disable-next-line no-unused-vars
             submitOnClick={async (filledResearch) => {
+              debugger;
               let filedTypes = {};
               // eslint-disable-next-line guard-for-in
               for (const page in filledResearch) {
@@ -117,36 +110,37 @@ export function ConsumerResearchPreview() {
                 }
               }
 
-              if (filedTypes[EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER]) {
-                const path = `images/${managerId}/${activeResearch}/${participantId}/`;
-                const listRef = ref(storage, path);
 
-                // Find all the prefixes and items.
-                listAll(listRef)
-                  .then((res) => {
-                    res.items.forEach((itemRef) => {
-                      const forestRef = ref(storage, itemRef.fullPath);
+              // if (filedTypes[EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER]) {
+              //   const path = `images/${managerId}/${activeResearch}/${participantId}/`;
+              //   const listRef = ref(storage, path);
 
-                      // Create file metadata with property to delete
-                      const deleteMetadata = {
-                        customMetadata: null,
-                      };
+              //   // Find all the prefixes and items.
+              //   listAll(listRef)
+              //     .then((res) => {
+              //       res.items.forEach((itemRef) => {
+              //         const forestRef = ref(storage, itemRef.fullPath);
 
-                      // Delete the metadata property
-                      updateMetadata(forestRef, deleteMetadata);
-                    // .then((metadata) => {
-                    //   debugger;
-                    //   // metadata.contentType should be null
-                    // }).catch((error) => {
-                    //   debugger;
-                    //   // Uh-oh, an error occurred!
-                    // });
-                    });
-                  });
-              // .catch((error) => {
-              //   // Uh-oh, an error occurred!
-              // });
-              }
+              //         // Create file metadata with property to delete
+              //         const deleteMetadata = {
+              //           customMetadata: null,
+              //         };
+
+              //         // Delete the metadata property
+              //         updateMetadata(forestRef, deleteMetadata);
+              //       // .then((metadata) => {
+              //       //   debugger;
+              //       //   // metadata.contentType should be null
+              //       // }).catch((error) => {
+              //       //   debugger;
+              //       //   // Uh-oh, an error occurred!
+              //       // });
+              //       });
+              //     });
+              // // .catch((error) => {
+              // //   // Uh-oh, an error occurred!
+              // // });
+              // }
 
               const dataBase = getDatabase();
               // Date.now() is the ID

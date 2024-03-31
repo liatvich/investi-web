@@ -2,10 +2,11 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { useState, useEffect } from 'react';
 import { Input } from 'antd';
+const { TextArea } = Input;
+import s from './PreviewTextArea.module.scss';
 import { PreviewText } from './PreviewText';
-import s from './PreviewTextbox.module.scss';
 
-export function PreviewTextbox({ node, disabled }) {
+export function PreviewTextArea({ node, disabled }) {
   const [value, setValue] = useState(node?.attrs?.value);
 
   useEffect(() => {
@@ -13,12 +14,10 @@ export function PreviewTextbox({ node, disabled }) {
   }, [node]);
 
   return (
-    <div className={s.mainTextBox}>
+    <div className={s.text_box_area}>
       {node
-        && <div className={s.top}>
-            <PreviewText key={Math.floor(Math.random() * 1000 + 1)} node={node} />
-          </div>}
-          <Input 
+        && <div className={s.top}><PreviewText key={Math.floor(Math.random() * 1000 + 1)} node={node} /></div>}
+        <TextArea rows={4} 
         placeholder={node?.attrs?.placeholder}
         value={value}
         disabled={disabled}
@@ -29,10 +28,10 @@ export function PreviewTextbox({ node, disabled }) {
             node.attrs.value = event.target.value;
           }
           setValue(event.target.value);
-        }
-        }></Input>
+        }}
+      />
     </div>
   );
 }
 
-export default PreviewTextbox;
+export default PreviewTextArea;

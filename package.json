@@ -11,6 +11,7 @@
     "@tiptap/core": "latest",
     "@tiptap/extension-document": "latest",
     "@tiptap/extension-dropcursor": "latest",
+    "@tiptap/extension-focus": "^2.2.4",
     "@tiptap/extension-image": "latest",
     "@tiptap/extension-list-item": "latest",
     "@tiptap/extension-paragraph": "latest",

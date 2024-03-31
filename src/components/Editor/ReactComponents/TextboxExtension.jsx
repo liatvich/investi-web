@@ -4,13 +4,21 @@ import Textbox from './Textbox';
 
 export default Node.create({
   name: 'textbox',
+  allowGapCursor: true,
+  atom: true,
+  selectable: true,
   group: 'block',
+  draggable: true,
+  isolating: false,
+  marks: '_',
   content: 'text*',
+  defining: true,
   addAttributes() {
     return {
       value: {
         default: '',
       },
+      placeholder: '',
     };
   },
   parseHTML() {
@@ -25,6 +33,9 @@ export default Node.create({
     return {
       toggleTextbox: () => ({ commands }) => {
         commands.toggleNode(this.name, 'text', {});
+      },
+      unToggleTextbox: () => ({ commands }) => {
+        commands.clearNodes();
       },
     };
   },

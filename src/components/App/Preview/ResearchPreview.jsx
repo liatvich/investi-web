@@ -36,7 +36,6 @@ const ArrowIconStyle = {
 export function ResearchPreview({
   research, isConsumer, submitOnClick, title, participantId, researchId, managerId, email
 }) {
-  debugger;
   const [currPage, setCurrPage] = useState(0);
   const [isSubmittedExperiment, setIsSubmittedExperiment] = useState(false);
 
@@ -49,16 +48,16 @@ export function ResearchPreview({
     return isValid;
   };
 
-  const researchView = () => (
-    research ? (
+  const researchView = () => {
+    return (research ? (
       <PreviewParser
         researchData={research[currPage]}
         participantId={participantId}
         researchId={researchId}
         managerId={managerId}
       />
-    ) : <div>Empty</div>
-  );
+    ) : <div>Empty</div>);
+    };
 
   const Header = (
     <div className={s.header}>

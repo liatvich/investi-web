@@ -1,4 +1,20 @@
 .continues_slide {
     width: 100%;
-    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+
+    .top {
+        margin-bottom: 9px;
+    }
+
+    .slider {
+        min-width: 250px;
+        margin: 0px 18px;
+    }
+}
+
+.on {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

@@ -7,14 +7,11 @@ export default Node.create({
   allowGapCursor: true,
   atom: true,
   selectable: true,
-
   group: 'block',
-
   content: 'inline*',
-
   draggable: true,
-
   isolating: true,
+
   addAttributes() {
     return {
       filePath: '',

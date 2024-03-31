@@ -12,8 +12,11 @@ import Image from '@tiptap/extension-image';
 import CreateIcon from '@mui/icons-material/Create';
 import MenuBar from '../../components/Editor/MenuBar';
 import ValidationCheckboxExtension from '../../components/Editor/ReactComponents/ValidationCheckboxExtension';
+import CheckboxExtension from '../../components/Editor/ReactComponents/CheckboxExtension';
+import TextAreaExtension from '../../components/Editor/ReactComponents/TextAreaExtension';
 import TextboxExtension from '../../components/Editor/ReactComponents/TextboxExtension';
 import RadioButtonExtension from '../../components/Editor/ReactComponents/RadioButtonExtension';
+import ContinuesScaleExtension from '../../components/Editor/ReactComponents/ContinuesScaleExtension';
 import ScaleExtension from '../../components/Editor/ReactComponents/ScaleExtension';
 import ImageUploaderExtension from '../../components/Editor/ReactComponents/ImageUploaderExtension';
 import ExternalVideoExtension from '../../components/Editor/ReactComponents/ExternalVideoExtension';
@@ -44,8 +47,11 @@ export function CreateExperiment({
       //     nested: true,
       //   }),
       ValidationCheckboxExtension,
+      CheckboxExtension,
       TextboxExtension,
       RadioButtonExtension,
+      ContinuesScaleExtension,
+      TextAreaExtension,
       ScaleExtension,
       ImageUploaderExtension,
       Image,

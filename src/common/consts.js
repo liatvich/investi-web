@@ -13,6 +13,8 @@ export const EDITOR_ELEMENTS_TYPES = {
   EXTERNAL_VIDEO: 'externalVideo',
   IMAGE_UPLOADER: 'imageUploader',
   SCALE_CONTINUES: 'scale_continues',
+  CHECKBOX: 'checkbox',
+  TEXTAREA: 'textarea',
 };
 
 export const RESEARCH_STATUS = {

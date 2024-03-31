@@ -1,9 +1,10 @@
+
 import { Node } from '@tiptap/core';
 import { ReactNodeViewRenderer, mergeAttributes } from '@tiptap/react';
-import ContinuesScale from './ContinuesScale';
+import TextArea from './TextArea';
 
 export default Node.create({
-  name: 'scale_continues',
+  name: 'textarea',
   allowGapCursor: true,
   atom: true,
   selectable: true,
@@ -17,36 +18,37 @@ export default Node.create({
   addAttributes() {
     return {
       value: {
-        chosenValue: 50,
+        default: '',
       },
-      minimumText: '',
-      maximumText: '',
+      placeholder: '',
     };
   },
+
   parseHTML() {
     return [
       {
-        tag: 'scale_continues',
+        tag: `textarea`,
       },
     ];
   },
 
+  renderHTML({ HTMLAttributes }) {
+    return ['textarea', mergeAttributes(HTMLAttributes)];
+  },
+
   addCommands() {
     return {
-      toggleScaleContinues: () => ({ commands }) => {
+      toggleTextArea: () => ({ commands }) => {
         commands.toggleNode(this.name, 'text', {});
       },
-      unToggleScaleContinues: () => ({ commands }) => {
+      unToggleTextArea: () => ({ commands }) => {
         commands.clearNodes();
       },
     };
   },
 
-  renderHTML({ HTMLAttributes }) {
-    return ['scale_continues', mergeAttributes(HTMLAttributes)];
-  },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ContinuesScale);
+    return ReactNodeViewRenderer(TextArea);
   },
 });

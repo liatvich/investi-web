@@ -24,7 +24,7 @@ import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import classNames from 'classnames';
 import RedoIcon from '../../assets/icons/redoIcon.svg';
 import UndoIcon from '../../assets/icons/undoIcon.svg';
-import { ColumnWidthOutlined } from '@ant-design/icons';
+import { ColumnWidthOutlined, CheckSquareOutlined, FormOutlined } from '@ant-design/icons';
 import s from './MenuBar.module.scss';
 
 const StyledMenu = styled((props) => (
@@ -215,7 +215,39 @@ function MenuBar({
             [s.selected]: editor.isActive('scale_continues'),
           })}
         >
-          <ColumnWidthOutlined />
+          <ColumnWidthOutlined style={{color:'#000000'}} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => {
+            if (!editor.isActive('checkbox')) {
+              editor.chain().focus().toggleCheckbox().run();
+            } else {
+              editor.chain().focus().unToggleCheckbox()
+                .run();
+            }
+          }}
+          className={classNames({
+            [s.selected]: editor.isActive('checkbox'),
+          })}
+        >
+          <CheckSquareOutlined style={{color:'#000000'}} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => {
+            if (!editor.isActive('textarea')) {
+              editor.chain().focus().toggleTextArea().run();
+            } else {
+              editor.chain().focus().unToggleTextArea()
+                .run();
+            }
+          }}
+          className={classNames({
+            [s.selected]: editor.isActive('textarea'),
+          })}
+        >
+          <FormOutlined style={{color:'#000000'}} />
         </IconButton>
         <IconButton
           disableRipple

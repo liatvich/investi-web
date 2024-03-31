@@ -1,4 +1,14 @@
 .continues_slide {
-    width: 100%;
-    max-width: 350px;
+    width: 250px;
+    margin: 9px;
+}
+
+.content_scale {
+    min-width: 20px;
+    background-color:antiquewhite ;
+}
+
+.main_scale{
+    display: flex;
+    flex-direction: column;
 }
