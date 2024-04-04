@@ -6,7 +6,6 @@ import s from './PreviewReadText.module.scss';
 import { PreviewText } from './PreviewText';
 import { ScanOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Button, Spin } from 'antd';
-import { Upload } from 'antd';
 import Tesseract from 'tesseract.js';
 
 export function PreviewReadText({ node, disabled }) {
@@ -58,14 +57,7 @@ try {
               document.getElementById('fileInput').click();
           }}>
           </Button>
-          <Upload
-            listType="picture"
-            maxCount={1}
-            onChange={onImageChange}
-            id="fileInput"
-            style={{display: 'none'}}
-          />
-          {/* <input type="file" accept="image/*" onChange={handleImageUpload}  id="fileInput" style={{display: 'none'}}/> */}
+          <input type="file" accept="image/*" onChange={handleImageUpload}  id="fileInput" style={{display: 'none'}}/>
          </div>
     </>
   );
