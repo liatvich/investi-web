@@ -15,6 +15,7 @@ export const EDITOR_ELEMENTS_TYPES = {
   SCALE_CONTINUES: 'scale_continues',
   CHECKBOX: 'checkbox',
   TEXTAREA: 'textarea',
+  READ_TEXT: 'read_text',
 };
 
 export const RESEARCH_STATUS = {

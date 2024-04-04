@@ -41,6 +41,7 @@
     "react-images-uploading": "^3.1.7",
     "react-router-dom": "latest",
     "react-scripts": "latest",
+    "tesseract.js": "^2.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

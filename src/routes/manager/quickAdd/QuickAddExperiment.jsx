@@ -20,6 +20,7 @@ import TaskItem from '../../../components/Editor/ReactComponents/ListItem';
 import ScaleExtension from '../../../components/Editor/ReactComponents/ScaleExtension';
 import ContinuesScaleExtension from '../../../components/Editor/ReactComponents/ContinuesScaleExtension';
 import ImageUploaderExtension from '../../../components/Editor/ReactComponents/ImageUploaderExtension';
+import ReadTextExtension from '../../../components/Editor/ReactComponents/ReadTextExtension';
 import Focus from '@tiptap/extension-focus'
 
 
@@ -53,6 +54,7 @@ export function QuickAddExperiment({
       ScaleExtension,
       ContinuesScaleExtension,
       ImageUploaderExtension,
+      ReadTextExtension,
       Image,
       Dropcursor,
       ExternalVideoExtension,

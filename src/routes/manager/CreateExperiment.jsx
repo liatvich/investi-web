@@ -20,6 +20,7 @@ import ContinuesScaleExtension from '../../components/Editor/ReactComponents/Con
 import ScaleExtension from '../../components/Editor/ReactComponents/ScaleExtension';
 import ImageUploaderExtension from '../../components/Editor/ReactComponents/ImageUploaderExtension';
 import ExternalVideoExtension from '../../components/Editor/ReactComponents/ExternalVideoExtension';
+import ReadTextExtension from '../../components/Editor/ReactComponents/ReadTextExtension';
 import s from './CreateExperiment.module.scss';
 import { RoundButton } from '../../components/RoundButton';
 import { RESEARCH_STATUS } from '../../common/consts';
@@ -54,6 +55,7 @@ export function CreateExperiment({
       TextAreaExtension,
       ScaleExtension,
       ImageUploaderExtension,
+      ReadTextExtension,
       Image,
       Dropcursor,
       ExternalVideoExtension,
@@ -110,7 +112,6 @@ export function CreateExperiment({
             disableRipple
             onChange={(event) => { setExperimentTitle(event.target.value); }}
             className={s.title}
-            disableUnderline={false}
             sx={{
               width: 300,
               '& .MuiInput-underline:before': {

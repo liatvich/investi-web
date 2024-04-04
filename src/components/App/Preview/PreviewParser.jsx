@@ -22,6 +22,7 @@ import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 // import ImageUploader from '../../Editor/ReactComponents/ImageUploader';
 import { PreviewImageUpload } from './PreviewImageUpload';
 import { PreviewTextArea } from './PreviewTextArea';
+import { PreviewReadText } from './PreviewReadText';
 
 const renderImage = (node) => (
   <div>
@@ -109,6 +110,14 @@ export function PreviewParser({
           if (node.type === EDITOR_ELEMENTS_TYPES.CHECKBOX) {
             return (
               wrapWithExteriorDiv(<PreviewCheckbox
+                key={Math.floor(Math.random() * 1000 + 1)}
+                node={node}
+              />)
+            );
+          } 
+          if (node.type === EDITOR_ELEMENTS_TYPES.READ_TEXT) {
+            return (
+              wrapWithExteriorDiv(<PreviewReadText
                 key={Math.floor(Math.random() * 1000 + 1)}
                 node={node}
               />)
