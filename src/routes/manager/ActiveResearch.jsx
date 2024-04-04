@@ -195,7 +195,6 @@ export function ActiveResearch({
             disableRipple
             onClick={(e) => {
               e.stopPropagation();
-              debugger;
               onEditExperiment({
                 title: value?.title,
                 researchJson: value?.researchJson,

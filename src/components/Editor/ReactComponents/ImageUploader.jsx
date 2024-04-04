@@ -23,7 +23,6 @@ function ImageUploader(props) {
     node,
   } = props;
 
-  debugger;
   const [fileList, setFileList] = useState([]);
   const [currDisabled, setCurrDisabled] = useState(disabled);
   const [petsDataLabBucket, setPetsDataLabBucket] = useState(null);

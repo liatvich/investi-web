@@ -100,7 +100,6 @@ export function ConsumerResearchPreview() {
             title={title}
             // eslint-disable-next-line no-unused-vars
             submitOnClick={async (filledResearch) => {
-              debugger;
               let filedTypes = {};
               // eslint-disable-next-line guard-for-in
               for (const page in filledResearch) {
