@@ -21,6 +21,12 @@ import ScaleExtension from '../../../components/Editor/ReactComponents/ScaleExte
 import ContinuesScaleExtension from '../../../components/Editor/ReactComponents/ContinuesScaleExtension';
 import ImageUploaderExtension from '../../../components/Editor/ReactComponents/ImageUploaderExtension';
 import ReadTextExtension from '../../../components/Editor/ReactComponents/ReadTextExtension';
+
+import ConditionalCheckbox from '../../../components/Editor/ReactComponents/ConditionalCheckboxExtension';
+import ConditionalRadioButton from '../../../components/Editor/ReactComponents/ConditionalRadioButtonExtension';
+import ConditionalContent from '../../../components/Editor/ReactComponents/ConditionalContentExtension';
+
+
 import Focus from '@tiptap/extension-focus'
 
 
@@ -48,6 +54,9 @@ export function QuickAddExperiment({
       StarterKit,
       TextboxExtension,
       RadioButtonExtension,
+      ConditionalCheckbox,
+      ConditionalRadioButton,
+      ConditionalContent,
       CheckboxExtension,
       TextAreaExtension,
       TaskItem.configure({}),

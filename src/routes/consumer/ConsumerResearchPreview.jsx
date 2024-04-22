@@ -26,30 +26,121 @@ export function ConsumerResearchPreview() {
   const [consumerStage, setConsumerStage] = useState('ResearchPreview');
   const [participantId, setParticipantId] = useState('');
 
-  const groupRadioButtons = (researchData) => Object.values(researchData)?.map(
-    (page) => page?.content?.reduce(
-      (acc, node) => {
-        if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON) {
-          if (acc[acc.length - 1]?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
-            acc[acc.length - 1].content.push(node);
+  const groupConditionalContentRadioButtons = (conditionalNode, contentId) => conditionalNode?.content?.reduce(
+      (acc, node, index) => {
+        if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON || node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
+          if (acc.goingArray[acc.goingArray.length - 1]?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+            const radioGroup = acc.goingArray[acc.goingArray.length - 1];
+            if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
+              if (!radioGroup.conditionalIndexes) {
+                radioGroup.conditionalIndexes = [];
+              }
+              if(radioGroup.conditionalIndexes.length === 0) {
+                radioGroup.conditionalIndexes = [radioGroup.content.length];
+              } else {
+                radioGroup.conditionalIndexes.push(radioGroup.content.length);
+              }
+            if(!radioGroup.correspondingIndexes ) {
+              radioGroup.correspondingIndexes = [];
+              }
+              radioGroup.correspondingIndexes.push(acc.conditionTracker);
+              acc.conditionTracker++;
+            }
+            radioGroup.content.push(node);
           } else {
-            acc.push({
-              type: EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP,
-              content: [node],
-              attrs: { chosenValue: '0' },
-            });
+            const radioGroupConditional = 
+              {
+                type: EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP,
+                content: [node],
+                attrs: { chosenValue: ''},
+            };
+            if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
+              radioGroupConditional.conditionalIndexes = [0];
+              radioGroupConditional.correspondingIndexes = [acc.conditionTracker];
+              acc.conditionTracker++;
+            }
+            acc.goingArray.push(radioGroupConditional);
           }
-        } else {
-          acc.push(node);
+        } else if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX) {
+          node.conditionTracker = acc.conditionTracker;
+          acc.conditionTracker++;
+          acc.goingArray.push(node);
+        } else if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CONTENT) {
+          const convertedNode = groupConditionalContentRadioButtons(node, acc.contentId + '-' + acc.conditionContentTracker);
+          convertedNode.conditionContentTracker = acc.conditionContentTracker;
+          acc.conditionContentTracker++;
+          acc.goingArray.push(convertedNode);
+        }
+        else {
+          acc.goingArray.push(node);
         }
         return acc;
       },
-      [],
+      {goingArray: [], conditionTracker: 0, conditionContentTracker: 0, contentId: contentId.toString()},
+    );
+
+
+  const groupRadioButtons = (researchData) => Object.values(researchData)?.map(
+    (page) => page?.content?.reduce(
+      (acc, node, index) => {
+        if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON || node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
+          if (acc.goingArray[acc.goingArray.length - 1]?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+            const radioGroup = acc.goingArray[acc.goingArray.length - 1];
+            if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
+              if (!radioGroup.conditionalIndexes) {
+                radioGroup.conditionalIndexes = [];
+              }
+              if(radioGroup.conditionalIndexes.length === 0) {
+                radioGroup.conditionalIndexes = [radioGroup.content.length];
+              } else {
+                radioGroup.conditionalIndexes.push(radioGroup.content.length);
+              }
+            if(!radioGroup.correspondingIndexes ) {
+              radioGroup.correspondingIndexes = [];
+              }
+              radioGroup.correspondingIndexes.push(acc.conditionTracker);
+              acc.conditionTracker++;
+            }
+            radioGroup.content.push(node);
+          } else {
+            const radioGroupConditional = 
+              {
+                type: EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP,
+                content: [node],
+                attrs: { chosenValue: ''},
+            };
+            if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
+              radioGroupConditional.conditionalIndexes = [0];
+              radioGroupConditional.correspondingIndexes = [acc.conditionTracker];
+              acc.conditionTracker++;
+            }
+            acc.goingArray.push(radioGroupConditional);
+          }
+        } else if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX) {
+          node.conditionTracker = acc.conditionTracker;
+          acc.conditionTracker++;
+          acc.goingArray.push(node);
+        } else if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CONTENT) {
+          const convertedNode = groupConditionalContentRadioButtons(node, acc.conditionContentTracker);
+          convertedNode.conditionContentTracker = acc.conditionContentTracker;
+          acc.conditionContentTracker++;
+          acc.goingArray.push(convertedNode);
+        }
+        else {
+          acc.goingArray.push(node);
+        }
+        return acc;
+      },
+      {goingArray: [], conditionTracker: 0, conditionContentTracker: 0},
     ),
   ).reduce((acc, page) => {
-    acc.push({ content: page, type: 'doc' });
+    acc.push({ content: page.goingArray, type: 'doc' });
     return acc;
   }, []);
+
+
+  //////
+
 
   useEffect(() => {
     async function fetchResearch() {
@@ -68,14 +159,17 @@ export function ConsumerResearchPreview() {
         if (signupDoc.exists()) {
           if (docResearch.data()?.researchType === 'QUICK') {
             // user is refilling the research -- think if we want to allow that
-            setResearch({...groupRadioButtons(signupDoc.data()?.filledResearch)});
+            setResearch(signupDoc.data()?.filledResearch);
             setTitle(docResearch.data()?.title);
           } else if (signupDoc.data()?.status === 'approved' && docResearch.data()?.status === 'started') {
             setImageUploadDescription(docResearch.data()?.description);
             setConsumerStage('ImageUpload');
           }
         } else {
-          setResearch({ ...groupRadioButtons(docResearch.data()?.data) });
+          console.log('---1', docResearch.data()?.data);
+          const a = {...groupRadioButtons(docResearch.data()?.data)};
+          console.log('---2', a);
+          setResearch(a);
           setTitle(docResearch.data()?.title);
         }
       } else {
@@ -108,7 +202,6 @@ export function ConsumerResearchPreview() {
                   filedTypes = { ...filedTypes, ...a };
                 }
               }
-
 
               // if (filedTypes[EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER]) {
               //   const path = `images/${managerId}/${activeResearch}/${participantId}/`;
@@ -149,6 +242,7 @@ export function ConsumerResearchPreview() {
                 date: Date.now(),
               });
             }}
+            conditionChanged={() =>{}}
             participantId={participantId}
             researchId={activeResearch}
             managerId={managerId}

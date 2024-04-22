@@ -5,7 +5,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-empty */
 /* eslint-disable global-require */
-import React from 'react';
+import React, {useState, useEffect } from 'react';
 import {
   List, ListItem,
 } from '@mui/material';
@@ -88,11 +88,28 @@ export function PreviewParser({
   researchId = '',
   managerId = '',
 }) {
+
+
+  const [stateConditions, setStateConditions] = useState({});
+
+    useEffect(() => {
+    researchData?.content?.filter(node=>Object.values(node).length>1).map((node, index) => {
+      if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX) {
+        setStateConditions((prev)=>({...prev, [node.conditionTracker]: Boolean(node?.attrs?.value)}));
+      } else if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+        if(node.correspondingIndexes !== undefined) {
+          for (let i = 0; i < node.correspondingIndexes.length; i++) {
+            setStateConditions((prev)=>({...prev, [node.correspondingIndexes[i]]: node?.attrs?.chosenValue === node.conditionalIndexes[i]}));
+          }
+        }
+      }
+    });
+  }, []);
+
   return (
     <div className={s.main} key={Math.floor(Math.random() * 1000 + 1)}>
       {
         researchData?.content?.filter(node=>Object.values(node).length>1).map((node, index) => {
-          // <div className={s.preview_node}>{}</div>;
           if (node.type === EDITOR_ELEMENTS_TYPES.HEADING
             || node.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) {
             return wrapWithExteriorDivOnTop(<PreviewText key={Math.floor(Math.random() * 1000 + 1)} node={node} />);
@@ -114,6 +131,33 @@ export function PreviewParser({
                 node={node}
               />)
             );
+          } 
+          if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CONTENT) {
+            return (
+              <div key={Math.floor(Math.random() * 1000 + 1)} style={{display: Boolean(stateConditions?.[node.conditionContentTracker]) ? 'unset' : 'none'}}>
+                {wrapWithExteriorDiv(<PreviewParser
+                  key={Math.floor(Math.random() * 1000 + 1)}
+                  researchData={node}
+                  disable={disabled}
+                  participantId={participantId}
+                  researchId={researchId}
+                  managerId={managerId}
+                />)}
+              </div>
+            );
+          } 
+          if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX) {
+            return (
+              wrapWithExteriorDiv(<PreviewCheckbox
+                key={Math.floor(Math.random() * 1000 + 1)}
+                node={node}
+                onChange={(value)=>{
+                  setStateConditions((prev)=>({...prev, [node.conditionTracker]: value}));
+                    }
+                  }
+                  />)
+            );
+            // 
           } 
           if (node.type === EDITOR_ELEMENTS_TYPES.READ_TEXT) {
             return (
@@ -137,6 +181,25 @@ export function PreviewParser({
                 node={node}
                 disabled={disabled}
                 key={Math.floor(Math.random() * 1000 + 1)}
+                onChange={(value)=>{
+                  if(!node?.correspondingIndexes){
+                    return;
+                  }
+                    const isValueToCheck = node?.conditionalIndexes?.findIndex((index)=>index === value);
+                    if (isValueToCheck !== -1) {
+                      for (let i = 0; i < node?.correspondingIndexes?.length || 0; i++) {
+                        if(isValueToCheck + node.correspondingIndexes[0] === node.correspondingIndexes[i]) {
+                          setStateConditions((prev)=>({...prev, [node.correspondingIndexes[i]]: true}));
+                        } else {
+                          setStateConditions((prev)=>({...prev, [node.correspondingIndexes[i]]: false}));
+                        }
+                      }
+                    } else {
+                      for (let i = 0; i < node?.correspondingIndexes?.length; i++) {
+                        setStateConditions((prev)=>({...prev, [node.correspondingIndexes[i]]: false}));
+                      }
+                    }
+                  }}
               />)
             );
           } if (node.type === EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER) {
@@ -188,7 +251,7 @@ export function PreviewParser({
             return wrapWithExteriorDiv(renderExternalVideo(node));
           }
           return <div key={Math.floor(Math.random() * 1000 + 1)} />;
-          
+
         })
       }
     </div>

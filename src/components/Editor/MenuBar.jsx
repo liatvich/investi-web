@@ -185,12 +185,61 @@ function MenuBar({
         </IconButton>
         <IconButton
           disableRipple
-          onClick={() => editor.chain().focus().toggleRadioButton().run()}
+          onClick={() =>  {
+            if (!editor.isActive('radioButton')) {
+              editor.chain().focus().toggleRadioButton().run();
+            } else {
+              editor.chain().focus().unToggleRadioButton()
+                .run();
+            }
+          }}
           className={classNames({
             [s.selected]: editor.isActive('radioButton'),
           })}
         >
           <RadioButtonCheckedIcon sx={{ color: 'text.primary' }} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => editor.chain().focus().toggleConditionalRadioButton().run()}
+          className={classNames({
+            [s.selected]: editor.isActive('conditionalRadioButton'),
+          })}
+        >
+          <RadioButtonCheckedIcon sx={{ color: 'blue' }} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => {
+            if (!editor.isActive('conditionalCheckbox')) {
+              editor.chain().focus().toggleConditionalCheckbox().run();
+            } else {
+              editor.chain().focus().unToggleConditionalCheckbox()
+                .run();
+            }
+          }}
+          className={classNames({
+            [s.selected]: editor.isActive('conditionalCheckbox'),
+          })}
+        >
+          <CheckSquareOutlined style={{color:'blue'}} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => {
+              editor.chain().focus().toggleConditionalContent().run();
+          }}
+        >
+          <CheckSquareOutlined style={{color:'pink'}} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => {
+              editor.chain().focus().unToggleConditionalContent()
+                .run();
+          }}
+        >
+          <CheckSquareOutlined style={{color:'green'}} />
         </IconButton>
         <IconButton
           disableRipple

@@ -2,15 +2,17 @@
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react'; // NodeViewContent
-import { Radio } from "antd";
-import './RadioButton.scss';
+import { Checkbox as CheckboxComponent } from 'antd';
+import './ConditionalCheckbox.scss';
 
-function RadioButton() {
+function ConditionalCheckbox({value}) {
   return (
     <NodeViewWrapper>
-      <div suppressContentEditableWarning className="content" contentEditable="true">
+      <div suppressContentEditableWarning className="contentConditionalCheckbox" contentEditable="true">
         <div contentEditable="true">
-          <Radio />
+          <CheckboxComponent 
+            checked={value}
+          />
         </div>
         <NodeViewContent />
       </div>
@@ -18,4 +20,4 @@ function RadioButton() {
   );
 }
 
-export default RadioButton;
+export default ConditionalCheckbox;

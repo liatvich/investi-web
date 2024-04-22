@@ -4,15 +4,8 @@ import RadioButton from './RadioButton';
 
 export default Node.create({
   name: 'radioButton',
-  allowGapCursor: true,
-  atom: true,
-  selectable: true,
-  group: 'block',
-  draggable: true,
-  isolating: false,
-  marks: '_',
-  content: 'text*',
-  defining: true,
+  group: "block",
+  content: "inline*",
 
   addAttributes() {
     return {
@@ -52,6 +45,9 @@ export default Node.create({
     return {
       toggleRadioButton: () => ({ commands }) => {
         commands.toggleNode(this.name, 'text', {});
+      },
+      unToggleRadioButton: () => ({ commands }) => {
+        commands.clearNodes();
       },
     };
   },

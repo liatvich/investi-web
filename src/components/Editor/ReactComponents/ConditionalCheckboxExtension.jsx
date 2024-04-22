@@ -1,10 +1,10 @@
 
 import { Node } from '@tiptap/core';
 import { ReactNodeViewRenderer, mergeAttributes } from '@tiptap/react';
-import Checkbox from './Checkbox';
+import ConditionalCheckbox from './ConditionalCheckbox';
 
 export default Node.create({
-  name: 'checkbox',
+  name: 'conditionalCheckbox',
   group: "block",
   content: "inline*",
 
@@ -33,10 +33,10 @@ export default Node.create({
 
   addCommands() {
     return {
-      toggleCheckbox: () => ({ commands }) => {
+      toggleConditionalCheckbox: () => ({ commands }) => {
         commands.toggleNode(this.name, 'text', {});
       },
-      unToggleCheckbox: () => ({ commands }) => {
+      unToggleConditionalCheckbox: () => ({ commands }) => {
         commands.clearNodes();
       },
     };
@@ -59,6 +59,6 @@ export default Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(Checkbox);
+    return ReactNodeViewRenderer(ConditionalCheckbox);
   },
 });

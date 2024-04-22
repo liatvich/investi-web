@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Checkbox } from 'antd';
 import { PreviewText } from './PreviewText';
 
-export function PreviewCheckbox({ node }) {
+export function PreviewCheckbox({ node, onChange }) {
   const [value, setValue] = useState(node?.attrs?.value);
 
   useEffect(() => {
@@ -20,6 +20,7 @@ export function PreviewCheckbox({ node }) {
             node.attrs.value = event.target.checked;
           }
           setValue(event.target.checked);
+          onChange?.(event.target.checked);
         }}
         checked={value}
       >

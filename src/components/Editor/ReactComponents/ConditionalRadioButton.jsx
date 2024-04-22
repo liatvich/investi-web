@@ -3,12 +3,12 @@
 import React from 'react';
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react'; // NodeViewContent
 import { Radio } from "antd";
-import './RadioButton.scss';
+import './ConditionalRadioButton.scss';
 
-function RadioButton() {
+function ConditionalRadioButton() {
   return (
     <NodeViewWrapper>
-      <div suppressContentEditableWarning className="content" contentEditable="true">
+      <div suppressContentEditableWarning className="contentConditionalRadioButton" contentEditable="true">
         <div contentEditable="true">
           <Radio />
         </div>
@@ -18,4 +18,4 @@ function RadioButton() {
   );
 }
 
-export default RadioButton;
+export default ConditionalRadioButton;

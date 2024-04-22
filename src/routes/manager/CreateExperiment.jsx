@@ -21,6 +21,11 @@ import ScaleExtension from '../../components/Editor/ReactComponents/ScaleExtensi
 import ImageUploaderExtension from '../../components/Editor/ReactComponents/ImageUploaderExtension';
 import ExternalVideoExtension from '../../components/Editor/ReactComponents/ExternalVideoExtension';
 import ReadTextExtension from '../../components/Editor/ReactComponents/ReadTextExtension';
+
+import ConditionalCheckbox from '../../components/Editor/ReactComponents/ConditionalCheckboxExtension';
+import ConditionalRadioButton from '../../components/Editor/ReactComponents/ConditionalRadioButtonExtension';
+import ConditionalContent from '../../components/Editor/ReactComponents/ConditionalContentExtension';
+
 import s from './CreateExperiment.module.scss';
 import { RoundButton } from '../../components/RoundButton';
 import { RESEARCH_STATUS } from '../../common/consts';
@@ -51,6 +56,9 @@ export function CreateExperiment({
       CheckboxExtension,
       TextboxExtension,
       RadioButtonExtension,
+      ConditionalRadioButton,
+      ConditionalCheckbox,
+      ConditionalContent,
       ContinuesScaleExtension,
       TextAreaExtension,
       ScaleExtension,

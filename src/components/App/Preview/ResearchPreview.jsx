@@ -34,7 +34,7 @@ const ArrowIconStyle = {
 
 // isConsumer - SUPER UGLY!
 export function ResearchPreview({
-  research, isConsumer, submitOnClick, title, participantId, researchId, managerId, email
+  research, isConsumer, submitOnClick, title, participantId, researchId, managerId, email, conditionChanged
 }) {
   const [currPage, setCurrPage] = useState(0);
   const [isSubmittedExperiment, setIsSubmittedExperiment] = useState(false);
@@ -55,6 +55,7 @@ export function ResearchPreview({
         participantId={participantId}
         researchId={researchId}
         managerId={managerId}
+        conditionChanged={conditionChanged}
       />
     ) : <div>Empty</div>);
     };
@@ -162,6 +163,7 @@ export function ResearchPreview({
             participantId={participantId}
             researchId={researchId}
             managerId={managerId}
+            conditionChanged={conditionChanged}
           />
         )
           : isSubmittedExperiment ? (
