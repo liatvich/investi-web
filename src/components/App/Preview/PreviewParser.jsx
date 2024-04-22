@@ -90,7 +90,7 @@ export function PreviewParser({
 }) {
 
 
-  const [stateConditions, setStateConditions] = useState({});
+  const [stateConditions, setStateConditions] = useState({}); // [idendexed by content Id ]
 
     useEffect(() => {
     researchData?.content?.filter(node=>Object.values(node).length>1).map((node, index) => {
@@ -135,14 +135,14 @@ export function PreviewParser({
           if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CONTENT) {
             return (
               <div key={Math.floor(Math.random() * 1000 + 1)} style={{display: Boolean(stateConditions?.[node.conditionContentTracker]) ? 'unset' : 'none'}}>
-                {wrapWithExteriorDiv(<PreviewParser
+                {<PreviewParser
                   key={Math.floor(Math.random() * 1000 + 1)}
                   researchData={node}
                   disable={disabled}
                   participantId={participantId}
                   researchId={researchId}
                   managerId={managerId}
-                />)}
+                />}
               </div>
             );
           } 

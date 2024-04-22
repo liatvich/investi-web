@@ -26,7 +26,8 @@ export function ConsumerResearchPreview() {
   const [consumerStage, setConsumerStage] = useState('ResearchPreview');
   const [participantId, setParticipantId] = useState('');
 
-  const groupConditionalContentRadioButtons = (conditionalNode, contentId) => conditionalNode?.content?.reduce(
+  const groupConditionalContentRadioButtons = (conditionalNode, contentId) => {
+    const newConditionalNode = conditionalNode?.content?.reduce(
       (acc, node, index) => {
         if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON || node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
           if (acc.goingArray[acc.goingArray.length - 1]?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
@@ -78,6 +79,11 @@ export function ConsumerResearchPreview() {
       },
       {goingArray: [], conditionTracker: 0, conditionContentTracker: 0, contentId: contentId.toString()},
     );
+    return {type: EDITOR_ELEMENTS_TYPES.CONDITIONAL_CONTENT,
+      content: newConditionalNode.goingArray,
+      contentId: newConditionalNode.contentId,
+    };
+  };
 
 
   const groupRadioButtons = (researchData) => Object.values(researchData)?.map(
