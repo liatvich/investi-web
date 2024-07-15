@@ -23,6 +23,25 @@ import s from './Research.module.scss';
 
 // const CssTextField = styled(TextField)(TextFieldMuiStyle);
 
+
+import csvDownload from 'json-to-csv-export'
+
+// const ipAddressesData = [
+//   {
+//     id: "1",
+//     name: "Sarajane Wheatman",
+//     ip: "40.98.252.240"
+//   },
+//   {
+//     id: "2",
+//     name: "Linell Humpherston",
+//     ip: "82.225.151.150"
+//   }
+// ]
+
+
+
+
 export const downloadFolderAsZip = async (path) => {
   // CHANGE TO AMAZON S3
   // const jszip = new JSZip();
@@ -113,10 +132,22 @@ export function Research({
                 <IconButton
                   className={s.actions}
                   onClick={() => {
-                    participantsSelected({
-                      participants: currentResearch?.actionsData?.participantsData,
-                      researchTitle: currentResearch?.researchTitle,
-                    });
+
+
+                    const dataToConvert = {
+                      data:  currentResearch?.actionsData?.participantsData,
+                      filename: currentResearch?.title + '_Data',
+                      delimiter: ',',
+                      // headers: ['IP', "Full Name", "IP Address"]
+                    }
+                    
+                    // ...
+
+                    csvDownload(dataToConvert);
+                    // participantsSelected({
+                    //   participants: currentResearch?.actionsData?.participantsData,
+                    //   title: currentResearch?.title,
+                    // });
                   }}
                 >
                   <GroupsIcon />

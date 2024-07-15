@@ -10,6 +10,9 @@ import {
 
 export function PreviewContinuesScale({ node, disabled }) {
   const [chosenValue, setChosenValue] = useState(0);
+  const [minValue, setMinValue] = useState(node?.attrs?.minValue || 0);
+  const [maxValue, setMaxValue] = useState(node?.attrs?.maxValue || 100);
+  const [intervalValue, setIntervalValue] = useState(node?.attrs?.intervalValue || 1);
 
   useEffect(() => {
     if(node?.attrs?.chosenValue) {
@@ -34,7 +37,8 @@ export function PreviewContinuesScale({ node, disabled }) {
                     >
                       {node?.attrs?.minimumText || ' '}
                     </Typography>}
-      <Slider defaultValue={50} value={chosenValue} disabled={disabled} 
+      <Slider value={chosenValue} disabled={disabled} 
+                min={minValue} max={maxValue} step={intervalValue}
        className={s.slider}
       onChange={(value)=>{
         setChosenValue(value);

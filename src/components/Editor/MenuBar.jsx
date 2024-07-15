@@ -24,7 +24,7 @@ import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
 import classNames from 'classnames';
 import RedoIcon from '../../assets/icons/redoIcon.svg';
 import UndoIcon from '../../assets/icons/undoIcon.svg';
-import { ColumnWidthOutlined, CheckSquareOutlined, FormOutlined, ScanOutlined } from '@ant-design/icons';
+import { ColumnWidthOutlined, CheckSquareOutlined, FormOutlined, ScanOutlined, DownSquareOutlined } from '@ant-design/icons';
 import s from './MenuBar.module.scss';
 
 const StyledMenu = styled((props) => (
@@ -265,6 +265,22 @@ function MenuBar({
           })}
         >
           <ColumnWidthOutlined style={{color:'#000000'}} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => {
+            if (!editor.isActive('drop_down')) {
+              editor.chain().focus().toggleDropDown().run();
+            } else {
+              editor.chain().focus().unToggleDropDown()
+                .run();
+            }
+          }}
+          className={classNames({
+            [s.selected]: editor.isActive('drop_down'),
+          })}
+        >
+          <DownSquareOutlined style={{color:'#000000'}} />
         </IconButton>
         <IconButton
           disableRipple

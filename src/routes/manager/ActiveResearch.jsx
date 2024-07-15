@@ -73,7 +73,7 @@ export function ActiveResearch({
         researchList.map(async (research) => {
           const signups = await getDocs(collection(dataBase, `experiments/${research.id}/signups`));
           research.actionsData = {
-            researchTitle: research.title,
+            title: research.title,
             id: research.id,
             status: research.status,
             title: research.title,
@@ -184,7 +184,7 @@ export function ActiveResearch({
               e.stopPropagation();
               participantsSelected({
                 participants: value?.participantsData,
-                researchTitle: value?.researchTitle,
+                title: value?.title,
                 researchType: value?.researchType,
               });
             }}

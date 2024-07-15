@@ -1,9 +1,9 @@
 import { Node } from '@tiptap/core';
 import { ReactNodeViewRenderer, mergeAttributes } from '@tiptap/react';
-import ContinuesScale from './ContinuesScale';
+import DropDown from './DropDown';
 
 export default Node.create({
-  name: 'scale_continues',
+  name: 'drop_down',
   allowGapCursor: true,
   atom: true,
   selectable: true,
@@ -16,40 +16,34 @@ export default Node.create({
 
   addAttributes() {
     return {
-      value: {
-        chosenValue: 50,
-      },
-      minimumText: '',
-      maximumText: '',
-      minValue: 0,
-      maxValue: 100,
-      intervalValue: 1,
+      chosenValue: '',
+      dropDownValues: [],
     };
   },
   parseHTML() {
     return [
       {
-        tag: 'scale_continues',
+        tag: 'drop_down',
       },
     ];
   },
 
   addCommands() {
     return {
-      toggleScaleContinues: () => ({ commands }) => {
+      toggleDropDown: () => ({ commands }) => {
         commands.toggleNode(this.name, 'text', {});
       },
-      unToggleScaleContinues: () => ({ commands }) => {
+      unToggleDropDown: () => ({ commands }) => {
         commands.clearNodes();
       },
     };
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['scale_continues', mergeAttributes(HTMLAttributes)];
+    return ['drop_down', mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ContinuesScale);
+    return ReactNodeViewRenderer(DropDown);
   },
 });

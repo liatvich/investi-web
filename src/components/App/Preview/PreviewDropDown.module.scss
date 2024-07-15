@@ -1,0 +1,10 @@
+.drop_down {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .text {
+    margin-right: 9px;
+  }
+}

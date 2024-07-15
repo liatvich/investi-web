@@ -5,15 +5,9 @@ import TextArea from './TextArea';
 
 export default Node.create({
   name: 'textarea',
-  allowGapCursor: true,
   atom: true,
-  selectable: true,
   group: 'block',
-  draggable: true,
-  isolating: false,
-  marks: '_',
   content: 'text*',
-  defining: true,
 
   addAttributes() {
     return {
@@ -34,6 +28,10 @@ export default Node.create({
 
   renderHTML({ HTMLAttributes }) {
     return ['textarea', mergeAttributes(HTMLAttributes)];
+  },
+
+  renderText({ node }) {
+    return `@${node.attrs.id}`
   },
 
   addCommands() {

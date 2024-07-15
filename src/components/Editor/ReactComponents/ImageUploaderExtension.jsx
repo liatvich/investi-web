@@ -15,6 +15,7 @@ export default Node.create({
   addAttributes() {
     return {
       filePath: '',
+      time: '',
     };
   },
   parseHTML() {

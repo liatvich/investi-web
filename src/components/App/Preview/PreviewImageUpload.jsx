@@ -26,6 +26,8 @@ export function PreviewImageUpload(props) {
   const [currDisabled, setCurrDisabled] = useState(disabled);
   const [petsDataLabBucket, setPetsDataLabBucket] = useState(null);
   const [downloadURL, setDownloadURL] = useState(null);
+  const [pressedTime, setPressedTime] = useState('');
+
 
   useEffect(() => {
     AWS.config.update({
@@ -111,6 +113,7 @@ export function PreviewImageUpload(props) {
             // eslint-disable-next-line no-param-reassign
             if (node?.attrs) {
               node.attrs.filePath = getFilePath(file);
+              node.attrs.time = pressedTime.toISOString();
             }
           }
         })
@@ -134,7 +137,7 @@ export function PreviewImageUpload(props) {
         fileList={fileList}
         onRemove={onImageRemove}
         >
-        <Button icon={<UploadOutlined />} disabled={currDisabled}>Upload</Button>
+        <Button icon={<UploadOutlined />} disabled={currDisabled} onClick={()=>{setPressedTime(new Date())}}>Upload</Button>
         </Upload>
         {downloadURL && <img className={s.image} src={downloadURL} style={{ objectFit: 'scale-down', height: '50px' }} />}
         </div>

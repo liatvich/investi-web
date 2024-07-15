@@ -19,6 +19,7 @@ export const EDITOR_ELEMENTS_TYPES = {
   CONDITIONAL_RADIO_BUTTON: 'conditionalRadioButton',
   CONDITIONAL_CHECKBOX: 'conditionalCheckbox',
   CONDITIONAL_CONTENT: 'conditionalContent',
+  DROP_DOWN: 'drop_down',
 };
 
 export const RESEARCH_STATUS = {
