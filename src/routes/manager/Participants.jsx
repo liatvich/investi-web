@@ -23,7 +23,7 @@ import { RoundButton } from '../../components/RoundButton';
 
 // eslint-disable-next-line react/prop-types
 export function Participants({
-  participants, researchTitle, back, researchType,
+  participants, title, back, researchType,
 }) {
   const { getDatabase } = useDatabase();
   const dataBase = getDatabase();
@@ -214,7 +214,7 @@ export function Participants({
               <KeyboardBackspaceIcon sx={{ color: '#2C3D8F' }} />
             </IconButton>
             <Typography variant="h5" component="div" className={s.title}>
-              {researchTitle}
+              {title}
             </Typography>
           </div>
 

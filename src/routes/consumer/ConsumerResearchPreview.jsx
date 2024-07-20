@@ -4,19 +4,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  doc, getDoc, setDoc,
+  doc, getDoc, setDoc, getDocs, query, collection, where, documentId
 } from 'firebase/firestore/lite';
-import _ from 'lodash';
+import _, { map } from 'lodash';
 import { EDITOR_ELEMENTS_TYPES } from '../../common/consts';
-
+import { Logo } from '../../components/Logo/Logo.jsx';
 import { useDatabase } from '../../Hooks';
 import { ResearchPreview } from '../../components/App/Preview/ResearchPreview';
+import { Button, Typography } from '@mui/material';
 import { emailValidation } from '../../common/general';
 import { UploadImageResearchContent } from './UploadImageResearchContent';
 import s from './ConsumerResearchPreview.module.scss';
 
 export function ConsumerResearchPreview() {
-  const { activeResearch, email } = useParams();
+  const { activeResearch,email: paramMail} = useParams();
   const { getDatabase } = useDatabase();
   const navigate = useNavigate();
   const [research, setResearch] = useState(null);
@@ -24,7 +25,12 @@ export function ConsumerResearchPreview() {
   const [managerId, setManagerId] = useState('');
   const [imageUploadDescription, setImageUploadDescription] = useState('');
   const [consumerStage, setConsumerStage] = useState('ResearchPreview');
-  const [participantId, setParticipantId] = useState('');
+  // const [participantId, setParticipantId] = useState('');
+  const [chooseNewOrExisting, setChooseNewOrExisting] = useState('NOT SET');
+  const [email, setEmail] = useState(paramMail);
+  const [trails, setTrails] = useState([]);
+  const [docResearch, setDocResearch] = useState({});
+
 
   const groupConditionalContentRadioButtons = (conditionalNode, contentId) => {
     const newConditionalNode = conditionalNode?.content?.reduce(
@@ -147,36 +153,81 @@ export function ConsumerResearchPreview() {
 
   //////
 
+  const yalla = () => {
+    setChooseNewOrExisting('YALLA');
+    setTrails([]);
+  }
+
+  const startNewResearch = (inputDocResearch = docResearch) => {
+        const a = {...groupRadioButtons(inputDocResearch.data()?.data)};
+        setResearch(a);
+        yalla();
+  }
 
   useEffect(() => {
     async function fetchResearch() {
       const dataBase = getDatabase();
       const docRef = doc(dataBase, 'experiments', activeResearch);
       const docResearch = await getDoc(docRef);
+      setDocResearch(docResearch);
       if (docResearch.exists() && docResearch.data()?.data) {
         if (!docResearch.data()?.researchType === 'QUICK' && !emailValidation(email)) {
           navigate(`/research/${activeResearch}`);
         }
-        const _participantId = email || (Date.now()).toString();
-        setParticipantId(_participantId);
-        const signupRef = doc(dataBase, 'experiments', activeResearch, 'signups', _participantId);
         setManagerId(docResearch.data()?.user_id);
-        const signupDoc = await getDoc(signupRef);
-        if (signupDoc.exists()) {
-          if (docResearch.data()?.researchType === 'QUICK') {
-            // user is refilling the research -- think if we want to allow that
-            setResearch(signupDoc.data()?.filledResearch);
-            setTitle(docResearch.data()?.title);
-          } else if (signupDoc.data()?.status === 'approved' && docResearch.data()?.status === 'started') {
-            setImageUploadDescription(docResearch.data()?.description);
-            setConsumerStage('ImageUpload');
-          }
+        setTitle(docResearch.data()?.title);
+
+        /////
+        // Check if there are several signups with the same email
+        // const _participantId = email;
+        // can be removed
+        // setParticipantId(_participantId);
+        var strSearch = email;
+        var strLength = strSearch.length;
+        var strFrontCode = strSearch.slice(0, strLength-1);
+        var strEndCode = strSearch.slice(strLength-1, strSearch.length);
+  
+        var startcode = strSearch;
+        var endcode= strFrontCode + String.fromCharCode(strEndCode.charCodeAt(0) + 1);
+
+        const dataBase = getDatabase();
+        const docRef = query(collection(dataBase, 'experiments', activeResearch, 'signups'),
+        where(documentId(), '>=', startcode), where(documentId(), '<', endcode));
+        const docsResearch = await getDocs(docRef);
+
+        const docsData = docsResearch?.docs?.sort((a, b) => a.date - b.date)
+        .map(
+          (currDoc) =>  currDoc.data()
+        );
+        setTrails(docsData);
+
+        // console.log('-------', docsData);
+        ///////
+
+
+        // const _participantId = email;
+        // setParticipantId(_participantId);
+        // const signupRef = doc(dataBase, 'experiments', activeResearch, 'signups', _participantId);
+        // const signupDoc = await getDoc(signupRef);
+
+
+        if (docsResearch.docs.length > 0) {
+
+          setChooseNewOrExisting('NEET TO CHOOSE')
+
+
+          // if (docResearch.data()?.researchType === 'QUICK') {
+            // // user is refilling the research -- think if we want to allow that
+
+            // setResearch(signupDoc.data()?.filledResearch);
+            // setTitle(docResearch.data()?.title);
+          //   // NEED TO DELETE THIS ALL ARE QUICK RESEARCHES
+          // } else if (signupDoc.data()?.status === 'approved' && docResearch.data()?.status === 'started') {
+          //   setImageUploadDescription(docResearch.data()?.description);
+          //   setConsumerStage('ImageUpload');
+          // }
         } else {
-          console.log('---1', docResearch.data()?.data);
-          const a = {...groupRadioButtons(docResearch.data()?.data)};
-          console.log('---2', a);
-          setResearch(a);
-          setTitle(docResearch.data()?.title);
+          startNewResearch(docResearch);
         }
       } else {
         navigate(`/research/${activeResearch}`);
@@ -192,7 +243,45 @@ export function ConsumerResearchPreview() {
 
   return (
     <div className={s.main}>
-      {research && consumerStage === 'ResearchPreview'
+      {
+        chooseNewOrExisting === 'NEET TO CHOOSE'
+        && (
+          <div className={s.chooseRoot}>
+          <Logo />
+          <div className={s.chooseContent}>
+          <div className={s.chooseBox}>
+            <Button
+              disableRipple
+              className={s.submit}
+              onClick={() => {
+                setEmail(paramMail +'_' + trails?.length);
+                startNewResearch();
+              }}
+            >
+              {'Fill New Research Form'}
+            </Button>
+            <Typography variant="subtitle1" component="div" className={s.chooseBoxTitle}>
+              Continue with existing filled forms: 
+            </Typography>
+            {trails?.map(({email: trailMail, filledResearch}, index) => (
+              <Button
+                disableRipple
+                className={s.submit}
+                onClick={() => {
+                  setEmail(trailMail);
+                  setResearch(filledResearch);
+                  yalla();
+                }}
+                key={trailMail}
+              > {`${index + 1} trail`}
+              </Button>)
+            )}
+            </div>
+          </div>
+          </div>
+        )
+      }
+      {research && consumerStage === 'ResearchPreview' & chooseNewOrExisting === 'YALLA'
         ? (
           <ResearchPreview
             research={research}
@@ -242,14 +331,14 @@ export function ConsumerResearchPreview() {
 
               const dataBase = getDatabase();
               // Date.now() is the ID
-              await setDoc(doc(dataBase, `experiments/${activeResearch}/signups`, participantId), {
+              await setDoc(doc(dataBase, `experiments/${activeResearch}/signups`, email), {
                 filledResearch,
                 email,
                 date: Date.now(),
               });
             }}
             conditionChanged={() =>{}}
-            participantId={participantId}
+            participantId={email}
             researchId={activeResearch}
             managerId={managerId}
           />
@@ -257,7 +346,7 @@ export function ConsumerResearchPreview() {
           ? (
             <UploadImageResearchContent
               description={imageUploadDescription}
-              participantId={participantId}
+              participantId={email}
               researchId={activeResearch}
               managerId={managerId}
             />
