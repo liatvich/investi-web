@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Image from '@tiptap/extension-image';
+import ImageResize from 'tiptap-extension-resize-image';
 import CreateIcon from '@mui/icons-material/Create';
 import MenuBar from '../../../components/Editor/MenuBar';
 import TextboxExtension from '../../../components/Editor/ReactComponents/TextboxExtension';
@@ -68,6 +69,7 @@ export function QuickAddExperiment({
       ImageUploaderExtension,
       ReadTextExtension,
       Image,
+      ImageResize,
       Dropcursor,
       ExternalVideoExtension,
       Focus.configure({
