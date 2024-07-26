@@ -24,21 +24,10 @@ import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 import { PreviewImageUpload } from './PreviewImageUpload';
 import { PreviewTextArea } from './PreviewTextArea';
 import { PreviewReadText } from './PreviewReadText';
+import {PreviewPathImage } from './PreviewPathImage';
 
 //style={node?.attrs?.style}
 
-const convertCssToObject = value => {
-  const regex = /(?<=^|;)\s*([^:]+)\s*:\s*([^;]+)\s*/g, o = {};
-  value.replace(regex, (m,p,v) => o[p] = v);
-  return o;
-}
-
-const renderImage = (node) => {
-  const cssInObject = convertCssToObject(node?.attrs?.style);
-  return (<div >
-    <img className={s.image} src={node?.attrs?.src} alt="img" style={cssInObject} /> 
-  </div>)
-};
 
 const isMobile = window.matchMedia('only screen and (max-width: 760px)').matches;
 
@@ -265,7 +254,7 @@ export function PreviewParser({
               />
             );
           } if (node.type === EDITOR_ELEMENTS_TYPES.IMAGE) {
-            return wrapWithExteriorDiv(renderImage(node));
+            return wrapWithExteriorDiv(<PreviewPathImage key={Math.floor(Math.random() * 1000 + 1)} node={node} />);
           } if (node.type === EDITOR_ELEMENTS_TYPES.EXTERNAL_VIDEO) {
             return wrapWithExteriorDiv(renderExternalVideo(node));
           }

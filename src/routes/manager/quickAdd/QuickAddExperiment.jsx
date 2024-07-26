@@ -68,8 +68,12 @@ export function QuickAddExperiment({
       DropDownExtension,
       ImageUploaderExtension,
       ReadTextExtension,
-      Image,
-      ImageResize,
+      Image.configure({ 
+        inline: true,
+      }),
+      ImageResize.configure({ 
+        inline: true,
+      }),
       Dropcursor,
       ExternalVideoExtension,
       Focus.configure({

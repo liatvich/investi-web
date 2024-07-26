@@ -68,8 +68,12 @@ export function CreateExperiment({
       ScaleExtension,
       ImageUploaderExtension,
       ReadTextExtension,
-      Image,
-      ImageResize,
+      Image.configure({ 
+        inline: true,
+      }),
+      ImageResize.configure({ 
+        inline: true,
+      }),
       Dropcursor,
       ExternalVideoExtension,
     //   ListItem.extend({

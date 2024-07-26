@@ -6,12 +6,15 @@ import {
   Typography,
 } from '@mui/material';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
+import {PreviewPathImage } from './PreviewPathImage';
+import s from './PreviewText.module.scss'
+
 
 export function PreviewText({ node }) {
   return (
-    <div key={Math.floor(Math.random() * 1000 + 1)}>
+    <div key={Math.floor(Math.random() * 1000 + 1)} className={s.section}>
       {node?.content?.filter((content) => content?.type === EDITOR_ELEMENTS_TYPES.TEXT
-      || content?.type === EDITOR_ELEMENTS_TYPES.HARD_BREAK)
+      || content?.type === EDITOR_ELEMENTS_TYPES.HARD_BREAK || content?.type === EDITOR_ELEMENTS_TYPES.IMAGE)
         .map((content) => {
           if (content?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
             return (
@@ -24,6 +27,14 @@ export function PreviewText({ node }) {
               >
                 {content.text || ' '}
               </Typography>
+            );
+          }
+          if (content?.type === EDITOR_ELEMENTS_TYPES.IMAGE) {
+            return (
+                <PreviewPathImage
+                  key={Math.floor(Math.random() * 1000 + 1)}
+                  node={content}
+                />
             );
           }
           return <br key={Math.floor(Math.random() * 1000 + 1)} />;
