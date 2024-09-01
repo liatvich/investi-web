@@ -81,6 +81,12 @@ export function PreviewImageUpload(props) {
           setFileList((currentFileList) => currentFileList.filter((f) => f.name !== file.name));
         }
       });
+
+      // eslint-disable-next-line no-param-reassign
+      if (node?.attrs) {
+        node.attrs.filePath = '';
+        node.attrs.time = '';
+      }
     }
   };
 
@@ -107,6 +113,7 @@ export function PreviewImageUpload(props) {
           setCurrDisabled(true);
           changeFileStatus(file, 'uploading', Math.round((evt.loaded / evt.total) * 100));
           if (evt.loaded === evt.total) {
+            console.log('======> done', file);
             changeFileStatus(file, 'done');
             setCurrDisabled(false);
 

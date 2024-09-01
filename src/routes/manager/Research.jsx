@@ -14,17 +14,15 @@ import {
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import GroupsIcon from '@mui/icons-material/Groups';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import {EDITOR_ELEMENTS_TYPES} from '../../common/consts';
 // import {
 //   getStorage, ref, listAll, getMetadata, getDownloadURL,
 // } from 'firebase/storage';
 // import { styled } from '@mui/material/styles';
 import s from './Research.module.scss';
-// import { TextFieldMuiStyle } from '../../common/styleConsts';
+import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
+import { saveAs } from 'file-saver';
 
-// const CssTextField = styled(TextField)(TextFieldMuiStyle);
-
-
-import csvDownload from 'json-to-csv-export'
 
 // const ipAddressesData = [
 //   {
@@ -75,7 +73,7 @@ export const downloadFolderAsZip = async (path) => {
 };
 
 export function Research({
-  research, back, participantsSelected, // startResearch, // saveResearchAsDraft,
+  research, back, participantsSelected, activeResearch // startResearch, // saveResearchAsDraft,
 }) {
   // const getResearchStage = () => {
   //   if (research.status === 'published') return 'not started';
@@ -88,6 +86,125 @@ export function Research({
   useEffect(() => {
     setResearch(research);
   }, [research]);
+
+
+  const convertFilledDataToSvg = (filledData) => {
+    // I need to add logic of text - paragraph or text inside the component
+    const allPagesData = Object.values(filledData).reduce((content, page) => {
+      content = [...content, ...page.content];
+      return content;
+    },[]);
+
+    console.log('allPagesData', allPagesData);
+
+    const svgData = {};
+
+    // NOTE: how am I doing my 
+    allPagesData.forEach((content, index) => {
+      if(content.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+        if (allPagesData[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+          const title = allPagesData[index - 1]?.content?.[0].text?.trim().replace(/\s/g, '_');
+          const chosen = content?.attrs?.chosenValue;
+          if (title && chosen) {
+            svgData[title] = content?.content?.[chosen]?.content?.[0].text;
+        }
+      }
+      } 
+      if (content.type === EDITOR_ELEMENTS_TYPES.TEXTBOX || content.type === EDITOR_ELEMENTS_TYPES.TEXTAREA) {
+        if (allPagesData[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+          const title = allPagesData[index - 1]?.content?.[0].text?.trim().replace(/\s/g, '_');
+          if (title) {
+            svgData[title] = content?.attrs?.value;
+          }
+        }
+      }
+      if (content.type === EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER) {
+        console.log('IMAGE_UPLOADER - content', content);
+        let title = 'Uploaded Image';
+        if (allPagesData[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+           title = allPagesData[index - 1]?.content?.[0].text?.trim().replace(/\s/g, '_'); 
+        }
+        svgData[title] = content?.attrs?.value;
+
+      }
+      // if (content.type === EDITOR_ELEMENTS_TYPES.SCALE_CONTINUES) {
+      //   // set her the chosen value
+      // }
+      // if (content.type === EDITOR_ELEMENTS_TYPES.CHECKBOX) {
+      //   // check here the chosen value - for each checkbox it's a new row
+      // }
+      // if (content.type === EDITOR_ELEMENTS_TYPES.READ_TEXT) { // the component that scan the image (working so so)
+      //   // set the text inside 
+      // }
+      // // CONDITIONAL ?
+      // if (content.type === EDITOR_ELEMENTS_TYPES.DROP_DOWN) {
+      //   //  OMG I Forgot about this ! 
+      // }
+      // if (content.type === EDITOR_ELEMENTS_TYPES.SCALE) {
+      //   // set the inside value an the paragraph before
+      // }
+    });
+    return svgData;
+  };
+
+
+  
+function exportToExcel(versioned, fileName) {
+  const workbook = new ExcelJS.Workbook();
+
+Object.keys(versioned).forEach((version, index) => {
+    const worksheet = workbook.addWorksheet('Sheet ' + (index + 1));
+    const data = versioned[version];
+    const tableHeader = worksheet.addRow(Object.keys(data[0]));
+  
+    tableHeader.eachCell((cell, colNumber) => {
+      cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      // cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFF00' } };
+      cell.font = { bold: true };
+      // worksheet.getColumn(colNumber).width = 25;
+    });
+
+    data.forEach(item => {
+      const rowData = Object.values(item);
+      const row = worksheet.addRow(rowData);
+      row.eachCell((cell) => {
+        cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
+      });
+    });
+// 
+
+    worksheet.columns.forEach(function (column, i) {
+      let maxLength = 0;
+      column["eachCell"]({ includeEmpty: true }, function (cell) {
+          var columnLength = cell.value ? cell.value.toString().length : 10;
+          if (columnLength > maxLength ) {
+              maxLength = columnLength;
+          }
+      });
+      column.width = maxLength < 10 ? 10 : maxLength;
+    });
+  });
+
+    // worksheet.addRow([]);
+  // });
+
+  workbook.xlsx.writeBuffer().then(buffer => {
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    saveAs(blob, fileName);
+  });
+}
+
+  const convertResearchData = (data) => {
+    const convertedData = data.map(
+      (item) => {
+        const researchData = convertFilledDataToSvg(item.filledResearch);
+        return{
+        date: new Date(item.date).toLocaleString(),
+        ...(!!researchData && { ...researchData }),
+      }
+    })
+    return convertedData;
+  }
 
   return (
     <div className={s.root}>
@@ -131,23 +248,19 @@ export function Research({
                 </Typography>
                 <IconButton
                   className={s.actions}
-                  onClick={() => {
-
-
-                    const dataToConvert = {
-                      data:  currentResearch?.actionsData?.participantsData,
-                      filename: currentResearch?.title + '_Data',
-                      delimiter: ',',
-                      // headers: ['IP', "Full Name", "IP Address"]
-                    }
-                    
-                    // ...
-
-                    csvDownload(dataToConvert);
-                    // participantsSelected({
-                    //   participants: currentResearch?.actionsData?.participantsData,
-                    //   title: currentResearch?.title,
-                    // });
+                  onClick={async () => {
+                    const convertedD = convertResearchData(currentResearch?.actionsData?.participantsData);
+                    const sortedByVersions = convertedD.reduce((acc, curr) => {
+                      const keys = Object.keys(curr).toString();
+                      if (acc[keys]) {
+                        acc[keys].push(curr);
+                      } else {
+                        acc[keys] = [curr];
+                      }
+                      return acc;
+                    }, {});
+                    const fileName = 'output.xlsx';
+                    exportToExcel(sortedByVersions, fileName);
                   }}
                 >
                   <GroupsIcon />
