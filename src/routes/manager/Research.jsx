@@ -24,22 +24,6 @@ import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
 import { saveAs } from 'file-saver';
 
 
-// const ipAddressesData = [
-//   {
-//     id: "1",
-//     name: "Sarajane Wheatman",
-//     ip: "40.98.252.240"
-//   },
-//   {
-//     id: "2",
-//     name: "Linell Humpherston",
-//     ip: "82.225.151.150"
-//   }
-// ]
-
-
-
-
 export const downloadFolderAsZip = async (path) => {
   // CHANGE TO AMAZON S3
   // const jszip = new JSZip();
@@ -87,68 +71,143 @@ export function Research({
     setResearch(research);
   }, [research]);
 
+  // const annotateConditionalContentVisible = (pageContent) => {
+  //   const conditions = pageContent.filter(content=>
+  //   (content?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP && !!content?.conditionalIndexes && content?.conditionalIndexes?.length > 0) ||
+  //   (content?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX)
+  //   );
 
-  const convertFilledDataToSvg = (filledData) => {
-    // I need to add logic of text - paragraph or text inside the component
-    const allPagesData = Object.values(filledData).reduce((content, page) => {
-      content = [...content, ...page.content];
-      return content;
-    },[]);
+  //   const condtionalContent = pageContent.filter(content=>(content?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CONTENT));
 
-    console.log('allPagesData', allPagesData);
+  //   for (let index = 0; index < conditions.length; index++) {
+  //     if(conditions[index]?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+        
+  //     } else if (conditions[index]?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX){
 
-    const svgData = {};
+  //     }
+  //   }
 
-    // NOTE: how am I doing my 
-    allPagesData.forEach((content, index) => {
-      if(content.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
-        if (allPagesData[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
-          const title = allPagesData[index - 1]?.content?.[0].text?.trim().replace(/\s/g, '_');
-          const chosen = content?.attrs?.chosenValue;
-          if (title && chosen) {
-            svgData[title] = content?.content?.[chosen]?.content?.[0].text;
+  // }
+
+  const convertPageDataToSvg = (pageContent, pageIndex,svgData, isVisible = true) => {
+    const conditionalVisible = {};
+    let checkboxGroupTitle = 'defaultTitle_checkbox_group'; 
+    for (let index = 0; index < pageContent.length; index++) {
+      const content = pageContent[index];
+        if (content?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+          if (isVisible && !!content?.conditionalIndexes && content?.conditionalIndexes?.length > 0 && (content?.attrs?.chosenValue !== '')){
+            const chosenConditionalIndex = content?.conditionalIndexes.findIndex(value => value === content?.attrs?.chosenValue);
+            if(chosenConditionalIndex > -1) {
+              const visibleContentIndex = content?.correspondingIndexes?.[chosenConditionalIndex];
+              if (visibleContentIndex !== undefined) {
+                conditionalVisible[visibleContentIndex] = true;
+              }
+            }
+            // content?.conditionalIndexes?.forEach(conditionalIndex=>{conditionalVisible[conditionalIndex] = true})
+          }
+          let title = 'radio_button_group';
+          if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+            title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+          }
+          if (!isVisible) {
+            svgData[pageIndex+index + '-' + title] = 'NOT_VISIBLE';
+          } else {
+            const chosen = content?.attrs?.chosenValue;
+            svgData[pageIndex+index + '-' + title] = chosen !== '' ? content?.content?.[chosen]?.content?.[0].text : 'EMPTY';
+          }
+        } 
+        else if (content?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX || content?.type === EDITOR_ELEMENTS_TYPES.CHECKBOX) {
+          if(isVisible && content?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX && content?.attrs?.value) {
+            conditionalVisible[content?.conditionTracker] = true;
+          }
+
+          if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) {
+            checkboxGroupTitle = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+          }
+          let option = 'defaultTitle_checkbox_option';
+          if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+            option = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+          }
+  
+          svgData[pageIndex+ '-' + index + '-' + checkboxGroupTitle + '-' + option] = isVisible ? Boolean(content?.attrs?.value) : 'NOT_VISIBLE';
         }
-      }
-      } 
-      if (content.type === EDITOR_ELEMENTS_TYPES.TEXTBOX || content.type === EDITOR_ELEMENTS_TYPES.TEXTAREA) {
-        if (allPagesData[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
-          const title = allPagesData[index - 1]?.content?.[0].text?.trim().replace(/\s/g, '_');
-          if (title) {
-            svgData[title] = content?.attrs?.value;
+        else if(content?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CONTENT) {
+          convertPageDataToSvg(content.content, pageIndex,svgData, true);// Boolean(conditionalVisible[content?.conditionContentTracker]));
+        }
+        else if (content.type === EDITOR_ELEMENTS_TYPES.TEXTBOX || content.type === EDITOR_ELEMENTS_TYPES.TEXTAREA) {
+          let title = 'title_' + content.type;
+          if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+            title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+          }
+           svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? content?.attrs?.value : 'NOT_VISIBLE';
+          } 
+          else if (content.type === EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER) {
+            let title = 'title_uploaded_Image';
+            if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+               title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_') 
+            }
+            svgData[pageIndex+ '-' + index + '-' + title] =  isVisible ? content?.attrs?.filePath: 'NOT_VISIBLE';
+          } else if (content.type === EDITOR_ELEMENTS_TYPES.SCALE_CONTINUES) {
+            let title = 'title_continues_scale';
+            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+              title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            }
+            svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? (content?.attrs?.chosenValue) : 'NOT_VISIBLE';
+          } else if (content.type === EDITOR_ELEMENTS_TYPES.READ_TEXT) { // the component that scan the image (working so so)
+            let title = 'title_scan_text';
+            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+              title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            }
+    
+            svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? content?.attrs?.value : 'NOT_VISIBLE';
+          } else if (content.type === EDITOR_ELEMENTS_TYPES.DROP_DOWN) { // the component that scan the image (working so so)
+            let title = 'title_drop_down';
+            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+              title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            }
+    
+            svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? content?.attrs?.chosenValue?.label : 'NOT_VISIBLE';
+          } else if (content.type === EDITOR_ELEMENTS_TYPES.SCALE) { // the component that scan the image (working so so)
+            let title = 'title_scale';
+            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+              title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            }
+    
+            svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? content?.attrs?.chosenValue : 'NOT_VISIBLE';
+          } else if (content.type === EDITOR_ELEMENTS_TYPES.NUMBER_INPUT) { // the component that scan the image (working so so)
+            let title = 'number_input';
+            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+              title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
+            }
+    
+            svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? content?.attrs?.value : 'NOT_VISIBLE';
           }
         }
-      }
-      if (content.type === EDITOR_ELEMENTS_TYPES.IMAGE_UPLOADER) {
-        console.log('IMAGE_UPLOADER - content', content);
-        let title = 'Uploaded Image';
-        if (allPagesData[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
-           title = allPagesData[index - 1]?.content?.[0].text?.trim().replace(/\s/g, '_'); 
-        }
-        svgData[title] = content?.attrs?.value;
+    }
 
-      }
-      // if (content.type === EDITOR_ELEMENTS_TYPES.SCALE_CONTINUES) {
-      //   // set her the chosen value
-      // }
-      // if (content.type === EDITOR_ELEMENTS_TYPES.CHECKBOX) {
-      //   // check here the chosen value - for each checkbox it's a new row
-      // }
-      // if (content.type === EDITOR_ELEMENTS_TYPES.READ_TEXT) { // the component that scan the image (working so so)
-      //   // set the text inside 
-      // }
-      // // CONDITIONAL ?
-      // if (content.type === EDITOR_ELEMENTS_TYPES.DROP_DOWN) {
-      //   //  OMG I Forgot about this ! 
-      // }
-      // if (content.type === EDITOR_ELEMENTS_TYPES.SCALE) {
-      //   // set the inside value an the paragraph before
-      // }
-    });
+  const convertFilledDataToSvg = (filledData, email) => {
+    const svgData = {};
+    console.log('filledData', filledData);
+    const filledDataValues = Object.values(filledData);
+    console.log('fdsf', participantsSelected);
+    svgData['email'] = email;
+    for (let pageIndex = 0; pageIndex < filledDataValues.length; pageIndex++) {
+      convertPageDataToSvg(filledDataValues[pageIndex]?.content || [], pageIndex,svgData);
+    }
     return svgData;
   };
 
 
-  
 function exportToExcel(versioned, fileName) {
   const workbook = new ExcelJS.Workbook();
 
@@ -157,11 +216,9 @@ Object.keys(versioned).forEach((version, index) => {
     const data = versioned[version];
     const tableHeader = worksheet.addRow(Object.keys(data[0]));
   
-    tableHeader.eachCell((cell, colNumber) => {
+    tableHeader.eachCell((cell) => {
       cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-      // cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFF00' } };
       cell.font = { bold: true };
-      // worksheet.getColumn(colNumber).width = 25;
     });
 
     data.forEach(item => {
@@ -171,7 +228,6 @@ Object.keys(versioned).forEach((version, index) => {
         cell.border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
       });
     });
-// 
 
     worksheet.columns.forEach(function (column, i) {
       let maxLength = 0;
@@ -185,9 +241,6 @@ Object.keys(versioned).forEach((version, index) => {
     });
   });
 
-    // worksheet.addRow([]);
-  // });
-
   workbook.xlsx.writeBuffer().then(buffer => {
     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     saveAs(blob, fileName);
@@ -197,7 +250,7 @@ Object.keys(versioned).forEach((version, index) => {
   const convertResearchData = (data) => {
     const convertedData = data.map(
       (item) => {
-        const researchData = convertFilledDataToSvg(item.filledResearch);
+        const researchData = convertFilledDataToSvg(item.filledResearch, item.email);
         return{
         date: new Date(item.date).toLocaleString(),
         ...(!!researchData && { ...researchData }),

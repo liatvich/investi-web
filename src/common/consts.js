@@ -13,6 +13,7 @@ export const EDITOR_ELEMENTS_TYPES = {
   EXTERNAL_VIDEO: 'externalVideo',
   IMAGE_UPLOADER: 'imageUploader',
   SCALE_CONTINUES: 'scale_continues',
+  NUMBER_INPUT: 'number_input',
   CHECKBOX: 'checkbox',
   TEXTAREA: 'textarea',
   READ_TEXT: 'read_text',

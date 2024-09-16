@@ -21,6 +21,7 @@ import VideocamOutlinedIcon from '@mui/icons-material/VideocamOutlined';
 import DriveFileRenameOutlineOutlinedIcon from '@mui/icons-material/DriveFileRenameOutlineOutlined';
 import PostAddOutlinedIcon from '@mui/icons-material/PostAddOutlined';
 import DeleteSweepOutlinedIcon from '@mui/icons-material/DeleteSweepOutlined';
+import Filter1OutlinedIcon from '@mui/icons-material/Filter1Outlined';
 import classNames from 'classnames';
 import RedoIcon from '../../assets/icons/redoIcon.svg';
 import UndoIcon from '../../assets/icons/undoIcon.svg';
@@ -265,6 +266,22 @@ function MenuBar({
           })}
         >
           <ColumnWidthOutlined style={{color:'#000000'}} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => {
+            if (!editor.isActive('number_input')) {
+              editor.chain().focus().toggleNumberInput().run();
+            } else {
+              editor.chain().focus().unToggleNumberInput()
+                .run();
+            }
+          }}
+          className={classNames({
+            [s.selected]: editor.isActive('number_input'),
+          })}
+        >
+          <Filter1OutlinedIcon style={{color:'#000000'}} />
         </IconButton>
         <IconButton
           disableRipple

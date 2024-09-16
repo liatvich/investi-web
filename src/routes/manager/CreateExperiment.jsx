@@ -18,6 +18,7 @@ import TextAreaExtension from '../../components/Editor/ReactComponents/TextAreaE
 import TextboxExtension from '../../components/Editor/ReactComponents/TextboxExtension';
 import RadioButtonExtension from '../../components/Editor/ReactComponents/RadioButtonExtension';
 import ContinuesScaleExtension from '../../components/Editor/ReactComponents/ContinuesScaleExtension';
+import NumebrInputExtension from '../../components/Editor/ReactComponents/NumberInputExtension';
 import DropDownExtension from '../../components/Editor/ReactComponents/DropDownExtension';
 
 import ScaleExtension from '../../components/Editor/ReactComponents/ScaleExtension';
@@ -63,6 +64,7 @@ export function CreateExperiment({
       ConditionalCheckbox,
       ConditionalContent,
       ContinuesScaleExtension,
+      NumebrInputExtension,
       DropDownExtension,
       TextAreaExtension,
       ScaleExtension,

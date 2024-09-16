@@ -17,6 +17,7 @@ import { PreviewRadioButtonGroup } from './PreviewRadioButtonGroup';
 import { PreviewImage } from './PreviewImage';
 import { PreviewScale } from './PreviewScale';
 import { PreviewContinuesScale } from './PreviewContinuesScale';
+import { PreviewNumberInput } from './PreviewNumberInput';
 import { PreviewDropDown } from './PreviewDropDown';
 import { PreviewTextbox } from './PreviewTextbox';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
@@ -87,7 +88,6 @@ export function PreviewParser({
   researchId = '',
   managerId = '',
 }) {
-
 
   const [stateConditions, setStateConditions] = useState({}); // [idendexed by content Id ]
 
@@ -231,6 +231,13 @@ export function PreviewParser({
           }
           if (node.type === EDITOR_ELEMENTS_TYPES.SCALE_CONTINUES) {
             return wrapWithExteriorDiv(<PreviewContinuesScale
+              node={node}
+              disabled={disabled}
+              key={Math.floor(Math.random() * 1000 + 1)}
+            />);
+          }
+          if (node.type === EDITOR_ELEMENTS_TYPES.NUMBER_INPUT) {
+            return wrapWithExteriorDiv(<PreviewNumberInput
               node={node}
               disabled={disabled}
               key={Math.floor(Math.random() * 1000 + 1)}

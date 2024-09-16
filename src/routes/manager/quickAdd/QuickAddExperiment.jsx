@@ -20,6 +20,7 @@ import TextAreaExtension from '../../../components/Editor/ReactComponents/TextAr
 import TaskItem from '../../../components/Editor/ReactComponents/ListItem';
 import ScaleExtension from '../../../components/Editor/ReactComponents/ScaleExtension';
 import ContinuesScaleExtension from '../../../components/Editor/ReactComponents/ContinuesScaleExtension';
+import NumberInputExtension from '../../../components/Editor/ReactComponents/NumberInputExtension';
 import DropDownExtension from '../../../components/Editor/ReactComponents/DropDownExtension';
 
 import ImageUploaderExtension from '../../../components/Editor/ReactComponents/ImageUploaderExtension';
@@ -65,6 +66,7 @@ export function QuickAddExperiment({
       TaskItem.configure({}),
       ScaleExtension,
       ContinuesScaleExtension,
+      NumberInputExtension,
       DropDownExtension,
       ImageUploaderExtension,
       ReadTextExtension,
