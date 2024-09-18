@@ -180,9 +180,6 @@ export function ResearchPreview({
                 <Typography variant="subtitle1" component="div" className={s.text}>
                   Success your application was sent!
                 </Typography>
-                <Typography variant="subtitle1" component="div" className={s.text}>
-                  You will get soon a mail with the experiment process.
-                </Typography>
               </div>
             </div>
           ) : (preview)
