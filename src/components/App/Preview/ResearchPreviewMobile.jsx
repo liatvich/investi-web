@@ -32,7 +32,7 @@ const ArrowIconStyle = {
 };
 
 export function ResearchPreviewMobile({
-  research, submitOnClick, title, managerId, participantId, researchId, email, conditionChanged
+  research, submitOnClick, title, managerId, participantId, researchId, email, conditionChanged, fillAnotherResearch
 }) {
   const [currPage, setCurrPage] = useState(0);
   // const [validationError, setValidationError] = useState(false);
@@ -160,6 +160,17 @@ export function ResearchPreviewMobile({
             <Typography variant="subtitle1" component="div" className={s.text}>
               Success your application was sent!
             </Typography>
+            <Button
+                disableRipple
+                onClick={() => {
+                  fillAnotherResearch();
+                  setCurrPage(0);
+                  setIsSubmittedExperiment(false);
+                  }
+                }
+              >
+                {'Fill the next application'}
+              </Button>
           </div>
         </div>
       ) : (preview)}

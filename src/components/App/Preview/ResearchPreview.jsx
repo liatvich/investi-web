@@ -158,12 +158,13 @@ export function ResearchPreview({
         isMobile ? (
           <ResearchPreviewMobile
             research={research}
-            submitOnClick={async () => {await submitOnClick();}}
+            submitOnClick={async (filledResearch) => {await submitOnClick(filledResearch);}}
             title={title}
             participantId={participantId}
             researchId={researchId}
             managerId={managerId}
             conditionChanged={conditionChanged}
+            fillAnotherResearch={fillAnotherResearch}
           />
         )
           : isSubmittedExperiment ? (
