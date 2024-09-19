@@ -34,7 +34,7 @@ const ArrowIconStyle = {
 
 // isConsumer - SUPER UGLY!
 export function ResearchPreview({
-  research, isConsumer, submitOnClick, title, participantId, researchId, managerId, email, conditionChanged
+  research, isConsumer, submitOnClick, title, participantId, researchId, managerId, email, conditionChanged, fillAnotherResearch
 }) {
   const [currPage, setCurrPage] = useState(0);
   const [isSubmittedExperiment, setIsSubmittedExperiment] = useState(false);
@@ -158,7 +158,7 @@ export function ResearchPreview({
         isMobile ? (
           <ResearchPreviewMobile
             research={research}
-            submitOnClick={submitOnClick}
+            submitOnClick={async () => {await submitOnClick();}}
             title={title}
             participantId={participantId}
             researchId={researchId}
@@ -180,6 +180,17 @@ export function ResearchPreview({
                 <Typography variant="subtitle1" component="div" className={s.text}>
                   Success your application was sent!
                 </Typography>
+                <Button
+                disableRipple
+                onClick={() => {
+                  fillAnotherResearch();
+                  setCurrPage(0);
+                  setIsSubmittedExperiment(false);
+                  }
+                }
+              >
+                {'Fill the next application'}
+              </Button>
               </div>
             </div>
           ) : (preview)

@@ -241,6 +241,29 @@ export function ConsumerResearchPreview() {
     fetchResearch();
   }, []);
 
+  const fillAnotherResearch = async ()=>{
+    var strSearch = paramMail;
+    var strLength = strSearch.length;
+    var strFrontCode = strSearch.slice(0, strLength-1);
+    var strEndCode = strSearch.slice(strLength-1, strSearch.length);
+
+    var startcode = strSearch;
+    var endcode= strFrontCode + String.fromCharCode(strEndCode.charCodeAt(0) + 1);
+
+    const dataBase = getDatabase();
+    const docRef = query(collection(dataBase, 'experiments', activeResearch, 'signups'),
+    where(documentId(), '>=', startcode), where(documentId(), '<', endcode));
+    const docsResearch = await getDocs(docRef);
+
+    const docsData = docsResearch?.docs?.sort((a, b) => a.date - b.date)
+    .map(
+      (currDoc) =>  currDoc.data()
+    );
+    setTrails(docsData);
+    setEmail(paramMail +'_' + docsData?.length);
+    startNewResearch();
+  }
+
   return (
     <div className={s.main}>
       {
@@ -341,6 +364,7 @@ export function ConsumerResearchPreview() {
             participantId={email}
             researchId={activeResearch}
             managerId={managerId}
+            fillAnotherResearch={fillAnotherResearch}
           />
         ) : (consumerStage === 'ImageUpload'
           ? (
