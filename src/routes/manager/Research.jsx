@@ -94,7 +94,23 @@ export function Research({
     let checkboxGroupTitle = 'defaultTitle_checkbox_group'; 
     for (let index = 0; index < pageContent.length; index++) {
       const content = pageContent[index];
-        if (content?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+      // inline Data!
+      if (content?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) {
+        const paragraphInlineContent = content?.content;
+        const datePickers = paragraphInlineContent?.filter(inlineContent =>  inlineContent.type ===  EDITOR_ELEMENTS_TYPES.DATE_PICKER);
+        if (datePickers?.length > 0) {
+          let title = 'date_time_group';
+          console.log(content);
+          if(paragraphInlineContent?.[0]?.type === 'text') {
+            title = paragraphInlineContent?.[0]?.text;
+          }
+          for (let dateTimeInlineIndex = 0; dateTimeInlineIndex < datePickers.length; dateTimeInlineIndex++) {
+            const element = datePickers[dateTimeInlineIndex];
+            svgData[pageIndex+ '-' + index + '-' + dateTimeInlineIndex + '-' + title + '-DatePicker' ] = isVisible ? element?.attrs?.value : 'NOT_VISIBLE';
+          }
+        }
+       }
+       else if (content?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
           if (isVisible && !!content?.conditionalIndexes && content?.conditionalIndexes?.length > 0 && (content?.attrs?.chosenValue !== '')){
             const chosenConditionalIndex = content?.conditionalIndexes.findIndex(value => value === content?.attrs?.chosenValue);
             if(chosenConditionalIndex > -1) {

@@ -7,14 +7,15 @@ import {
 } from '@mui/material';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 import {PreviewPathImage } from './PreviewPathImage';
+import {PreviewDatePicker} from './PreviewDatePicker';
 import s from './PreviewText.module.scss'
 
 
-export function PreviewText({ node }) {
+export function PreviewText({ node, disabled }) {
   return (
     <div key={Math.floor(Math.random() * 1000 + 1)} className={s.section}>
       {node?.content?.filter((content) => content?.type === EDITOR_ELEMENTS_TYPES.TEXT
-      || content?.type === EDITOR_ELEMENTS_TYPES.HARD_BREAK || content?.type === EDITOR_ELEMENTS_TYPES.IMAGE)
+      || content?.type === EDITOR_ELEMENTS_TYPES.HARD_BREAK || content?.type === EDITOR_ELEMENTS_TYPES.IMAGE  || content?.type ===  EDITOR_ELEMENTS_TYPES.DATE_PICKER)
         .map((content) => {
           if (content?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
             return (
@@ -36,6 +37,12 @@ export function PreviewText({ node }) {
                   node={content}
                 />
             );
+          } if (content?.type === EDITOR_ELEMENTS_TYPES.DATE_PICKER) {
+            return (<PreviewDatePicker
+              node={content}
+              disabled={disabled}
+              key={Math.floor(Math.random() * 1000 + 1)}
+            />);
           }
           return <br key={Math.floor(Math.random() * 1000 + 1)} />;
         })}

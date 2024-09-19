@@ -21,6 +21,7 @@ import TaskItem from '../../../components/Editor/ReactComponents/ListItem';
 import ScaleExtension from '../../../components/Editor/ReactComponents/ScaleExtension';
 import ContinuesScaleExtension from '../../../components/Editor/ReactComponents/ContinuesScaleExtension';
 import NumberInputExtension from '../../../components/Editor/ReactComponents/NumberInputExtension';
+import DatePickerExtension from '../../../components/Editor/ReactComponents/DatePickerExtension';
 import DropDownExtension from '../../../components/Editor/ReactComponents/DropDownExtension';
 
 import ImageUploaderExtension from '../../../components/Editor/ReactComponents/ImageUploaderExtension';
@@ -67,6 +68,7 @@ export function QuickAddExperiment({
       ScaleExtension,
       ContinuesScaleExtension,
       NumberInputExtension,
+      DatePickerExtension,
       DropDownExtension,
       ImageUploaderExtension,
       ReadTextExtension,
@@ -126,7 +128,6 @@ export function QuickAddExperiment({
       <div className={s.topBar}>
         <div className={s.input}>
           <TextField
-            autoComplete={false}
             defaultValue={experimentTitle || 'Experiment Name'}
             id="standard-basic"
             variant="standard"

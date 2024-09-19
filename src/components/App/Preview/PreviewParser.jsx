@@ -18,6 +18,7 @@ import { PreviewImage } from './PreviewImage';
 import { PreviewScale } from './PreviewScale';
 import { PreviewContinuesScale } from './PreviewContinuesScale';
 import { PreviewNumberInput } from './PreviewNumberInput';
+import { PreviewDatePicker } from './PreviewDatePicker';
 import { PreviewDropDown } from './PreviewDropDown';
 import { PreviewTextbox } from './PreviewTextbox';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
@@ -90,7 +91,7 @@ export function PreviewParser({
 }) {
 
   const [stateConditions, setStateConditions] = useState({}); // [idendexed by content Id ]
-
+  
     useEffect(() => {
     researchData?.content?.filter(node=>Object.values(node).length>1).map((node, index) => {
       if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX) {
@@ -238,6 +239,13 @@ export function PreviewParser({
           }
           if (node.type === EDITOR_ELEMENTS_TYPES.NUMBER_INPUT) {
             return wrapWithExteriorDiv(<PreviewNumberInput
+              node={node}
+              disabled={disabled}
+              key={Math.floor(Math.random() * 1000 + 1)}
+            />);
+          }
+          if (node.type === EDITOR_ELEMENTS_TYPES.DATE_PICKER) {
+            return wrapWithExteriorDiv(<PreviewDatePicker
               node={node}
               disabled={disabled}
               key={Math.floor(Math.random() * 1000 + 1)}

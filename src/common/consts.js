@@ -14,6 +14,7 @@ export const EDITOR_ELEMENTS_TYPES = {
   IMAGE_UPLOADER: 'imageUploader',
   SCALE_CONTINUES: 'scale_continues',
   NUMBER_INPUT: 'number_input',
+  DATE_PICKER: 'date_picker',
   CHECKBOX: 'checkbox',
   TEXTAREA: 'textarea',
   READ_TEXT: 'read_text',

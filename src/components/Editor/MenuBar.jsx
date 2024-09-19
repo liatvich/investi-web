@@ -25,7 +25,7 @@ import Filter1OutlinedIcon from '@mui/icons-material/Filter1Outlined';
 import classNames from 'classnames';
 import RedoIcon from '../../assets/icons/redoIcon.svg';
 import UndoIcon from '../../assets/icons/undoIcon.svg';
-import { ColumnWidthOutlined, CheckSquareOutlined, FormOutlined, ScanOutlined, DownSquareOutlined } from '@ant-design/icons';
+import { ColumnWidthOutlined, CheckSquareOutlined, FormOutlined, ScanOutlined, DownSquareOutlined, FieldTimeOutlined } from '@ant-design/icons';
 import s from './MenuBar.module.scss';
 
 const StyledMenu = styled((props) => (
@@ -282,6 +282,22 @@ function MenuBar({
           })}
         >
           <Filter1OutlinedIcon style={{color:'#000000'}} />
+        </IconButton>
+        <IconButton
+          disableRipple
+          onClick={() => {
+            if (!editor.isActive('date_picker')) {
+              editor.chain().focus().addDatePicker().run();
+            } else {
+              editor.chain().focus().unToggleDatePicker()
+                .run();
+            }
+          }}
+          className={classNames({
+            [s.selected]: editor.isActive('date_picker'),
+          })}
+        >
+          <FieldTimeOutlined style={{color:'#000000'}} />
         </IconButton>
         <IconButton
           disableRipple

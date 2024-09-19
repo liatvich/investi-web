@@ -19,6 +19,7 @@ import TextboxExtension from '../../components/Editor/ReactComponents/TextboxExt
 import RadioButtonExtension from '../../components/Editor/ReactComponents/RadioButtonExtension';
 import ContinuesScaleExtension from '../../components/Editor/ReactComponents/ContinuesScaleExtension';
 import NumebrInputExtension from '../../components/Editor/ReactComponents/NumberInputExtension';
+import DatePickerExtension from '../../components/Editor/ReactComponents/DatePickerExtension';
 import DropDownExtension from '../../components/Editor/ReactComponents/DropDownExtension';
 
 import ScaleExtension from '../../components/Editor/ReactComponents/ScaleExtension';
@@ -65,6 +66,7 @@ export function CreateExperiment({
       ConditionalContent,
       ContinuesScaleExtension,
       NumebrInputExtension,
+      DatePickerExtension,
       DropDownExtension,
       TextAreaExtension,
       ScaleExtension,
@@ -123,7 +125,6 @@ export function CreateExperiment({
       <div className={s.topBar}>
         <div className={s.input}>
           <TextField
-            autoComplete={false}
             defaultValue={experimentTitle || 'Experiment Name'}
             id="standard-basic"
             variant="standard"
