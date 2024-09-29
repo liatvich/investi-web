@@ -31,6 +31,9 @@ import ConditionalCheckbox from '../../components/Editor/ReactComponents/Conditi
 import ConditionalRadioButton from '../../components/Editor/ReactComponents/ConditionalRadioButtonExtension';
 import ConditionalContent from '../../components/Editor/ReactComponents/ConditionalContentExtension';
 
+import Link from '@tiptap/extension-link';
+
+
 import s from './CreateExperiment.module.scss';
 import { RoundButton } from '../../components/RoundButton';
 import { RESEARCH_STATUS } from '../../common/consts';
@@ -83,6 +86,10 @@ export function CreateExperiment({
     //   ListItem.extend({
     //     content: 'text*',
     //   }),
+    Link.configure({
+      openOnClick: true,
+      autolink: true,
+    }),
     ],
     content: `
       <p>

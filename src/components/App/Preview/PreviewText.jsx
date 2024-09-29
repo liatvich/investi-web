@@ -4,6 +4,7 @@
 import React from 'react';
 import {
   Typography,
+  Link,
 } from '@mui/material';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 import {PreviewPathImage } from './PreviewPathImage';
@@ -18,6 +19,24 @@ export function PreviewText({ node, disabled }) {
       || content?.type === EDITOR_ELEMENTS_TYPES.HARD_BREAK || content?.type === EDITOR_ELEMENTS_TYPES.IMAGE  || content?.type ===  EDITOR_ELEMENTS_TYPES.DATE_PICKER)
         .map((content) => {
           if (content?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+            let attributes;
+            let type = 'text';
+            if(content?.marks?.length > 0) {
+              if (content?.marks?.[0]?.type === 'link') {
+                type = 'link';
+              }
+              attributes = content?.marks?.[0]?.attrs;
+            }  
+            if(type === 'link' && !!(attributes)) {
+              return (<Link 
+              variant={node?.attrs?.level ? (node?.attrs?.level === 1 ? 'h4' : 'h5') : 'body1'}
+              gutterBottom
+              key={Math.floor(Math.random() * 1000 + 1)}
+              {...attributes}
+              >
+              {content.text || ' '}
+              </Link>);
+            }
             return (
               <Typography
         // eslint-disable-next-line no-nested-ternary

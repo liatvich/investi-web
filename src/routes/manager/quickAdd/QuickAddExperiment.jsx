@@ -31,7 +31,7 @@ import ConditionalCheckbox from '../../../components/Editor/ReactComponents/Cond
 import ConditionalRadioButton from '../../../components/Editor/ReactComponents/ConditionalRadioButtonExtension';
 import ConditionalContent from '../../../components/Editor/ReactComponents/ConditionalContentExtension';
 
-
+import Link from '@tiptap/extension-link';
 import Focus from '@tiptap/extension-focus'
 
 
@@ -84,7 +84,10 @@ export function QuickAddExperiment({
         className: 'has-focus',
         mode: 'all',
       }),
-
+    Link.configure({
+      openOnClick: true,
+      autolink: true,
+    }),
     ],
     content: `
       <p>
