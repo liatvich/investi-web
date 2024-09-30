@@ -13,6 +13,7 @@
     "@tiptap/extension-dropcursor": "latest",
     "@tiptap/extension-focus": "^2.2.4",
     "@tiptap/extension-image": "latest",
+    "@tiptap/extension-link": "^2.7.4",
     "@tiptap/extension-list-item": "latest",
     "@tiptap/extension-paragraph": "latest",
     "@tiptap/extension-task-item": "latest",
