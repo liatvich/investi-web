@@ -1,30 +1,35 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
-import React, {useState} from 'react';
+import React, { useState, useCallback } from 'react';
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react'; // NodeViewContent
-import { Slider, Input } from 'antd';
+import { Slider, Input, InputNumber } from 'antd';
 import {
   Typography,
 } from '@mui/material';
 import './ContinuesScale.scss';
 import debounce from 'lodash.debounce';
-import { InputNumber } from 'antd';
 
+function ContinuesScale({ node, updateAttributes }) {
+  const [state, setState] = useState({
+    maximumText: node?.attrs?.maximumText || '',
+    minimumText: node?.attrs?.minimumText || '',
+    scaleValue: node?.attrs?.value || 50,
+    minValue: node?.attrs?.minValue || 0,
+    maxValue: node?.attrs?.maxValue || 100,
+    intervalValue: node?.attrs?.intervalValue || 1,
+  });
 
-function ContinuesScale({node, updateAttributes}) {
+  const onAttributeChange = useCallback(
+    debounce((attribute, value) => {
+      updateAttributes({ [attribute]: value });
+    }, 250),
+    [updateAttributes]
+  );
 
-  const [maximumText, setMaximumText] = useState(node?.attrs?.maximumText || '');
-  const [minimumText, setMinimumText] = useState(node?.attrs?.minimumText || '');
-  const [scaleValue, setScaleValue] = useState(node?.attrs?.value || 50);
-  const [minValue, setMinValue] = useState(node?.attrs?.minValue || 0);
-  const [maxValue, setMaxValue] = useState(node?.attrs?.maxValue || 100);
-  const [intervalValue, setIntervalValue] = useState(node?.attrs?.intervalValue || 1);
-
-  const onAttributeChange = (attribute, value) => {
-    updateAttributes({[`${attribute}`]: value})
-  }
-
-  const onChangeDebounce = debounce(onAttributeChange, 250);
+  const handleChange = useCallback((attribute, value) => {
+    setState((prevState) => ({ ...prevState, [attribute]: value }));
+    onAttributeChange(attribute, value);
+  }, [onAttributeChange]);
 
   return (
     <NodeViewWrapper>
@@ -36,62 +41,38 @@ function ContinuesScale({node, updateAttributes}) {
       <Typography  variant="subtitle1" component="div" >
           Minimum Value:
         </Typography>
-      <InputNumber min={0} max={100} value={minValue} onChange={(value)=>{{
-        onAttributeChange('minValue', value);
-        setMinValue(value);
-      }
-      }}/>
+      <InputNumber min={0} max={100} value={state.minValue} onChange={(value) => handleChange('minValue', value)}/>
       </div>
       <div>
       <Typography  variant="subtitle1" component="div" >
       Maximum Value:
         </Typography>
-        <InputNumber min={0} max={100} value={maxValue} onChange={(value)=>{
-        onAttributeChange('maxValue', value);
-        setMaxValue(value);
-        }
-      }/>
+        <InputNumber min={0} max={100} value={state.maxValue} onChange={(value) => handleChange('maxValue', value)}/>
 </div>
 <div>
       <Typography  variant="subtitle1" component="div" >
           Intervals:
         </Typography>
-        <InputNumber min={0} max={100} value={intervalValue} onChange={(value)=>{
-        onAttributeChange('intervalValue', value);
-        setIntervalValue(value);
-        }
-      }
-      step="0.01"
-      stringMode/>
+        <InputNumber min={0} max={100} value={state.intervalValue} onChange={(value) => handleChange('intervalValue', value)} step="0.01" stringMode/>
 </div>
 
 
           <Slider defaultValue={50}
           className={'continues_slide'}
-          min={minValue} max={maxValue} step={intervalValue}
-           value={scaleValue} onChange={(value) => {
-            setScaleValue(value);
-            onChangeDebounce('value', value);
-          }
-          
-            }/>
+          min={state.minValue} max={state.maxValue} step={state.intervalValue}
+           value={state.scaleValue} onChange={(value) => handleChange('scaleValue', value)}
+          />
         <div>
         <Typography  variant="subtitle1" component="div" >
           Minimum Text:
         </Typography>
-        <Input placeholder="Minimum" value={minimumText} onChange={(e)=> {
-            setMinimumText(e.target.value);
-            onChangeDebounce('minimumText', e.target.value)}
-          }/>
+        <Input placeholder="Minimum" value={state.minimumText} onChange={(e) => handleChange('minimumText', e.target.value)}/>
         </div>
         <div>
           <Typography variant="subtitle1" component="div" >
             Maximum Text:
           </Typography>
-          <Input placeholder="Maximum" value={maximumText}  onChange={(e)=> {
-          setMaximumText(e.target.value);
-          onChangeDebounce('maximumText', e.target.value)
-          }}/>
+          <Input placeholder="Maximum" value={state.maximumText}  onChange={(e) => handleChange('maximumText', e.target.value)}/>
       </div>
       </div>
     </NodeViewWrapper>

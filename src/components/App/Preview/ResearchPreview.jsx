@@ -16,8 +16,6 @@ import s from './ResearchPreview.module.scss';
 import { EDITOR_ELEMENTS_TYPES } from '../../../common/consts';
 import { Logo } from '../../Logo';
 import { ResearchPreviewMobile } from './ResearchPreviewMobile';
-import { EmailTextbox } from '../../EmailTextbox';
-import { emailValidation } from '../../../common/general';
 
 const IconRoundButton = styled(IconButton)({
   width: '184px',
@@ -34,7 +32,7 @@ const ArrowIconStyle = {
 
 // isConsumer - SUPER UGLY!
 export function ResearchPreview({
-  research, isConsumer, submitOnClick, title, participantId, researchId, managerId, email, conditionChanged, fillAnotherResearch
+  research, isConsumer, submitOnClick, title, participantId, researchId, managerId, email, conditionChanged, fillAnotherResearch, submitText
 }) {
   const [currPage, setCurrPage] = useState(0);
   const [isSubmittedExperiment, setIsSubmittedExperiment] = useState(false);
@@ -46,6 +44,49 @@ export function ResearchPreview({
       .length === 0;
 
     return isValid;
+  };
+
+  const calculateScore = () => {
+    if (!research || typeof research !== 'object') {
+      console.warn('Invalid research data');
+      return 0;
+    }
+
+    try {
+      return Object.values(research).reduce((totalScore, page, index) => {
+        if (!page || !Array.isArray(page.content)) {
+          return totalScore;
+        }
+
+        const flattenedContent = page.content.reduce((acc, node) => {
+          if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+            node.content[node.attrs.chosenValue].attrs.value = true;
+            acc.push(...node.content);
+          } else {
+            acc.push(node);
+          }
+          return acc;
+        }, []);
+
+        const pageScore = flattenedContent
+          .filter(node => 
+            node && 
+            typeof node === 'object' && 
+            (node.type === EDITOR_ELEMENTS_TYPES.CHECKBOX_SCORE || node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_SCORE) && 
+            node.attrs && 
+            node.attrs.value === true
+          )
+          .reduce((acc, node) => {
+            const nodeScore = parseFloat(node.attrs.score);
+            return acc + (Number.isFinite(nodeScore) ? nodeScore : 0);
+          }, 0);
+
+        return totalScore + pageScore;
+      }, 0);
+    } catch (error) {
+      console.error('Error calculating score:', error);
+      return 0;
+    }
   };
 
   const researchView = () => {
@@ -160,6 +201,7 @@ export function ResearchPreview({
             research={research}
             submitOnClick={async (filledResearch) => {await submitOnClick(filledResearch);}}
             title={title}
+            submitText={submitText}
             participantId={participantId}
             researchId={researchId}
             managerId={managerId}
@@ -181,6 +223,11 @@ export function ResearchPreview({
                 <Typography variant="subtitle1" component="div" className={s.text}>
                   Success your application was sent!
                 </Typography>
+                {submitText && (
+                  <Typography variant="subtitle1" component="div" className={s.text}>
+                    {submitText + ' ' + calculateScore()}
+                  </Typography>
+                )}
                 <Button
                 disableRipple
                 onClick={() => {

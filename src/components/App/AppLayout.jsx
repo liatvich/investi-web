@@ -38,7 +38,7 @@ export function AppLayout({ children }) {
   const { user } = useProvideAuth();
 
   // eslint-disable-next-line max-len
-  const onSaveResearch = (experimentTitle, currentResearchJson, status) => async (researchType) => {
+  const onSaveResearch = (experimentTitle, currentResearchJson, status, submitText) => async (researchType) => {
     const dataBase = getDatabase();
     const experimentsRef = collection(dataBase, 'experiments');
     const experimentData = {
@@ -48,6 +48,7 @@ export function AppLayout({ children }) {
       date: Date.now(),
       data: { ...currentResearchJson },
       status,
+      submitText: submitText || '',
     };
     if (step?.data?.updateResearchId) {
       const participantRef = doc(dataBase, `experiments/${step?.data?.updateResearchId}`);
@@ -96,10 +97,11 @@ export function AppLayout({ children }) {
             && (
             <CreateExperiment
               onSaveResearch={
-              (experimentTitle, currentResearchJson, status) => onSaveResearch(
+              (experimentTitle, currentResearchJson, status, submitText) => onSaveResearch(
                 experimentTitle,
                 currentResearchJson,
                 status,
+                submitText,
               )(ResearchTypes.REGULAR)
             }
               onComplete={() => { setStep({ id: Steps.LIST, data: {} }); }}
@@ -109,10 +111,11 @@ export function AppLayout({ children }) {
           || (step.id === Steps.QUICK_ADD && (
             <QuickAddExperiment
               onSaveResearch={
-              (experimentTitle, currentResearchJson, status) => onSaveResearch(
+              (experimentTitle, currentResearchJson, status, submitText) => onSaveResearch(
                 experimentTitle,
                 currentResearchJson,
                 status,
+                submitText,
               )(ResearchTypes.QUICK)
             }
               onComplete={() => { setStep({ id: Steps.LIST, data: {} }); }}
@@ -122,32 +125,36 @@ export function AppLayout({ children }) {
             && (
             <CreateExperiment
               onSaveResearch={
-                (experimentTitle, currentResearchJson, status) => onSaveResearch(
+                (experimentTitle, currentResearchJson, status, submitText) => onSaveResearch(
                   experimentTitle,
                   currentResearchJson,
                   status,
+                  submitText,
                 )(ResearchTypes.QUICK)
               }
               onComplete={() => { setStep({ id: Steps.LIST, data: {} }); }}
               updateResearchId={step?.data?.updateResearchId}
               title={step?.data?.title}
               researchJson={step?.data?.researchJson}
+              submitText={step?.data?.submitText}
             />
             ))
           || (step.id === Steps.EDIT
             && (
             <CreateExperiment
               onSaveResearch={
-              (experimentTitle, currentResearchJson, status) => onSaveResearch(
+              (experimentTitle, currentResearchJson, status, submitText) => onSaveResearch(
                 experimentTitle,
                 currentResearchJson,
                 status,
+                submitText,
               )(ResearchTypes.REGULAR)
             }
               onComplete={() => { setStep({ id: Steps.LIST, data: {} }); }}
               updateResearchId={step?.data?.updateResearchId}
               title={step?.data?.title}
               researchJson={step?.data?.researchJson}
+              submitText={step?.data?.submitText}
             />
             ))
           || (step.id === Steps.PARTICIPANTS

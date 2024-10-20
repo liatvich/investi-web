@@ -25,7 +25,7 @@ import Filter1OutlinedIcon from '@mui/icons-material/Filter1Outlined';
 import classNames from 'classnames';
 import RedoIcon from '../../assets/icons/redoIcon.svg';
 import UndoIcon from '../../assets/icons/undoIcon.svg';
-import { ColumnWidthOutlined, CheckSquareOutlined, FormOutlined, ScanOutlined, DownSquareOutlined, FieldTimeOutlined } from '@ant-design/icons';
+import { ColumnWidthOutlined, CheckSquareOutlined, FormOutlined, ScanOutlined, DownSquareOutlined, FieldTimeOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import s from './MenuBar.module.scss';
 
 const StyledMenu = styled((props) => (
@@ -248,6 +248,7 @@ function MenuBar({
         >
           <CheckSquareOutlined style={{color:'blue'}} />
         </IconButton>
+        
         <IconButton
           disableRipple
           onClick={() => {
@@ -354,6 +355,43 @@ function MenuBar({
         >
           <CheckSquareOutlined style={{color:'#000000'}} />
         </IconButton>
+
+        <IconButton
+        disableRipple
+        onClick={() => {
+          if (!editor.isActive('checkboxScore')) {
+            editor.chain().focus().toggleCheckboxScore().run();
+          } else {
+            editor.chain().focus().unToggleCheckboxScore()
+              .run();
+          }
+        }}
+        className={classNames({
+          [s.selected]: editor.isActive('checkboxScore'),
+        })}
+      >
+        <PlusSquareOutlined style={{color:'green'}} />
+      </IconButton>
+
+
+      <IconButton
+          disableRipple
+          onClick={() => {
+            if (!editor.isActive('radioButtonScore')) {
+              editor.chain().focus().toggleRadioButtonScore().run();
+            } else {
+              editor.chain().focus().unToggleRadioButtonScore()
+                .run();
+            }
+          }}
+          className={classNames({
+            [s.selected]: editor.isActive('radioButtonScore'),
+          })}
+        >
+          <RadioButtonCheckedIcon sx={{ color: 'green' }} />
+        </IconButton>
+
+
         <IconButton
           disableRipple
           onClick={() => {

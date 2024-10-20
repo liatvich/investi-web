@@ -22,6 +22,7 @@ export function ConsumerResearchPreview() {
   const navigate = useNavigate();
   const [research, setResearch] = useState(null);
   const [title, setTitle] = useState('');
+  const [submitText, setSubmitText] = useState('');
   const [managerId, setManagerId] = useState('');
   const [imageUploadDescription, setImageUploadDescription] = useState('');
   const [consumerStage, setConsumerStage] = useState('ResearchPreview');
@@ -35,7 +36,7 @@ export function ConsumerResearchPreview() {
   const groupConditionalContentRadioButtons = (conditionalNode, contentId) => {
     const newConditionalNode = conditionalNode?.content?.reduce(
       (acc, node, index) => {
-        if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON || node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
+        if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON || node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON || node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_SCORE) {
           if (acc.goingArray[acc.goingArray.length - 1]?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
             const radioGroup = acc.goingArray[acc.goingArray.length - 1];
             if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
@@ -95,7 +96,7 @@ export function ConsumerResearchPreview() {
   const groupRadioButtons = (researchData) => Object.values(researchData)?.map(
     (page) => page?.content?.reduce(
       (acc, node, index) => {
-        if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON || node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
+        if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON || node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON || node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_SCORE) {
           if (acc.goingArray[acc.goingArray.length - 1]?.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
             const radioGroup = acc.goingArray[acc.goingArray.length - 1];
             if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_RADIO_BUTTON) {
@@ -176,6 +177,7 @@ export function ConsumerResearchPreview() {
         }
         setManagerId(docResearch.data()?.user_id);
         setTitle(docResearch.data()?.title);
+        setSubmitText(docResearch.data()?.submitText);
 
         /////
         // Check if there are several signups with the same email
@@ -310,6 +312,7 @@ export function ConsumerResearchPreview() {
             research={research}
             isConsumer
             title={title}
+            submitText={submitText}
             // eslint-disable-next-line no-unused-vars
             submitOnClick={async (filledResearch) => {
               let filedTypes = {};

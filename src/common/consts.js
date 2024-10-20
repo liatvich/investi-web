@@ -16,6 +16,8 @@ export const EDITOR_ELEMENTS_TYPES = {
   NUMBER_INPUT: 'number_input',
   DATE_PICKER: 'date_picker',
   CHECKBOX: 'checkbox',
+  CHECKBOX_SCORE: 'checkboxScore',
+  RADIO_BUTTON_SCORE: 'radioButtonScore',
   TEXTAREA: 'textarea',
   READ_TEXT: 'read_text',
   CONDITIONAL_RADIO_BUTTON: 'conditionalRadioButton',

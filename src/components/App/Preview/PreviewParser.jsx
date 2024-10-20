@@ -124,7 +124,7 @@ export function PreviewParser({
               />)
             );
           } 
-          if (node.type === EDITOR_ELEMENTS_TYPES.CHECKBOX) {
+          if (node.type === EDITOR_ELEMENTS_TYPES.CHECKBOX || node.type === EDITOR_ELEMENTS_TYPES.CHECKBOX_SCORE) {
             return (
               wrapWithExteriorDiv(<PreviewCheckbox
                 key={Math.floor(Math.random() * 1000 + 1)}
@@ -145,7 +145,7 @@ export function PreviewParser({
                 />}
               </div>
             );
-          } 
+          }
           if (node.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX) {
             return (
               wrapWithExteriorDiv(<PreviewCheckbox

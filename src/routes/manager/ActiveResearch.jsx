@@ -79,6 +79,7 @@ export function ActiveResearch({
             title: research.title,
             researchJson: research?.data || [],
             researchType: research?.researchType,
+            submitText: research?.submitText,
           };
           if (signups?.docs.length > 0) {
             // eslint-disable-next-line no-unused-vars
@@ -199,6 +200,7 @@ export function ActiveResearch({
                 title: value?.title,
                 researchJson: value?.researchJson,
                 updateResearchId: value?.id,
+                submitText: value?.submitText,
               });
             }}
           >

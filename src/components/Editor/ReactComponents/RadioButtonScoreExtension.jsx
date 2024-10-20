@@ -1,15 +1,21 @@
 import { Node } from '@tiptap/core';
 import { ReactNodeViewRenderer, mergeAttributes } from '@tiptap/react';
-import ConditionalRadioButton from './ConditionalRadioButton';
+import RadioButtonScore from './RadioButtonScore';
 
 export default Node.create({
-  name: 'conditionalRadioButton',
+  name: 'radioButtonScore',
   group: "block",
   content: "inline*",
 
   addAttributes() {
     return {
       value: {
+        default: '',
+      },
+      score: {
+        default: 0,
+      },
+      summary: {
         default: '',
       },
     };
@@ -26,6 +32,10 @@ export default Node.create({
     return [
       {
         tag: `li[data-type="${this.name}"]`,
+        getAttrs: (element) => ({
+          score: element.getAttribute('data-score'),
+          value: element.getAttribute('data-value'),
+        }),
       },
     ];
   },
@@ -37,16 +47,16 @@ export default Node.create({
   renderHTML({ HTMLAttributes }) {
     return [
       'li',
-      ['conditionalRadioButton', mergeAttributes(HTMLAttributes)],
+      ['radioButtonScore', mergeAttributes(HTMLAttributes)],
     ];
   },
 
   addCommands() {
     return {
-      toggleConditionalRadioButton: () => ({ commands }) => {
-        commands.toggleNode(this.name, 'text', {});
+      toggleRadioButtonScore: () => ({ commands }) => {
+        commands.toggleNode(this.name, 'paragraph', {});
       },
-      unToggleConditionalRadioButton: () => ({ commands }) => {
+      unToggleRadioButtonScore: () => ({ commands }) => {
         commands.clearNodes();
       },
     };
@@ -69,6 +79,6 @@ export default Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ConditionalRadioButton);
+    return ReactNodeViewRenderer(RadioButtonScore);
   },
 });

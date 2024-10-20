@@ -14,6 +14,8 @@ import CreateIcon from '@mui/icons-material/Create';
 import MenuBar from '../../components/Editor/MenuBar';
 import ValidationCheckboxExtension from '../../components/Editor/ReactComponents/ValidationCheckboxExtension';
 import CheckboxExtension from '../../components/Editor/ReactComponents/CheckboxExtension';
+import CheckboxScoreExtention from '../../components/Editor/ReactComponents/CheckboxScoreExtention';
+import RadioButtonScoreExtension from '../../components/Editor/ReactComponents/RadioButtonScoreExtension';
 import TextAreaExtension from '../../components/Editor/ReactComponents/TextAreaExtension';
 import TextboxExtension from '../../components/Editor/ReactComponents/TextboxExtension';
 import RadioButtonExtension from '../../components/Editor/ReactComponents/RadioButtonExtension';
@@ -41,7 +43,7 @@ import './CreateExperiment.scss';
 
 export function CreateExperiment({
   // eslint-disable-next-line react/prop-types, no-unused-vars
-  onComplete, title, updateResearchId, researchJson, onSaveResearch,
+  onComplete, title, updateResearchId, researchJson, onSaveResearch, submitText,
 }) {
   const [experimentTitle, setExperimentTitle] = useState(title || '');
   // eslint-disable-next-line no-unused-vars
@@ -90,6 +92,8 @@ export function CreateExperiment({
       openOnClick: true,
       autolink: true,
     }),
+    CheckboxScoreExtention,
+    RadioButtonScoreExtension,
     ],
     content: `
       <p>
@@ -102,6 +106,9 @@ export function CreateExperiment({
     if (updateResearchId && researchJson?.[0]) {
       // eslint-disable-next-line react/prop-types
       editor?.commands?.setContent(researchJson?.[0]?.content);
+    }
+    if (submitText && editor) {
+      editor.submitText = submitText;
     }
   }, [editor]);
 
@@ -198,7 +205,8 @@ export function CreateExperiment({
             className={s.draft}
             onClick={async () => {
               currentResearchJson[pagesCounter] = editor.getJSON();
-              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.DRAFT);
+              const submitText = editor.submitText;
+              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.DRAFT, submitText);
               onComplete();
             }}
           >
@@ -211,7 +219,8 @@ export function CreateExperiment({
             className={s.submit}
             onClick={async () => {
               currentResearchJson[pagesCounter] = editor.getJSON();
-              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.PUBLISHED);
+              const submitText = editor.submitText;
+              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.PUBLISHED, submitText);
               onComplete();
             }}
           >
@@ -243,6 +252,7 @@ export function CreateExperiment({
         )}
         <EditorContent className="editor-content" editor={editor} />
       </div>
+      {/* // TODO: ADD A GENERAL INFO FOR WHOLE DOCUMENT - SOCRE! */}
       {/* {
         currentDocId && (
         <Typography variant="contained" gutterBottom component="div">

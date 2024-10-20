@@ -7,50 +7,39 @@ import { PreviewText } from './PreviewText';
 
 
 export function PreviewRadioButtonGroup({ node, disabled, onChange }) {
-  const [chosenValue, setChosenValue] = useState('');
+  const [chosenValue, setChosenValue] = useState(null);
 
   useEffect(() => {
-    setChosenValue(node?.attrs?.chosenValue);
+    setChosenValue(node?.attrs?.chosenValue ?? null);
   }, [node]);
 
   const changeValue = (value) => {
-    setChosenValue(value);
-    node.attrs.chosenValue = value;
-    onChange?.(value);
+    const newValue = value === chosenValue ? null : value;
+    setChosenValue(newValue);
+    if (node.attrs) {
+      node.attrs.chosenValue = newValue;
+    }
+    onChange?.(newValue);
   };
 
   return (
-        <Radio.Group
-          name="controlled-radio-buttons-group"
-          value={chosenValue}
-          onChange={(event) => changeValue(event.target.value)}
-          className={s.group}
+    <Radio.Group
+      name="controlled-radio-buttons-group"
+      value={chosenValue}
+      className={s.group}
+    >
+      {node?.content?.map((item, index) => (
+        <Radio
+          value={index}
+          disabled={disabled}
+          key={`radio-${index}`}
+          className={s.item}
+          onClick={() => changeValue(index)}
         >
-          {node?.content?.map((item, index) => (
-            <Radio
-              value={index}
-              disabled={disabled}
-              key={Math.floor(Math.random() * 1000 + 1)}
-              className={s.item}
-              onClick={() => {
-                if(index === chosenValue) {
-                  changeValue(null);
-                }
-              }}
-            >
-              {/* <Typography
-        // eslint-disable-next-line no-nested-ternary
-                variant={'body1'}
-                gutterBottom
-                component="span"
-                key={Math.floor(Math.random() * 1000 + 1)}
-              > */}
-              <PreviewText node={item} />
-                {/* {item?.content?.[0]?.text || ''} */}
-              {/* </Typography> */}
-            </Radio>
-          ))}
-      </Radio.Group>
+          <PreviewText node={item} />
+        </Radio>
+      ))}
+    </Radio.Group>
   );
 }
 

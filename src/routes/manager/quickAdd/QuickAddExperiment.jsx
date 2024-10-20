@@ -16,6 +16,8 @@ import TextboxExtension from '../../../components/Editor/ReactComponents/Textbox
 import ExternalVideoExtension from '../../../components/Editor/ReactComponents/ExternalVideoExtension';
 import RadioButtonExtension from '../../../components/Editor/ReactComponents/RadioButtonExtension';
 import CheckboxExtension from '../../../components/Editor/ReactComponents/CheckboxExtension';
+import CheckboxScoreExtension from '../../../components/Editor/ReactComponents/CheckboxScoreExtention';
+import RadioButtonScoreExtension from '../../../components/Editor/ReactComponents/RadioButtonScoreExtension';
 import TextAreaExtension from '../../../components/Editor/ReactComponents/TextAreaExtension';
 import TaskItem from '../../../components/Editor/ReactComponents/ListItem';
 import ScaleExtension from '../../../components/Editor/ReactComponents/ScaleExtension';
@@ -88,6 +90,8 @@ export function QuickAddExperiment({
       openOnClick: true,
       autolink: true,
     }),
+      CheckboxScoreExtension,
+      RadioButtonScoreExtension,
     ],
     content: `
       <p>
@@ -197,7 +201,8 @@ export function QuickAddExperiment({
             className={s.draft}
             onClick={async () => {
               currentResearchJson[pagesCounter] = editor.getJSON();
-              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.DRAFT);
+              const submitText = editor.submitText;
+              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.DRAFT, submitText);
               onComplete();
             }}
           >
@@ -210,7 +215,8 @@ export function QuickAddExperiment({
             className={s.submit}
             onClick={async () => {
               currentResearchJson[pagesCounter] = editor.getJSON();
-              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.PUBLISHED);
+              const submitText = editor.submitText; 
+              await onSaveResearch(experimentTitle, currentResearchJson, RESEARCH_STATUS.PUBLISHED, submitText);
               onComplete();
             }}
           >
@@ -242,6 +248,7 @@ export function QuickAddExperiment({
         )}
         <EditorContent className={'editor-content'} editor={editor} />
       </div>
+      {/* // TODO: ADD A GENERAL INFO FOR WHOLE DOCUMENT - SOCRE! */}
     </div>
   );
 }
