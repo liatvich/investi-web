@@ -60,7 +60,7 @@ export function ResearchPreviewMobile({
         }
 
         const flattenedContent = page.content.reduce((acc, node) => {
-          if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP) {
+          if (node.type === EDITOR_ELEMENTS_TYPES.RADIO_BUTTON_GROUP && node.attrs?.chosenValue !== "") {
             node.content[node.attrs.chosenValue].attrs.value = true;
             acc.push(...node.content);
           } else {
@@ -204,8 +204,8 @@ export function ResearchPreviewMobile({
               Success your application was sent!
             </Typography>
             {submitText && (
-              <Typography variant="subtitle1" component="div" className={s.text}>
-                {submitText + ' ' + calculateScore()}
+              <Typography variant="body2" component="div" className={s.score}>
+                {submitText + ' Score: ' + calculateScore()}
               </Typography>
             )}
             <Button
