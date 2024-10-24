@@ -146,9 +146,6 @@ export function ResearchPreview({
               && (
                 <>
                   <div className={s.submit}>
-                    <Typography variant="subtitle1" component="div" className={s.text}>
-                      To finish your application click in the submit button
-                    </Typography>
                     <Button
                       disableRipple
                       onClick={() => {
@@ -221,12 +218,18 @@ export function ResearchPreview({
                 }}
                 />
                 <Typography variant="subtitle1" component="div" className={s.text}>
-                  Success your application was sent!
+                Your application was successfully sent!
                 </Typography>
                 {submitText && (
-                  <Typography variant="subtitle1" component="div" className={s.score}>
-                    {submitText + ' Score: ' + calculateScore()}
-                  </Typography>
+                  <div> 
+                    <Typography variant="subtitle1" component="div" className={s.scoreTitle}>
+                      {'Score: ' + calculateScore()}
+                    </Typography>
+                    <Typography variant="subtitle1" component="div" className={s.score}>
+                      {submitText}
+                    </Typography>
+                  </div>
+
                 )}
                 <Button
                 disableRipple
