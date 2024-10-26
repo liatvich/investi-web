@@ -132,7 +132,7 @@ export function Research({
             svgData[pageIndex+index + '-' + title] = chosen !== '' ? content?.content?.[chosen]?.content?.[0].text : 'EMPTY';
           }
         } 
-        else if (content?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX || content?.type === EDITOR_ELEMENTS_TYPES.CHECKBOX) {
+        else if (content?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX || content?.type === EDITOR_ELEMENTS_TYPES.CHECKBOX || content?.type === EDITOR_ELEMENTS_TYPES.CHECKBOX_SCORE) {
           if(isVisible && content?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CHECKBOX && content?.attrs?.value) {
             conditionalVisible[content?.conditionTracker] = true;
           }
@@ -148,11 +148,13 @@ export function Research({
           svgData[pageIndex+ '-' + index + '-' + checkboxGroupTitle + '-' + option] = isVisible ? Boolean(content?.attrs?.value) : 'NOT_VISIBLE';
         }
         else if(content?.type === EDITOR_ELEMENTS_TYPES.CONDITIONAL_CONTENT) {
-          convertPageDataToSvg(content.content, pageIndex,svgData, true);// Boolean(conditionalVisible[content?.conditionContentTracker]));
+          convertPageDataToSvg(content.content, pageIndex,svgData, Boolean(conditionalVisible[content?.conditionContentTracker]));
         }
         else if (content.type === EDITOR_ELEMENTS_TYPES.TEXTBOX || content.type === EDITOR_ELEMENTS_TYPES.TEXTAREA) {
           let title = 'title_' + content.type;
-          if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
+          if(content?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+            title = content?.content?.[0]?.text; // ?.trim().replace(/\s/g, '_')
+          } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
             title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
           }
            svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? content?.attrs?.value : 'NOT_VISIBLE';
@@ -165,7 +167,9 @@ export function Research({
             svgData[pageIndex+ '-' + index + '-' + title] =  isVisible ? content?.attrs?.filePath: 'NOT_VISIBLE';
           } else if (content.type === EDITOR_ELEMENTS_TYPES.SCALE_CONTINUES) {
             let title = 'title_continues_scale';
-            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+            if(content?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = content?.content?.[0]?.text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
               title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
             } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
               title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
@@ -173,16 +177,19 @@ export function Research({
             svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? (content?.attrs?.chosenValue) : 'NOT_VISIBLE';
           } else if (content.type === EDITOR_ELEMENTS_TYPES.READ_TEXT) { // the component that scan the image (working so so)
             let title = 'title_scan_text';
-            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+            if(content?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = content?.content?.[0]?.text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
               title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
             } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
               title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
             }
-    
             svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? content?.attrs?.value : 'NOT_VISIBLE';
           } else if (content.type === EDITOR_ELEMENTS_TYPES.DROP_DOWN) { // the component that scan the image (working so so)
             let title = 'title_drop_down';
-            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+            if(content?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = content?.content?.[0]?.text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
               title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
             } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
               title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
@@ -191,7 +198,9 @@ export function Research({
             svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? content?.attrs?.chosenValue?.label : 'NOT_VISIBLE';
           } else if (content.type === EDITOR_ELEMENTS_TYPES.SCALE) { // the component that scan the image (working so so)
             let title = 'title_scale';
-            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+            if(content?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = content?.content?.[0]?.text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
               title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
             } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
               title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
@@ -200,7 +209,9 @@ export function Research({
             svgData[pageIndex+ '-' + index + '-' + title] = isVisible ? content?.attrs?.chosenValue : 'NOT_VISIBLE';
           } else if (content.type === EDITOR_ELEMENTS_TYPES.NUMBER_INPUT) { // the component that scan the image (working so so)
             let title = 'number_input';
-            if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+            if(content?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
+              title = content?.content?.[0]?.text; // ?.trim().replace(/\s/g, '_')
+            } else if (pageContent[index]?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
               title = pageContent[index]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
             } else if (pageContent[index - 1]?.type === EDITOR_ELEMENTS_TYPES.PARAGRAPH) { // CHECK OTHER TEXT TYPES?
               title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_')
@@ -213,9 +224,7 @@ export function Research({
 
   const convertFilledDataToSvg = (filledData, email) => {
     const svgData = {};
-    console.log('filledData', filledData);
     const filledDataValues = Object.values(filledData);
-    console.log('fdsf', participantsSelected);
     svgData['email'] = email;
     for (let pageIndex = 0; pageIndex < filledDataValues.length; pageIndex++) {
       convertPageDataToSvg(filledDataValues[pageIndex]?.content || [], pageIndex,svgData);

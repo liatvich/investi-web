@@ -139,7 +139,7 @@ export function PreviewParser({
                   key={Math.floor(Math.random() * 1000 + 1)}
                   researchData={node}
                   disable={disabled}
-                  participantId={participantId}
+                  participantEmail={participantId}
                   researchId={researchId}
                   managerId={managerId}
                 />}
@@ -217,7 +217,7 @@ export function PreviewParser({
                 disabled={false}
                 researchId={researchId}
                 managerId={managerId}
-                participantId={participantId}
+                participantEmail={participantId}
                 node={node}
               />)
             );
