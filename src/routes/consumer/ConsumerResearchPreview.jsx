@@ -31,6 +31,7 @@ export function ConsumerResearchPreview() {
   const [email, setEmail] = useState(paramMail);
   const [trails, setTrails] = useState([]);
   const [docResearch, setDocResearch] = useState({});
+  const [noTrailsVersion, setNoTrailsVersion] = useState(true);
 
 
   const groupConditionalContentRadioButtons = (conditionalNode, contentId) => {
@@ -216,6 +217,10 @@ export function ConsumerResearchPreview() {
         if (docsResearch.docs.length > 0) {
 
           setChooseNewOrExisting('NEET TO CHOOSE')
+
+          if (noTrailsVersion) {
+            startNewResearch(docResearch);
+          }
 
 
           // if (docResearch.data()?.researchType === 'QUICK') {
