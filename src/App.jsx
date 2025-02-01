@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'; // Outlet
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import s from './App.module.scss';
-// import { SignInScreen } from './routes/manager';
+// import { SignInScreen } from './routes/manager'; //
 import { ProvideAuth, useProvideAuth } from './Hooks';
 import { AppLayout } from './components/App/AppLayout';
 import { Logo as LogoIcon } from './assets/logo';
