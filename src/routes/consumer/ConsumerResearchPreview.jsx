@@ -219,6 +219,7 @@ export function ConsumerResearchPreview() {
           setChooseNewOrExisting('NEET TO CHOOSE')
 
           if (noTrailsVersion) {
+            setEmail(paramMail +'_' + docsData?.length);
             startNewResearch(docResearch);
           }
 

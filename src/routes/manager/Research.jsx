@@ -165,6 +165,14 @@ export function Research({
                title = pageContent[index - 1]?.content?.[0].text; // ?.trim().replace(/\s/g, '_') 
             }
             svgData[pageIndex+ '-' + index + '-' + title] =  isVisible ? content?.attrs?.filePath: 'NOT_VISIBLE';
+            
+            if(content?.attrs?.filePath) {
+              svgData[pageIndex+ '-' + index + '-' + title + 'link'] =  
+              'https://eu-north-1.console.aws.amazon.com/s3/buckets/pets-data-lab-storage/' + content?.attrs?.filePath;
+            } else {
+              svgData[pageIndex+ '-' + index + '-' + title + 'link'] =  'NOT_VISIBLE';
+            }
+
           } else if (content.type === EDITOR_ELEMENTS_TYPES.SCALE_CONTINUES) {
             let title = 'title_continues_scale';
             if(content?.content?.[0]?.type === EDITOR_ELEMENTS_TYPES.TEXT) {
